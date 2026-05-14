@@ -328,6 +328,9 @@ function CallerScreen({ me, onLeave }) {
             gap:14,
             flex:1,
             minHeight:0,
+            overflow:'hidden',
+            width:'100%',
+            boxSizing:'border-box',
           }}>
             <div style={{display:'flex', flexDirection:'column', gap:12}}>
               <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:6}}>
