@@ -318,22 +318,9 @@ function CallerScreen({ me, onLeave }) {
             </div>
           </div>
 
-          <div style={{
-            background:'rgba(255,255,255,0.03)',
-            border:'1px solid rgba(192,132,252,0.28)',
-            borderRadius:20,
-            padding:'16px 18px 18px',
-            display:'flex',
-            flexDirection:'column',
-            gap:14,
-            flex:1,
-            minHeight:0,
-            overflow:'hidden',
-            width:'100%',
-            boxSizing:'border-box',
-          }}>
-            <div style={{display:'flex', flexDirection:'column', gap:12}}>
-              <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:6}}>
+          <div className="caller-card">
+            <div className="caller-card-body">
+              <div className="last-called-section">
                 <div style={{fontSize:10, textTransform:'uppercase', letterSpacing:'0.22em', color:'var(--ink-dimmer)'}}>
                   Last called
                 </div>
@@ -352,7 +339,7 @@ function CallerScreen({ me, onLeave }) {
                   }
                 </div>
               </div>
-              <div style={{display:'flex', flexDirection:'column', gap:8}}>
+              <div className="board-section">
                 <div style={{display:'flex', alignItems:'baseline', justifyContent:'space-between'}}>
                   <span style={{fontFamily:'var(--font-display)', fontSize:16, fontWeight:600, letterSpacing:'-0.01em'}}>Number board</span>
                   <span style={{fontSize:12, color:'var(--ink-dimmer)'}}>{50 - drawn.length} left</span>
@@ -370,15 +357,15 @@ function CallerScreen({ me, onLeave }) {
                     );
                   })}
                 </div>
+                <button
+                  className="draw-random"
+                  onClick={drawRandom}
+                  disabled={drawn.length >= 50}
+                  style={{width:'100%'}}>
+                  {drawn.length >= 50 ? "All numbers have been called" : "🎲 Call the next number"}
+                </button>
               </div>
             </div>
-            <button
-              className="draw-random"
-              onClick={drawRandom}
-              disabled={drawn.length >= 50}
-              style={{marginTop:2, width:'100%'}}>
-              {drawn.length >= 50 ? "All numbers have been called" : "🎲 Call the next number"}
-            </button>
           </div>
         </div>
 

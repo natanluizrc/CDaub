@@ -629,6 +629,42 @@ input {
   color: #1a0838;
 }
 
+/* --- Caller card layout (portrait default) --- */
+.caller-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(192,132,252,0.28);
+  border-radius: 20px;
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+.caller-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+.last-called-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.board-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+}
+
 /* Big action button */
 .draw-random {
   margin-top: 8px;
@@ -1278,4 +1314,28 @@ input {
 .sheet-list {
   max-height: none !important;
   overflow: visible !important;
+}
+
+/* Paisagem em celulares — tudo cabe sem rolar */
+@media (orientation: landscape) and (max-height: 520px) {
+  .top-bar { padding: 5px 16px; }
+  .caller .left, .player-shell .left { padding: 6px 16px 64px; }
+  .session-bar { margin-bottom: 6px; }
+  .session-code { padding: 6px 14px; }
+  .session-code .code { font-size: 18px; margin-top: 0; }
+  .players-pill { padding: 6px 14px; }
+  .players-pill .count { font-size: 18px; margin-top: 0; }
+
+  /* Card vira duas colunas: bola | board + botão */
+  .caller-card { padding: 8px 12px 10px; }
+  .caller-card-body { flex-direction: row; align-items: stretch; gap: 14px; }
+  .last-called-section { width: 80px; flex-shrink: 0; justify-content: center; }
+  .last-called-section .ball { width: 60px !important; height: 60px !important; font-size: 28px !important; }
+  .last-called-section .ball.empty { font-size: 9px !important; }
+  .board-section { min-width: 0; }
+
+  /* Grid e botão compactos */
+  .numbers-grid { gap: 3px; }
+  .num-btn { font-size: 9px; border-radius: 4px; }
+  .draw-random { padding: 7px 12px; font-size: 13px; margin-top: 0; }
 }
