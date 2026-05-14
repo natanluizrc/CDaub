@@ -157,6 +157,33 @@ function Celebrate({ word, sub, onClose }) {
   );
 }
 
+// ---------- Bottom Sheet ----------
+function BottomSheet({ sheet, onSheet, tabs, content }) {
+  const open = sheet !== null;
+  return (
+    <>
+      <div className="bottom-tab-bar">
+        {tabs.map(t => (
+          <button
+            key={t.key}
+            className={`tab-btn${sheet === t.key ? " active" : ""}`}
+            onClick={() => onSheet(sheet === t.key ? null : t.key)}
+          >
+            <span className="tab-icon">{t.icon}</span>
+            <span className="tab-label">{t.label}</span>
+            {t.badge ? <span className="tab-badge">{t.badge}</span> : null}
+          </button>
+        ))}
+      </div>
+      {open && <div className="sheet-backdrop" onClick={() => onSheet(null)} />}
+      <div className={`bottom-sheet${open ? " open" : ""}`}>
+        <div className="sheet-handle" onClick={() => onSheet(null)} />
+        {open && content[sheet]}
+      </div>
+    </>
+  );
+}
+
 // ---------- Caller screen ----------
 function CallerScreen({ me, onLeave }) {
   const [code] = useState(() => makeCode());
@@ -164,6 +191,7 @@ function CallerScreen({ me, onLeave }) {
   const [copied, setCopied] = useState(false);
   const [reveal, setReveal] = useState(0);
   const [fsError, setFsError] = useState(null);
+  const [sheet, setSheet] = useState(null);
   const createdRef = useRef(false);
 
   // Persist "me" + session code locally so we can reconnect on refresh
@@ -351,47 +379,59 @@ function CallerScreen({ me, onLeave }) {
           </div>
         </div>
 
-        <div className="right">
-          <div>
-            <div className="panel-head">
-              <h2>History</h2>
-              <span className="hint">Newest first</span>
-            </div>
-            <div className="history">
-              {drawn.length === 0 && <div className="empty-hist">No numbers called yet.</div>}
-              {[...drawn].reverse().map((n, i) =>
-                <div key={n} className={`h-num${i === 0 ? " newest" : ""}`}>
-                  {String(n).padStart(2, "0")}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div>
-            <div className="panel-head">
-              <h2>At the table</h2>
-              <span className="hint">{players.length} {players.length === 1 ? "player" : "players"}</span>
-            </div>
-            <div className="players-list">
-              {players.length === 0 &&
-                <div className="empty-p">
-                  Share the code <strong style={{ color: "var(--purple-glow)" }}>{code}</strong> for players to join.
-                </div>
-              }
-              {players.map((p) => {
-                const marks = (p.marked || []).length;
-                return (
-                  <div key={p.id} className={`player-row${p.bingo ? " bingo" : ""}`}>
-                    <div className="avatar">{p.name.slice(0, 1).toUpperCase()}</div>
-                    <div className="name">{p.name}</div>
-                    <div className="marks">{p.bingo ? "BINGO!" : `${marks} mark${marks === 1 ? "" : "s"}`}</div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
       </div>
+
+      <BottomSheet
+        sheet={sheet}
+        onSheet={setSheet}
+        tabs={[
+          { key: "history", icon: "🕐", label: "History", badge: drawn.length || null },
+          { key: "players", icon: "👥", label: "At the table", badge: players.length || null },
+        ]}
+        content={{
+          history: (
+            <div>
+              <div className="panel-head">
+                <h2>History</h2>
+                <span className="hint">Newest first</span>
+              </div>
+              <div className="history sheet-list">
+                {drawn.length === 0 && <div className="empty-hist">No numbers called yet.</div>}
+                {[...drawn].reverse().map((n, i) =>
+                  <div key={n} className={`h-num${i === 0 ? " newest" : ""}`}>
+                    {String(n).padStart(2, "0")}
+                  </div>
+                )}
+              </div>
+            </div>
+          ),
+          players: (
+            <div>
+              <div className="panel-head">
+                <h2>At the table</h2>
+                <span className="hint">{players.length} {players.length === 1 ? "player" : "players"}</span>
+              </div>
+              <div className="players-list sheet-list">
+                {players.length === 0 &&
+                  <div className="empty-p">
+                    Share the code <strong style={{ color: "var(--purple-glow)" }}>{code}</strong> for players to join.
+                  </div>
+                }
+                {players.map((p) => {
+                  const marks = (p.marked || []).length;
+                  return (
+                    <div key={p.id} className={`player-row${p.bingo ? " bingo" : ""}`}>
+                      <div className="avatar">{p.name.slice(0, 1).toUpperCase()}</div>
+                      <div className="name">{p.name}</div>
+                      <div className="marks">{p.bingo ? "BINGO!" : `${marks} mark${marks === 1 ? "" : "s"}`}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ),
+        }}
+      />
 
       {session.winner &&
         <Celebrate
@@ -490,6 +530,7 @@ function PlayerGame({ me, conn, onLeave }) {
   const [session, setSession] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [celebrate, setCelebrate] = useState(false);
+  const [sheet, setSheet] = useState(null);
 
   // Persist identity for reconnection
   useEffect(() => {
@@ -633,10 +674,8 @@ function PlayerGame({ me, conn, onLeave }) {
             disabled={!hasBingo || me_p.bingo}>
             {me_p.bingo ? "✓ BINGO confirmed" : hasBingo ? "BINGO!" : "Keep marking..."}
           </button>
-        </div>
 
-        <div className="right">
-          <div className="latest-panel">
+          <div className="latest-panel" style={{ marginTop: 24, width: "100%", maxWidth: 460 }}>
             <div className="latest-head">Last number called</div>
             {lastDrawn
               ? <div className="mini-ball" key={lastDrawn}>
@@ -650,45 +689,58 @@ function PlayerGame({ me, conn, onLeave }) {
               </div>
             }
           </div>
-
-          <div>
-            <div className="panel-head">
-              <h2>Called so far</h2>
-              <span className="hint">{drawn.length} of 50</span>
-            </div>
-            <div className="drawn-strip">
-              {drawn.length === 0 && <div className="empty-hist" style={{ padding: 10, fontStyle: "italic", color: "var(--ink-dimmer)" }}>None yet.</div>}
-              {[...drawn].reverse().map((n) =>
-                <div key={n} className={`ds-num${cardSet.has(n) ? " on-card" : ""}`}>
-                  {String(n).padStart(2, "0")}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div>
-            <div className="panel-head">
-              <h2>At the table</h2>
-              <span className="hint">{Object.keys(session.players || {}).length} players</span>
-            </div>
-            <div className="players-list">
-              {Object.values(session.players || {}).map((p) => {
-                const marks = (p.marked || []).length;
-                return (
-                  <div key={p.id} className={`player-row${p.bingo ? " bingo" : ""}`}>
-                    <div className="avatar">{p.name.slice(0, 1).toUpperCase()}</div>
-                    <div className="name">
-                      {p.name}
-                      {p.id === playerId && <span style={{ color: "var(--purple-glow)", marginLeft: 6, fontSize: 12 }}>(you)</span>}
-                    </div>
-                    <div className="marks">{p.bingo ? "BINGO!" : `${marks} mark${marks === 1 ? "" : "s"}`}</div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
         </div>
       </div>
+
+      <BottomSheet
+        sheet={sheet}
+        onSheet={setSheet}
+        tabs={[
+          { key: "called", icon: "📋", label: "Called so far", badge: drawn.length || null },
+          { key: "players", icon: "👥", label: "At the table", badge: Object.keys(session.players || {}).length || null },
+        ]}
+        content={{
+          called: (
+            <div>
+              <div className="panel-head">
+                <h2>Called so far</h2>
+                <span className="hint">{drawn.length} of 50</span>
+              </div>
+              <div className="drawn-strip sheet-list">
+                {drawn.length === 0 && <div className="empty-hist" style={{ padding: 10, fontStyle: "italic", color: "var(--ink-dimmer)" }}>None yet.</div>}
+                {[...drawn].reverse().map((n) =>
+                  <div key={n} className={`ds-num${cardSet.has(n) ? " on-card" : ""}`}>
+                    {String(n).padStart(2, "0")}
+                  </div>
+                )}
+              </div>
+            </div>
+          ),
+          players: (
+            <div>
+              <div className="panel-head">
+                <h2>At the table</h2>
+                <span className="hint">{Object.keys(session.players || {}).length} players</span>
+              </div>
+              <div className="players-list sheet-list">
+                {Object.values(session.players || {}).map((p) => {
+                  const marks = (p.marked || []).length;
+                  return (
+                    <div key={p.id} className={`player-row${p.bingo ? " bingo" : ""}`}>
+                      <div className="avatar">{p.name.slice(0, 1).toUpperCase()}</div>
+                      <div className="name">
+                        {p.name}
+                        {p.id === playerId && <span style={{ color: "var(--purple-glow)", marginLeft: 6, fontSize: 12 }}>(you)</span>}
+                      </div>
+                      <div className="marks">{p.bingo ? "BINGO!" : `${marks} mark${marks === 1 ? "" : "s"}`}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ),
+        }}
+      />
 
       {(celebrate || session.winner) &&
         <Celebrate

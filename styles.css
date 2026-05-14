@@ -351,18 +351,17 @@ input {
 .caller {
   flex: 1;
   display: grid;
-  grid-template-columns: 1.05fr 1fr;
+  grid-template-columns: 1fr;
   gap: 0;
   padding: 0;
 }
 
 .caller .left {
-  padding: 18px 28px 22px;
-  border-right: 1px solid var(--line);
+  padding: 18px 28px 90px;
   display: flex;
   flex-direction: column;
   min-height: 0;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .session-bar {
@@ -532,16 +531,6 @@ input {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-
-/* Right side panels */
-.caller .right {
-  padding: 24px 32px 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  min-height: 0;
-  overflow: hidden;
 }
 
 .panel-head {
@@ -718,26 +707,17 @@ input {
 .player-shell {
   flex: 1;
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: 1fr;
   gap: 0;
   min-height: 0;
 }
 .player-shell .left {
-  padding: 24px 32px 28px;
-  border-right: 1px solid var(--line);
+  padding: 24px 32px 90px;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 0;
-  overflow: hidden;
-}
-.player-shell .right {
-  padding: 24px 32px 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  min-height: 0;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .session-mini {
@@ -1064,7 +1044,7 @@ input {
 /* ---------- BINGO celebration ---------- */
 .celebrate {
   position: fixed; inset: 0;
-  z-index: 80;
+  z-index: 300;
   background: radial-gradient(ellipse at center, rgba(91, 33, 182, 0.9), rgba(14, 4, 32, 0.97));
   display: flex; align-items: center; justify-content: center;
   animation: shroud-in .4s ease;
@@ -1134,28 +1114,6 @@ input {
 
 /* ---------- Responsive ---------- */
 
-/* Tablet — stack colunas */
-@media (max-width: 1100px) {
-  .caller, .player-shell {
-    grid-template-columns: 1fr;
-    flex: none;
-    overflow: visible;
-  }
-  .caller .left, .player-shell .left {
-    border-right: none;
-    border-bottom: 1px solid var(--line);
-    overflow: visible;
-    min-height: unset;
-  }
-  .caller .right, .player-shell .right {
-    overflow: visible;
-    min-height: unset;
-  }
-  .history { max-height: none; }
-  .drawn-strip { max-height: none; }
-  .players-list { max-height: 400px; }
-}
-
 /* Mobile (≤ 640px) */
 @media (max-width: 640px) {
   /* Welcome */
@@ -1172,8 +1130,7 @@ input {
   .top-bar .who .role-chip { display: none; }
 
   /* Padding dos painéis */
-  .caller .left, .caller .right,
-  .player-shell .left, .player-shell .right { padding: 16px; }
+  .caller .left, .player-shell .left { padding: 16px 16px 90px; }
 
   /* Session bar empilhada */
   .session-bar { flex-direction: column; }
@@ -1215,4 +1172,116 @@ input {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+}
+
+/* ---------- Bottom tab bar ---------- */
+.bottom-tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  background: rgba(14, 4, 32, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--line-strong);
+  padding: 10px 0 max(10px, env(safe-area-inset-bottom));
+}
+
+.tab-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: none;
+  border: none;
+  color: var(--ink-dimmer);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.tab-btn:hover { color: var(--ink-dim); }
+
+.tab-btn.active {
+  color: var(--purple-glow);
+}
+
+.tab-icon { font-size: 22px; line-height: 1; }
+
+.tab-label {
+  font-size: 10px;
+  font-family: var(--font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.tab-badge {
+  position: absolute;
+  top: 4px;
+  right: calc(50% - 22px);
+  background: var(--magenta);
+  color: white;
+  font-size: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 999px;
+  min-width: 16px;
+  text-align: center;
+  line-height: 16px;
+}
+
+/* ---------- Bottom sheet ---------- */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  background: rgba(0, 0, 0, 0.55);
+  animation: backdrop-in 0.2s ease;
+}
+@keyframes backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.bottom-sheet {
+  position: fixed;
+  bottom: 64px;
+  left: 0;
+  right: 0;
+  z-index: 150;
+  background: linear-gradient(180deg, #1e0a40 0%, #130530 100%);
+  border: 1px solid var(--line-strong);
+  border-bottom: none;
+  border-radius: 24px 24px 0 0;
+  padding: 0 24px 28px;
+  max-height: 65vh;
+  overflow-y: auto;
+  transform: translateY(110%);
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+  pointer-events: none;
+}
+
+.bottom-sheet.open {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.sheet-handle {
+  width: 44px;
+  height: 4px;
+  background: var(--line-strong);
+  border-radius: 2px;
+  margin: 14px auto 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.sheet-list {
+  max-height: none !important;
+  overflow: visible !important;
 }
