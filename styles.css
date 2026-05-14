@@ -1132,15 +1132,8 @@ input {
   /* Padding dos painéis */
   .caller .left, .player-shell .left { padding: 16px 16px 90px; }
 
-  /* Session bar empilhada */
-  .session-bar { flex-direction: column; }
-  .players-pill {
-    min-width: unset;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .players-pill .count { margin-top: 0; }
+  /* Session bar lado a lado no mobile */
+  .players-pill { min-width: unset; }
 
   /* Bola do número */
   .ball { width: 130px; height: 130px; font-size: 68px; }

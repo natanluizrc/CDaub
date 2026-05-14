@@ -329,8 +329,8 @@ function CallerScreen({ me, onLeave }) {
             flex:1,
             minHeight:0,
           }}>
-            <div style={{display:'flex', gap:18, alignItems:'center'}}>
-              <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:6, flexShrink:0}}>
+            <div style={{display:'flex', flexDirection:'column', gap:12}}>
+              <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:6}}>
                 <div style={{fontSize:10, textTransform:'uppercase', letterSpacing:'0.22em', color:'var(--ink-dimmer)'}}>
                   Last called
                 </div>
@@ -349,7 +349,7 @@ function CallerScreen({ me, onLeave }) {
                   }
                 </div>
               </div>
-              <div style={{flex:1, display:'flex', flexDirection:'column', gap:8}}>
+              <div style={{display:'flex', flexDirection:'column', gap:8}}>
                 <div style={{display:'flex', alignItems:'baseline', justifyContent:'space-between'}}>
                   <span style={{fontFamily:'var(--font-display)', fontSize:16, fontWeight:600, letterSpacing:'-0.01em'}}>Number board</span>
                   <span style={{fontSize:12, color:'var(--ink-dimmer)'}}>{50 - drawn.length} left</span>
