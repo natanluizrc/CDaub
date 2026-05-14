@@ -38,24 +38,44 @@ const HostScreen = () => {
               <div className="count">4<span className="live-dot" /></div>
             </div>
           </div>
-          <div className="stage">
-            <div className="stage-eyebrow">Last number called</div>
-            <div className="ball" style={{animation:'none'}}><span className="num-text">09</span></div>
-            <div className="caption"><em>Hot, hot, hot!</em> &nbsp;12 of 50 called</div>
-          </div>
-          <div>
-            <button className="draw-random" style={{marginTop:0, marginBottom:20, width:'100%'}}>🎲 Call the next number</button>
-            <div className="panel-head">
-              <h2>Number board</h2>
-              <span className="hint">38 left · random draw</span>
+          <div style={{
+            background:'rgba(255,255,255,0.03)',
+            border:'1px solid rgba(192,132,252,0.28)',
+            borderRadius:20,
+            padding:'16px 18px 18px',
+            display:'flex',
+            flexDirection:'column',
+            gap:14,
+            flex:1,
+            minHeight:0,
+          }}>
+            <div style={{display:'flex', gap:18, alignItems:'center'}}>
+              <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:6, flexShrink:0}}>
+                <div style={{fontSize:10, textTransform:'uppercase', letterSpacing:'0.22em', color:'var(--ink-dimmer)'}}>
+                  Last called
+                </div>
+                <div className="ball" style={{animation:'none', width:96, height:96, fontSize:52}}>
+                  <span className="num-text">09</span>
+                </div>
+                <div style={{fontSize:12, textAlign:'center', color:'var(--ink-dim)'}}>
+                  <em style={{fontStyle:'normal', background:'linear-gradient(90deg,var(--magenta),var(--gold))', WebkitBackgroundClip:'text', backgroundClip:'text', color:'transparent'}}>Hot, hot, hot!</em>{' · '}12/50
+                </div>
+              </div>
+              <div style={{flex:1, display:'flex', flexDirection:'column', gap:8}}>
+                <div style={{display:'flex', alignItems:'baseline', justifyContent:'space-between'}}>
+                  <span style={{fontFamily:'var(--font-display)', fontSize:16, fontWeight:600, letterSpacing:'-0.01em'}}>Number board</span>
+                  <span style={{fontSize:12, color:'var(--ink-dimmer)'}}>38 left</span>
+                </div>
+                <div className="numbers-grid">
+                  {Array.from({length:50},(_,i)=>i+1).map(n=>{
+                    const isDrawn = drawnSet.has(n);
+                    const isLast = n === lastDrawn;
+                    return <div key={n} className={`num-btn${isLast?' last-drawn':isDrawn?' drawn':''}`} style={isLast?{animation:'none'}:{}}>{String(n).padStart(2,'0')}</div>;
+                  })}
+                </div>
+              </div>
             </div>
-            <div className="numbers-grid">
-              {Array.from({length:50},(_,i)=>i+1).map(n=>{
-                const isDrawn = drawnSet.has(n);
-                const isLast = n === lastDrawn;
-                return <div key={n} className={`num-btn${isLast?' last-drawn':isDrawn?' drawn':''}`} style={isLast?{animation:'none'}:{}}>{String(n).padStart(2,'0')}</div>;
-              })}
-            </div>
+            <button className="draw-random" style={{marginTop:2, width:'100%'}}>🎲 Call the next number</button>
           </div>
         </div>
         <div className="right">

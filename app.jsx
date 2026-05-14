@@ -290,48 +290,64 @@ function CallerScreen({ me, onLeave }) {
             </div>
           </div>
 
-          <div className="stage">
-            <div className="stage-eyebrow">Last number called</div>
-            {lastDrawn
-              ? <div className="ball reveal" key={reveal}>
-                  <span className="num-text">{String(lastDrawn).padStart(2, "0")}</span>
+          <div style={{
+            background:'rgba(255,255,255,0.03)',
+            border:'1px solid rgba(192,132,252,0.28)',
+            borderRadius:20,
+            padding:'16px 18px 18px',
+            display:'flex',
+            flexDirection:'column',
+            gap:14,
+            flex:1,
+            minHeight:0,
+          }}>
+            <div style={{display:'flex', gap:18, alignItems:'center'}}>
+              <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:6, flexShrink:0}}>
+                <div style={{fontSize:10, textTransform:'uppercase', letterSpacing:'0.22em', color:'var(--ink-dimmer)'}}>
+                  Last called
                 </div>
-              : <div className="ball empty">
-                  Press the button below to call the first number
+                {lastDrawn
+                  ? <div className="ball reveal" key={reveal} style={{width:96, height:96, fontSize:52}}>
+                      <span className="num-text">{String(lastDrawn).padStart(2, "0")}</span>
+                    </div>
+                  : <div className="ball empty" style={{width:96, height:96, fontSize:13, padding:'0 14px'}}>
+                      Waiting...
+                    </div>
+                }
+                <div style={{fontSize:12, textAlign:'center', color:'var(--ink-dim)', minHeight:18}}>
+                  {lastDrawn
+                    ? <><em style={{fontStyle:'normal', background:'linear-gradient(90deg,var(--magenta),var(--gold))', WebkitBackgroundClip:'text', backgroundClip:'text', color:'transparent'}}>{callPhrase}</em>{' · '}{drawn.length}/50</>
+                    : <span style={{color:'var(--ink-dimmer)'}}>0 / 50</span>
+                  }
                 </div>
-            }
-            <div className="caption">
-              {lastDrawn
-                ? <><em>{callPhrase}</em> &nbsp;{drawn.length} of 50 called</>
-                : "Good luck, everyone!"}
+              </div>
+              <div style={{flex:1, display:'flex', flexDirection:'column', gap:8}}>
+                <div style={{display:'flex', alignItems:'baseline', justifyContent:'space-between'}}>
+                  <span style={{fontFamily:'var(--font-display)', fontSize:16, fontWeight:600, letterSpacing:'-0.01em'}}>Number board</span>
+                  <span style={{fontSize:12, color:'var(--ink-dimmer)'}}>{50 - drawn.length} left</span>
+                </div>
+                <div className="numbers-grid">
+                  {Array.from({ length: 50 }, (_, i) => i + 1).map((n) => {
+                    const isDrawn = drawnSet.has(n);
+                    const isLast = n === lastDrawn;
+                    return (
+                      <div
+                        key={n}
+                        className={`num-btn${isLast ? " last-drawn" : isDrawn ? " drawn" : ""}`}>
+                        {String(n).padStart(2, "0")}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-          </div>
-
-          <div>
             <button
               className="draw-random"
               onClick={drawRandom}
               disabled={drawn.length >= 50}
-              style={{ marginTop: 0, marginBottom: 20, width: "100%" }}>
+              style={{marginTop:2, width:'100%'}}>
               {drawn.length >= 50 ? "All numbers have been called" : "🎲 Call the next number"}
             </button>
-            <div className="panel-head">
-              <h2>Number board</h2>
-              <span className="hint">{50 - drawn.length} left · random draw</span>
-            </div>
-            <div className="numbers-grid">
-              {Array.from({ length: 50 }, (_, i) => i + 1).map((n) => {
-                const isDrawn = drawnSet.has(n);
-                const isLast = n === lastDrawn;
-                return (
-                  <div
-                    key={n}
-                    className={`num-btn${isLast ? " last-drawn" : isDrawn ? " drawn" : ""}`}>
-                    {String(n).padStart(2, "0")}
-                  </div>
-                );
-              })}
-            </div>
           </div>
         </div>
 
