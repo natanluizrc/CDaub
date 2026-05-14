@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CDaub — Bingo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=7" />
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- ─── Firebase SDK (compat) ─────────────────────────────────── -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- ─── Configuração do seu projeto Firebase ─────────────────────
+       1. Acesse console.firebase.google.com
+       2. Crie ou abra seu projeto
+       3. Clique em "Adicionar app" → Web
+       4. Copie o objeto firebaseConfig e substitua abaixo
+  ──────────────────────────────────────────────────────────────── -->
+  <script>
+    const firebaseConfig = {
+      apiKey:            "AIzaSyCLb7J6D_qfDG7pk1zILp5nSMJ9VQEYCQw",
+      authDomain:        "nl-cdaub.firebaseapp.com",
+      projectId:         "nl-cdaub",
+      storageBucket:     "nl-cdaub.firebasestorage.app",
+      messagingSenderId: "810383826934",
+      appId:             "1:810383826934:web:4fa31e42510a420ded71d7"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <!-- ─────────────────────────────────────────────────────────────── -->
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script>
+    window.onerror = function(msg, src, line, col, err) {
+      document.getElementById('root').innerHTML =
+        '<div style="background:#0e0420;color:#fca5a5;padding:40px;font-family:monospace;min-height:100vh">' +
+        '<h2 style="color:#f5edff">Erro JavaScript</h2><p>' + msg + '</p>' +
+        '<p style="color:#8b7aa8">em ' + src + ' linha ' + line + '</p>' +
+        (err ? '<pre style="color:#c084fc;white-space:pre-wrap">' + err.stack + '</pre>' : '') +
+        '</div>';
+    };
+    window.addEventListener('unhandledrejection', function(e) {
+      document.getElementById('root').innerHTML =
+        '<div style="background:#0e0420;color:#fca5a5;padding:40px;font-family:monospace;min-height:100vh">' +
+        '<h2 style="color:#f5edff">Erro Firestore / Promise</h2>' +
+        '<pre style="color:#c084fc;white-space:pre-wrap">' + (e.reason ? (e.reason.message || JSON.stringify(e.reason)) : String(e)) + '</pre>' +
+        '</div>';
+    });
+  </script>
+  <script type="text/babel" src="app.jsx?v=7"></script>
+</body>
+</html>

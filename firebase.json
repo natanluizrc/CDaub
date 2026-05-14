@@ -1,0 +1,22 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      "firestore.rules",
+      "firestore.indexes.json",
+      ".gitignore",
+      "README.md",
+      "All Screens.html",
+      "design-canvas.jsx",
+      "screens-host.jsx",
+      "screens-player.jsx",
+      "screens-welcome.jsx"
+    ]
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}
