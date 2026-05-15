@@ -101,7 +101,7 @@ function TopBar({ name, role, onLeave, onInfo }) {
       <div className="who">
         <span className="role-chip">{role === "caller" ? "Host" : "Player"} · {name}</span>
         {onInfo && <button className="info-btn" onClick={onInfo}>Room</button>}
-        <button className="leave" onClick={onLeave}>Leave</button>
+        <button className="leave" onClick={onLeave}>Exit</button>
       </div>
     </div>
   );

@@ -151,14 +151,14 @@ input {
 .top-bar .who .name { color: var(--ink); font-weight: 500; }
 
 .top-bar .who .role-chip {
-  font-size: 11px;
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.07);
+  letter-spacing: 0.06em;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: transparent;
   border: 1px solid var(--line-strong);
-  color: var(--ink-dim);
+  color: var(--ink-dimmer);
 }
 
 .top-bar button.leave {
@@ -1363,11 +1363,7 @@ input {
 
 /* ---------- Landscape: layout 2 colunas ---------- */
 @media (orientation: landscape) {
-  .draw-random--landscape { display: block; width: 100%; }
   .draw-random--portrait { display: none; }
-  .last-called-row { display: block; }
-
-  .session-bar { flex-direction: column; }
 
   /* Caller: controles à esq, grid de números à dir */
   .caller {
@@ -1380,10 +1376,44 @@ input {
   }
   .caller-info-col {
     flex: 0 0 180px;
+    min-height: 0;
   }
   .caller-card {
     flex: 1;
     min-width: 0;
+  }
+
+  /* session-bar: flex col com 2 filhos — ocupa 2 unidades para igualar altura */
+  .session-bar {
+    flex: 2;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .session-code,
+  .players-pill {
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* last-called-row: 1 unidade, mostra só last-called-card */
+  .last-called-row {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: stretch;
+  }
+  .last-called-card {
+    flex: 1;
+    min-height: 0;
+    height: auto;
+  }
+
+  /* next number: 1 unidade — mesma altura dos outros blocos */
+  .draw-random--landscape {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    width: 100%;
   }
 
   /* Player: cartela à esq, ação à dir */
