@@ -648,9 +648,10 @@ input {
 @media (orientation: portrait) {
   .numbers-grid {
     grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-template-rows: repeat(9, 1fr);
     flex: 1;
     min-height: 0;
-    grid-auto-rows: minmax(0, 1fr);
+    height: 0;
     overflow: hidden;
   }
   .num-btn {
