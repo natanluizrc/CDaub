@@ -23,8 +23,8 @@
   --card-bg: rgba(255, 255, 255, 0.04);
   --shadow-glow: 0 0 60px rgba(255, 255, 255, 0.05);
   --shadow-deep: 0 30px 80px -20px rgba(0, 0, 0, 0.6);
-  --font-display: "Bricolage Grotesque", "Fraunces", serif;
-  --font-ui: "Space Grotesk", system-ui, sans-serif;
+  --font-display: "JetBrains Mono", "Menlo", monospace;
+  --font-ui: "JetBrains Mono", "Menlo", monospace;
   --font-mono: "JetBrains Mono", "Menlo", monospace;
 }
 
@@ -1622,5 +1622,11 @@ input {
   overflow-y: auto;
   padding: 20px 24px 40px;
   flex: 1;
+}
+
+/* === Universal font normalization === */
+* {
+  font-family: "JetBrains Mono", "Menlo", monospace !important;
+  font-size: 13px !important;
 }
 

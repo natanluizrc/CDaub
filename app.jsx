@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "2.2";
+const APP_VERSION = "2.3";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -50,7 +50,6 @@ function Welcome({ onPick }) {
     <div style={{position:'relative', width:'100%', minHeight:'100vh', background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)', overflow:'hidden', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
       <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.025), transparent 60%)', pointerEvents:'none'}} />
       <div className="welcome">
-        <div className="eyebrow">WELCOME TO</div>
         <h1>CDaub. <span className="version-tag">v{APP_VERSION}</span></h1>
         <div className="slogan">Cards that build Moments.</div>
 

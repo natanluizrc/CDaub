@@ -4,7 +4,6 @@ const WelcomeScreen = () => (
     <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 20% 20%, rgba(124,58,237,0.25), transparent 40%), radial-gradient(circle at 80% 80%, rgba(236,72,153,0.18), transparent 45%)'}} />
     <div className="modal-shroud" style={{position:'absolute', animation:'none'}}>
       <div className="welcome" style={{animation:'none'}}>
-        <div className="eyebrow">WELCOME TO</div>
         <h1>CDaub.</h1>
         <div className="slogan">Cards that build Moments.</div>
         <p className="sub">The excitement begins before the first number is called. Tell us who you are — and how you'll join the game.</p>
