@@ -47,7 +47,7 @@ function Welcome({ onPick }) {
   const ok = name.trim().length >= 2;
 
   return (
-    <div style={{position:'fixed', inset:0, background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)', overflow:'auto', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
+    <div style={{position:'fixed', inset:0, background:'radial-gradient(ellipse at top, #16162c 0%, #0d0d1c 45%, #07070f 80%)', overflow:'auto', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
       <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.025), transparent 60%)', pointerEvents:'none'}} />
       <div className="welcome" style={{flexShrink:0}}>
         <h1>CDaub. <span className="version-tag">v{APP_VERSION}</span></h1>
@@ -93,14 +93,14 @@ function Welcome({ onPick }) {
 // ---------- Top bar ----------
 function TopBar({ onLeave, onInfo }) {
   return (
-    <div className={`top-bar${onInfo ? ' top-bar--clickable' : ''}`} onClick={onInfo}>
+    <div className="top-bar">
       <div className="brand">
         <span className="logo">CDaub.</span>
       </div>
       <div className="who">
-        {onLeave && <button className="leave" onClick={(e) => { e.stopPropagation(); onLeave(); }}>Exit</button>}
+        {onInfo && <button className="info-btn" onClick={onInfo}>Info</button>}
+        {onLeave && <button className="leave" onClick={onLeave}>Exit</button>}
       </div>
-      {onInfo && <div className="top-bar-pull-tab"><span>INFO</span></div>}
     </div>
   );
 }
@@ -108,7 +108,7 @@ function TopBar({ onLeave, onInfo }) {
 // ---------- Confetti / Celebration ----------
 function Celebrate({ word, sub, onClose }) {
   const pieces = useMemo(() => {
-    const colors = ["#f5f5f5", "#d0d0d0", "#b0b0b0", "#e0e0e0", "#ffffff", "#c8c8c8"];
+    const colors = ["#818cf8", "#a78bfa", "#4ade80", "#fbbf24", "#f472b6", "#60a5fa"];
     return Array.from({ length: 110 }, (_, i) => ({
       left: Math.random() * 100,
       delay: Math.random() * 0.8,
@@ -153,7 +153,7 @@ function ExitConfirmDialog({ onConfirm, onCancel }) {
         position:'fixed',top:'50%',left:'50%',
         transform:'translate(-50%,-50%)',
         zIndex:401,
-        background:'#181818',
+        background:'#12121e',
         border:'1px solid rgba(239,68,68,0.32)',
         borderRadius:20,
         padding:'28px 24px',
@@ -305,7 +305,7 @@ function CallerScreen({ me, onLeave }) {
 
   if (fsError) {
     return (
-      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
+      <div className="app" style={{background:'radial-gradient(ellipse at top, #16162c 0%, #0d0d1c 45%, #07070f 80%)'}}>
         <TopBar name={me.name} role="caller" onLeave={onLeave} />
         <div style={{ padding: 40, textAlign: "center", color: "#fca5a5" }}>
           Erro ao conectar ao Firestore:<br /><strong>{fsError}</strong>
@@ -316,7 +316,7 @@ function CallerScreen({ me, onLeave }) {
 
   if (!session) {
     return (
-      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
+      <div className="app" style={{background:'radial-gradient(ellipse at top, #16162c 0%, #0d0d1c 45%, #07070f 80%)'}}>
         <TopBar name={me.name} role="caller" onLeave={onLeave} />
         <div style={{ padding: 40, textAlign: "center", color: "var(--ink-dim)" }}>
           Conectando…
@@ -335,7 +335,7 @@ function CallerScreen({ me, onLeave }) {
   const players = Object.values(session.players || {});
 
   return (
-    <div className="app app--caller" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
+    <div className="app app--caller" style={{background:'radial-gradient(ellipse at top, #16162c 0%, #0d0d1c 45%, #07070f 80%)'}}>
       <TopBar onInfo={() => setShowInfo(v => !v)} />
       <div className="caller">
         <div className="left">
@@ -549,7 +549,7 @@ function ConnectModal({ me, onConnected, onLeave }) {
   };
 
   return (
-    <div style={{position:'fixed', inset:0, background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)', overflow:'auto', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
+    <div style={{position:'fixed', inset:0, background:'radial-gradient(ellipse at top, #16162c 0%, #0d0d1c 45%, #07070f 80%)', overflow:'auto', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
       <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.025), transparent 60%)', pointerEvents:'none'}} />
       <div className="connect-card">
         <h2>Join the room</h2>
@@ -624,7 +624,7 @@ function PlayerGame({ me, conn, onLeave }) {
 
   if (!loaded) {
     return (
-      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
+      <div className="app" style={{background:'radial-gradient(ellipse at top, #16162c 0%, #0d0d1c 45%, #07070f 80%)'}}>
         <TopBar name={me.name} role="player" onLeave={onLeave} />
         <div style={{ padding: 40, textAlign: "center", color: "var(--ink-dim)" }}>
           Conectando…
@@ -635,7 +635,7 @@ function PlayerGame({ me, conn, onLeave }) {
 
   if (!session) {
     return (
-      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
+      <div className="app" style={{background:'radial-gradient(ellipse at top, #16162c 0%, #0d0d1c 45%, #07070f 80%)'}}>
         <TopBar name={me.name} role="player" onLeave={onLeave} />
         <div style={{ padding: 40, textAlign: "center", color: "var(--ink-dim)" }}>
           The room has ended.
@@ -671,7 +671,7 @@ function PlayerGame({ me, conn, onLeave }) {
   const marksCount = (me_p.marked || []).length;
 
   return (
-    <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
+    <div className="app" style={{background:'radial-gradient(ellipse at top, #16162c 0%, #0d0d1c 45%, #07070f 80%)'}}>
       <TopBar onLeave={onLeave} onInfo={() => setShowInfo(v => !v)} />
       <div className="player-shell">
         <div className="left">
