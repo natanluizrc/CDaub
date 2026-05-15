@@ -1419,8 +1419,7 @@ input {
     width: 100%;
   }
 
-  /* === Caller landscape: top-bar oculta, sidebar vertical à direita === */
-  .app--caller .top-bar { display: none; }
+  /* === Caller landscape: sidebar vertical à direita === */
   .app--caller .caller-info-col { display: none; }
   .app--caller .last-called-row { display: none; }
   .app--caller .caller { padding: 0; }
@@ -1437,16 +1436,6 @@ input {
     overflow-y: auto;
   }
 
-
-  .ls-brand {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--ink-dim);
-    letter-spacing: -0.01em;
-    padding: 2px 4px 8px;
-    flex-shrink: 0;
-    border-bottom: 1px solid var(--line);
-  }
 
   .ls-btn {
     padding: 7px 10px;

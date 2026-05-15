@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "3.4";
+const APP_VERSION = "3.5";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -467,7 +467,6 @@ function CallerScreen({ me, onLeave }) {
           </div>
 
           <div className="ls-sidebar">
-            <div className="ls-brand">CDaub.</div>
             <div className="ls-widget">
               <div className="ls-lbl">Code</div>
               <div className="ls-code">{code}</div>
