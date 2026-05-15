@@ -88,6 +88,32 @@ input {
   background: rgba(10, 10, 10, 0.75);
   backdrop-filter: blur(20px);
   flex-shrink: 0;
+  position: relative;
+}
+
+.top-bar-pull-tab {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--line-strong);
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  padding: 4px 20px 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  pointer-events: none;
+}
+
+.top-bar-pull-tab span {
+  font-style: italic;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink-dimmer);
+  line-height: 1;
 }
 
 .top-bar .brand {
@@ -1627,9 +1653,16 @@ input {
 .top-bar--clickable {
   cursor: pointer;
   transition: background 0.15s;
+  z-index: 10;
 }
 .top-bar--clickable:hover {
   background: rgba(255, 255, 255, 0.04);
+}
+.top-bar--clickable:hover .top-bar-pull-tab {
+  border-color: var(--ink-dim);
+}
+.top-bar--clickable:hover .top-bar-pull-tab span {
+  color: var(--ink-dim);
 }
 
 .info-icon {

@@ -98,9 +98,9 @@ function TopBar({ onLeave, onInfo }) {
         <span className="logo">CDaub.</span>
       </div>
       <div className="who">
-        {onInfo && <span className="info-icon">i</span>}
         {onLeave && <button className="leave" onClick={(e) => { e.stopPropagation(); onLeave(); }}>Exit</button>}
       </div>
+      {onInfo && <div className="top-bar-pull-tab"><span>i</span></div>}
     </div>
   );
 }
