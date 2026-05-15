@@ -1475,21 +1475,24 @@ input {
     width: 100%;
   }
 
-  /* === Caller landscape: sidebar vertical à direita === */
-  .app--caller .caller-info-col { display: none; }
-  .app--caller .last-called-row { display: none; }
-  .app--caller .caller { padding: 0; }
-  .app--caller .caller .left { gap: 0; }
-
-  .app--caller .ls-sidebar {
-    display: flex;
-    flex-direction: column;
-    flex: 0 0 152px;
+  /* === Caller landscape: chips inline com o grid === */
+  .app--caller .caller .left { flex-direction: column; }
+  .app--caller .caller-info-col { display: flex; flex: none; }
+  .app--caller .session-bar { flex: none; flex-direction: row; }
+  .app--caller .last-called-row { flex: none; }
+  .app--caller .draw-random--landscape { display: none; }
+  .app--caller .draw-random--portrait { display: flex; height: auto; }
+  .app--caller .ls-sidebar { display: none; }
+  .app--caller .numbers-grid {
+    flex: 1;
     min-height: 0;
-    gap: 8px;
-    padding: 8px;
-    border-left: 1px solid rgba(129, 140, 248, 0.15);
-    overflow-y: auto;
+    grid-auto-rows: minmax(0, 1fr);
+    overflow: hidden;
+  }
+  .app--caller .num-btn {
+    aspect-ratio: unset;
+    min-height: 0;
+    min-width: 0;
   }
 
 
@@ -1606,13 +1609,8 @@ input {
   .top-bar .brand .brand-slogan { display: none; }
   .top-bar .who .role-chip { font-size: 10px; padding: 3px 8px; }
 
-  .app--caller .ls-sidebar { flex-basis: 132px; gap: 4px; padding: 4px 8px; }
-  .ls-widget { padding: 4px 8px; }
-  .ls-next-btn { padding: 8px; }
-
   .caller { padding: 4px 12px; gap: 4px; }
-  .caller .left { gap: 8px; }
-  .caller-info-col { flex: 0 0 156px; gap: 4px; }
+  .caller-info-col { gap: 4px; }
   .session-code, .players-pill { padding: 4px 8px; height: auto; }
   .session-code .code, .players-pill .count { font-size: 16px; }
   .last-called-card { padding: 4px 8px; height: auto; }
