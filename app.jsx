@@ -100,7 +100,7 @@ function TopBar({ onLeave, onInfo }) {
       <div className="who">
         {onLeave && <button className="leave" onClick={(e) => { e.stopPropagation(); onLeave(); }}>Exit</button>}
       </div>
-      {onInfo && <div className="top-bar-pull-tab"><span>i</span></div>}
+      {onInfo && <div className="top-bar-pull-tab"><span>INFO</span></div>}
     </div>
   );
 }
