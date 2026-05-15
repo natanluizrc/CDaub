@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "2.0";
+const APP_VERSION = "2.1";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -282,7 +282,7 @@ function CallerScreen({ me, onLeave }) {
                 <div className="code">{code}</div>
               </div>
               <div className="players-pill">
-                <div className="lbl">Players</div>
+                <div className="lbl">Total Players</div>
                 <div className="count">
                   {players.length}
                   <span className="live-dot" />
@@ -292,7 +292,7 @@ function CallerScreen({ me, onLeave }) {
 
             <div className="last-called-row">
               <div className="last-called-card">
-                <div className="lbl">Last called</div>
+                <div className="lbl">Last Number</div>
                 {lastDrawn
                   ? <div className="last-num reveal" key={reveal}>{String(lastDrawn).padStart(2, "0")}</div>
                   : <div className="last-num empty">—</div>
@@ -302,23 +302,25 @@ function CallerScreen({ me, onLeave }) {
                 className="draw-random draw-random--portrait"
                 onClick={drawRandom}
                 disabled={drawn.length >= 72}>
-                {drawn.length >= 72 ? "All numbers called" : "🎲 Next Number"}
+                <span className="btn-lbl">{drawn.length >= 72 ? "Done" : "Tap to draw"}</span>
+                <span className="btn-val">{drawn.length >= 72 ? "—" : "Next Number"}</span>
               </button>
             </div>
             <button
               className="draw-random draw-random--landscape"
               onClick={drawRandom}
               disabled={drawn.length >= 72}>
-              {drawn.length >= 72 ? "All numbers have been called" : "🎲 Next Number"}
+              <span className="btn-lbl">{drawn.length >= 72 ? "Done" : "Tap to draw"}</span>
+              <span className="btn-val">{drawn.length >= 72 ? "—" : "Next Number"}</span>
             </button>
           </div>
 
           <div className="caller-card">
             <div className="caller-card-body">
               <div className="board-section">
-                <div style={{display:'flex', alignItems:'baseline', justifyContent:'space-between'}}>
-                  <span style={{fontFamily:'var(--font-display)', fontSize:16, fontWeight:600, letterSpacing:'-0.01em'}}>Number board</span>
-                  <span style={{fontSize:12, color:'var(--ink-dimmer)'}}>{72 - drawn.length} left</span>
+                <div className="board-section-head">
+                  <span className="lbl">Number Board</span>
+                  <span className="lbl">{72 - drawn.length} left</span>
                 </div>
                 <div className="numbers-grid">
                   {Array.from({ length: 72 }, (_, i) => i + 1).map((n) => {

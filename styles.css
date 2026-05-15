@@ -456,13 +456,17 @@ input {
   gap: 10px;
   align-items: stretch;
 }
+.last-called-row .last-called-card,
+.last-called-row .draw-random--portrait {
+  flex: 1;
+  min-width: 0;
+}
 
 .last-called-card {
   background: linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(236, 72, 153, 0.15));
   border: 1px solid var(--line-strong);
   border-radius: 14px;
   padding: 8px 14px;
-  flex: 1;
   box-sizing: border-box;
   flex-shrink: 0;
 }
@@ -709,20 +713,46 @@ input {
   flex: 1;
   min-height: 0;
 }
+.board-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.board-section-head .lbl {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--ink-dimmer);
+}
 
 /* Big action button */
 .draw-random {
   margin-top: 0;
-  padding: 8px 12px;
-  border-radius: 12px;
+  padding: 8px 14px;
+  border-radius: 14px;
   background: linear-gradient(135deg, #f97316, #ea580c);
   font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
   color: white;
   transition: all .2s;
   box-shadow: 0 8px 20px -8px rgba(249, 115, 22, 0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: left;
+}
+.draw-random .btn-lbl {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: rgba(255,255,255,0.65);
+  font-weight: 500;
+}
+.draw-random .btn-val {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  margin-top: 2px;
 }
 .draw-random:hover:not(:disabled) {
   transform: translateY(-2px);
@@ -1412,7 +1442,8 @@ input {
   .board-section { gap: 4px; }
   .numbers-grid { gap: 3px; }
   .num-btn { font-size: 10px; border-radius: 4px; }
-  .draw-random { padding: 5px 8px; font-size: 12px; margin-top: 2px; }
+  .draw-random { padding: 5px 10px; }
+  .draw-random .btn-val { font-size: 16px; }
 
   .player-shell .left { padding: 5px 12px; gap: 8px; }
   .player-card-col { gap: 5px; }
