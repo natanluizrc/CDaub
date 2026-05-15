@@ -619,18 +619,24 @@ input {
 
 .numbers-grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 5px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 @media (orientation: portrait) {
   .numbers-grid {
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(8, minmax(0, 1fr));
     flex: 1;
-    grid-auto-rows: 1fr;
+    min-height: 0;
+    grid-auto-rows: minmax(0, 1fr);
+    overflow: hidden;
   }
   .num-btn {
     aspect-ratio: unset;
+    min-height: 0;
+    min-width: 0;
   }
 }
 
