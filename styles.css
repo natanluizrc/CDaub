@@ -504,6 +504,17 @@ input {
 .last-called-card .last-num.empty {
   color: var(--ink-dimmer);
 }
+.last-num.spinning,
+.ls-num-val.spinning {
+  color: #fbbf24;
+  text-shadow: 0 0 18px rgba(251, 191, 36, 0.8);
+  animation: spin-tick 0.13s ease-out;
+}
+@keyframes spin-tick {
+  0%   { opacity: 0.15; transform: scale(0.7) translateY(5px); }
+  55%  { opacity: 1;    transform: scale(1.1) translateY(-2px); }
+  100% { opacity: 1;    transform: scale(1)   translateY(0); }
+}
 
 /* hide in portrait — moved below .draw-random so the cascade is correct */
 

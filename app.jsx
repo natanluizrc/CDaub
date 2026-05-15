@@ -235,6 +235,10 @@ function CallerScreen({ me, onLeave }) {
   const [code] = useState(() => makeCode());
   const [session, setSession] = useState(null);
   const [reveal, setReveal] = useState(0);
+  const [spinning, setSpinning] = useState(false);
+  const [spinDisplay, setSpinDisplay] = useState(null);
+  const [spinTick, setSpinTick] = useState(0);
+  const [localLastDrawn, setLocalLastDrawn] = useState(null);
   const [fsError, setFsError] = useState(null);
   const [showInfo, setShowInfo] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
@@ -277,6 +281,7 @@ function CallerScreen({ me, onLeave }) {
   const drawn = session ? (session.drawn || []) : [];
   const drawnSet = new Set(drawn);
   const lastDrawn = session ? session.lastDrawn : null;
+  const effectiveLast = localLastDrawn !== null ? localLastDrawn : lastDrawn;
 
   // Hooks must be called before any conditional return
   const drawNumber = useCallback((n) => {
@@ -290,7 +295,7 @@ function CallerScreen({ me, onLeave }) {
   }, [drawn, drawnSet, code]);
 
   const callPhrase = useMemo(() => {
-    if (!lastDrawn) return "";
+    if (!effectiveLast) return "";
     const phrases = [
       "Here it comes!",
       "One more drops!",
@@ -300,8 +305,8 @@ function CallerScreen({ me, onLeave }) {
       "Don't blink now!",
       "This one's special!"
     ];
-    return phrases[lastDrawn % phrases.length];
-  }, [lastDrawn]);
+    return phrases[effectiveLast % phrases.length];
+  }, [effectiveLast]);
 
   if (fsError) {
     return (
@@ -326,10 +331,37 @@ function CallerScreen({ me, onLeave }) {
   }
 
   const drawRandom = () => {
+    if (spinning) return;
     const avail = [];
     for (let i = 1; i <= 72; i++) if (!drawnSet.has(i)) avail.push(i);
     if (!avail.length) return;
-    drawNumber(avail[Math.floor(Math.random() * avail.length)]);
+
+    const finalNum = avail[Math.floor(Math.random() * avail.length)];
+    // Frame delays (ms): fast → slow, total ≈ 1820ms
+    const INTERVALS = [55, 65, 80, 95, 115, 140, 170, 205, 245, 295, 355];
+
+    setSpinning(true);
+    setSpinDisplay(avail[Math.floor(Math.random() * avail.length)]);
+    setSpinTick((t) => t + 1);
+
+    let cumulative = 0;
+    INTERVALS.forEach((interval, idx) => {
+      cumulative += interval;
+      const isLast = idx === INTERVALS.length - 1;
+      setTimeout(() => {
+        if (isLast) {
+          setSpinning(false);
+          setSpinDisplay(null);
+          setLocalLastDrawn(finalNum);
+          drawNumber(finalNum);
+        } else {
+          const others = avail.filter((n) => n !== finalNum);
+          const pool = others.length >= 3 ? others : avail;
+          setSpinDisplay(pool[Math.floor(Math.random() * pool.length)]);
+          setSpinTick((t) => t + 1);
+        }
+      }, cumulative);
+    });
   };
 
   const players = Object.values(session.players || {});
@@ -360,8 +392,8 @@ function CallerScreen({ me, onLeave }) {
             <button
               className="draw-random draw-random--landscape"
               onClick={drawRandom}
-              disabled={drawn.length >= 72}>
-              <span className="btn-val">{drawn.length >= 72 ? "—" : "Next"}</span>
+              disabled={drawn.length >= 72 || spinning}>
+              <span className="btn-val">{drawn.length >= 72 ? "—" : spinning ? "Picking…" : "Next"}</span>
             </button>
           </div>
 
@@ -371,7 +403,7 @@ function CallerScreen({ me, onLeave }) {
 <div className="numbers-grid">
                   {Array.from({ length: 72 }, (_, i) => i + 1).map((n) => {
                     const isDrawn = drawnSet.has(n);
-                    const isLast = n === lastDrawn;
+                    const isLast = n === effectiveLast;
                     return (
                       <div
                         key={n}
@@ -388,16 +420,18 @@ function CallerScreen({ me, onLeave }) {
           <div className="last-called-row">
             <div className="last-called-card">
               <div className="lbl">Last</div>
-              {lastDrawn
-                ? <div className="last-num reveal" key={reveal}>{String(lastDrawn).padStart(2, "0")}</div>
-                : <div className="last-num empty">—</div>
+              {spinning
+                ? <div className="last-num spinning" key={`s${spinTick}`}>{String(spinDisplay).padStart(2, "0")}</div>
+                : effectiveLast
+                  ? <div className="last-num reveal" key={reveal}>{String(effectiveLast).padStart(2, "0")}</div>
+                  : <div className="last-num empty">—</div>
               }
             </div>
             <button
               className="draw-random draw-random--portrait"
               onClick={drawRandom}
-              disabled={drawn.length >= 72}>
-              <span className="btn-val">{drawn.length >= 72 ? "—" : "Next"}</span>
+              disabled={drawn.length >= 72 || spinning}>
+              <span className="btn-val">{drawn.length >= 72 ? "—" : spinning ? "Picking…" : "Next"}</span>
             </button>
           </div>
 
@@ -419,16 +453,18 @@ function CallerScreen({ me, onLeave }) {
             </div>
             <div className="ls-widget">
               <div className="ls-lbl">Last</div>
-              {lastDrawn
-                ? <div className="ls-num-val ls-reveal" key={reveal}>{String(lastDrawn).padStart(2, "0")}</div>
-                : <div className="ls-num-val ls-empty">—</div>
+              {spinning
+                ? <div className="ls-num-val spinning" key={`s${spinTick}`}>{String(spinDisplay).padStart(2, "0")}</div>
+                : effectiveLast
+                  ? <div className="ls-num-val ls-reveal" key={reveal}>{String(effectiveLast).padStart(2, "0")}</div>
+                  : <div className="ls-num-val ls-empty">—</div>
               }
             </div>
             <button
               className="ls-next-btn"
               onClick={drawRandom}
-              disabled={drawn.length >= 72}>
-              {drawn.length >= 72 ? "—" : "Next"}
+              disabled={drawn.length >= 72 || spinning}>
+              {drawn.length >= 72 ? "—" : spinning ? "Picking…" : "Next"}
             </button>
           </div>
         </div>
