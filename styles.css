@@ -421,6 +421,7 @@ input {
 }
 
 .players-pill {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -428,7 +429,6 @@ input {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--line);
   border-radius: 14px;
-  min-width: 100px;
 }
 .players-pill .lbl {
   font-size: 10px;
@@ -1333,6 +1333,8 @@ input {
 
 /* ---------- Landscape: layout 2 colunas ---------- */
 @media (orientation: landscape) {
+  .session-bar { flex-direction: column; }
+
   /* Caller: controles à esq, grid de números à dir */
   .caller {
     padding: 6px 14px;
