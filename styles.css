@@ -619,9 +619,8 @@ input {
 }
 
 .num-btn.drawn {
-  background: linear-gradient(135deg, #92400e, #b45309);
-  color: #1a0838;
-  border-color: var(--gold);
+  background: linear-gradient(135deg, #ca8a04, #eab308);
+  border-color: #fde047;
   cursor: not-allowed;
   color: #1c1002;
 }
@@ -658,8 +657,8 @@ input {
   font-family: var(--font-display);
   font-size: 14px;
   font-weight: 600;
-  background: radial-gradient(circle at 30% 30%, #b45309, #92400e);
-  border: 1px solid var(--gold);
+  background: radial-gradient(circle at 30% 30%, #eab308, #ca8a04);
+  border: 1px solid #fde047;
   color: #1c1002;
   box-shadow: inset -3px -4px 8px rgba(0,0,0,0.3), inset 3px 3px 6px rgba(255,255,255,0.15);
 }
@@ -710,18 +709,18 @@ input {
   margin-top: 4px;
   padding: 8px 12px;
   border-radius: 12px;
-  background: linear-gradient(135deg, var(--magenta), var(--purple-2));
+  background: linear-gradient(135deg, #f97316, #ea580c);
   font-family: var(--font-display);
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.01em;
   color: white;
   transition: all .2s;
-  box-shadow: 0 8px 20px -8px rgba(236, 72, 153, 0.6);
+  box-shadow: 0 8px 20px -8px rgba(249, 115, 22, 0.6);
 }
 .draw-random:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 18px 40px -12px rgba(236, 72, 153, 0.8);
+  box-shadow: 0 18px 40px -12px rgba(249, 115, 22, 0.8);
 }
 .draw-random:disabled {
   opacity: 0.45;

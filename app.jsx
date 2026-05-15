@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "1.8";
+const APP_VERSION = "1.9";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -301,7 +301,7 @@ function CallerScreen({ me, onLeave }) {
               className="draw-random draw-random--landscape"
               onClick={drawRandom}
               disabled={drawn.length >= 72}>
-              {drawn.length >= 72 ? "All numbers have been called" : "🎲 Call the next number"}
+              {drawn.length >= 72 ? "All numbers have been called" : "🎲 Next Number"}
             </button>
           </div>
 
@@ -330,7 +330,7 @@ function CallerScreen({ me, onLeave }) {
                   onClick={drawRandom}
                   disabled={drawn.length >= 72}
                   style={{width:'100%'}}>
-                  {drawn.length >= 72 ? "All numbers have been called" : "🎲 Call the next number"}
+                  {drawn.length >= 72 ? "All numbers have been called" : "🎲 Next Number"}
                 </button>
               </div>
             </div>
