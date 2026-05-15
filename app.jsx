@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "3.6";
+const APP_VERSION = "3.7";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -96,9 +96,9 @@ function TopBar({ onLeave, onInfo }) {
     <div className={`top-bar${onInfo ? ' top-bar--clickable' : ''}`} onClick={onInfo}>
       <div className="brand">
         <span className="logo">CDaub.</span>
-        {onInfo && <span className="info-icon">i</span>}
       </div>
       <div className="who">
+        {onInfo && <span className="info-icon">i</span>}
         {onLeave && <button className="leave" onClick={(e) => { e.stopPropagation(); onLeave(); }}>Exit</button>}
       </div>
     </div>
