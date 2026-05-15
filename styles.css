@@ -581,8 +581,12 @@ input {
 
 .numbers-grid {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(12, 1fr);
   gap: 6px;
+}
+
+@media (orientation: portrait) {
+  .numbers-grid { grid-template-columns: repeat(6, 1fr); }
 }
 
 .num-btn {
@@ -1206,8 +1210,8 @@ input {
   .stage { padding: 8px 0; }
   .stage .caption { font-size: 14px; }
 
-  /* Grade de números — 10 colunas com células menores */
-  .numbers-grid { grid-template-columns: repeat(10, 1fr); gap: 4px; }
+  /* Grade de números — células menores no mobile */
+  .numbers-grid { gap: 4px; }
   .num-btn { font-size: 11px; border-radius: 6px; }
 
   /* Cartela do jogador */

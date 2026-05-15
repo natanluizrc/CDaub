@@ -14,22 +14,14 @@ const db = () => firebase.firestore();
 const sessionRef = (code) => db().collection("sessions").doc(code);
 
 function makeCode() {
-  const A = "ABCDEFGHJKLMNPQRSTUVWXYZ";
-  const N = "23456789";
-  return (
-    A[Math.floor(Math.random() * A.length)] +
-    A[Math.floor(Math.random() * A.length)] +
-    A[Math.floor(Math.random() * A.length)] +
-    N[Math.floor(Math.random() * N.length)] +
-    N[Math.floor(Math.random() * N.length)] +
-    N[Math.floor(Math.random() * N.length)]
-  );
+  const n = () => String(Math.floor(Math.random() * 72) + 1).padStart(2, "0");
+  return n() + n() + n();
 }
 
 function makeCard() {
   // Flat array of 25 elements (Firestore doesn't support nested arrays)
   const pool = [];
-  for (let i = 1; i <= 50; i++) pool.push(i);
+  for (let i = 1; i <= 72; i++) pool.push(i);
   for (let i = pool.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -292,7 +284,7 @@ function CallerScreen({ me, onLeave }) {
 
   const drawRandom = () => {
     const avail = [];
-    for (let i = 1; i <= 50; i++) if (!drawnSet.has(i)) avail.push(i);
+    for (let i = 1; i <= 72; i++) if (!drawnSet.has(i)) avail.push(i);
     if (!avail.length) return;
     drawNumber(avail[Math.floor(Math.random() * avail.length)]);
   };
@@ -331,10 +323,10 @@ function CallerScreen({ me, onLeave }) {
               <div className="board-section">
                 <div style={{display:'flex', alignItems:'baseline', justifyContent:'space-between'}}>
                   <span style={{fontFamily:'var(--font-display)', fontSize:16, fontWeight:600, letterSpacing:'-0.01em'}}>Number board</span>
-                  <span style={{fontSize:12, color:'var(--ink-dimmer)'}}>{50 - drawn.length} left</span>
+                  <span style={{fontSize:12, color:'var(--ink-dimmer)'}}>{72 - drawn.length} left</span>
                 </div>
                 <div className="numbers-grid">
-                  {Array.from({ length: 50 }, (_, i) => i + 1).map((n) => {
+                  {Array.from({ length: 72 }, (_, i) => i + 1).map((n) => {
                     const isDrawn = drawnSet.has(n);
                     const isLast = n === lastDrawn;
                     return (
@@ -349,9 +341,9 @@ function CallerScreen({ me, onLeave }) {
                 <button
                   className="draw-random"
                   onClick={drawRandom}
-                  disabled={drawn.length >= 50}
+                  disabled={drawn.length >= 72}
                   style={{width:'100%'}}>
-                  {drawn.length >= 50 ? "All numbers have been called" : "🎲 Call the next number"}
+                  {drawn.length >= 72 ? "All numbers have been called" : "🎲 Call the next number"}
                 </button>
               </div>
             </div>
@@ -483,7 +475,7 @@ function ConnectModal({ me, onConnected, onLeave }) {
         <p className="sub">Grab the 6-character code from the host calling the numbers.</p>
         <input
           className={`code-input${shake ? " shake" : ""}`}
-          placeholder="ABC123"
+          placeholder="053271"
           value={code}
           onChange={(e) => { setCode(e.target.value.toUpperCase()); setError(""); }}
           maxLength={6}
@@ -683,7 +675,7 @@ function PlayerGame({ me, conn, onLeave }) {
             <div>
               <div className="panel-head">
                 <h2>Called so far</h2>
-                <span className="hint">{drawn.length} of 50</span>
+                <span className="hint">{drawn.length} of 72</span>
               </div>
               <div className="drawn-strip sheet-list">
                 {drawn.length === 0 && <div className="empty-hist" style={{ padding: 10, fontStyle: "italic", color: "var(--ink-dimmer)" }}>None yet.</div>}
