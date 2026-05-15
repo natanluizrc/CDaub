@@ -609,6 +609,7 @@ input {
 
 @media (orientation: portrait) {
   .numbers-grid { grid-template-columns: repeat(8, 1fr); }
+  .role-label { display: none; }
 }
 
 .num-btn {
