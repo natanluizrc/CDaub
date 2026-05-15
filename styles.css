@@ -451,12 +451,18 @@ input {
   animation: pulse 1.4s ease-in-out infinite;
 }
 
+.last-called-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
 .last-called-card {
   background: linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(236, 72, 153, 0.15));
   border: 1px solid var(--line-strong);
   border-radius: 14px;
   padding: 8px 14px;
-  width: 100%;
+  flex: 1;
   box-sizing: border-box;
   flex-shrink: 0;
 }
@@ -706,7 +712,7 @@ input {
 
 /* Big action button */
 .draw-random {
-  margin-top: 4px;
+  margin-top: 0;
   padding: 8px 12px;
   border-radius: 12px;
   background: linear-gradient(135deg, #f97316, #ea580c);
@@ -1334,6 +1340,7 @@ input {
 @media (orientation: landscape) {
   .draw-random--landscape { display: block; width: 100%; }
   .draw-random--portrait { display: none; }
+  .last-called-row { display: block; }
 
   .session-bar { flex-direction: column; }
 

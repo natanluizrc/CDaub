@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "1.9";
+const APP_VERSION = "2.0";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -290,12 +290,20 @@ function CallerScreen({ me, onLeave }) {
               </div>
             </div>
 
-            <div className="last-called-card">
-              <div className="lbl">Last called</div>
-              {lastDrawn
-                ? <div className="last-num reveal" key={reveal}>{String(lastDrawn).padStart(2, "0")}</div>
-                : <div className="last-num empty">—</div>
-              }
+            <div className="last-called-row">
+              <div className="last-called-card">
+                <div className="lbl">Last called</div>
+                {lastDrawn
+                  ? <div className="last-num reveal" key={reveal}>{String(lastDrawn).padStart(2, "0")}</div>
+                  : <div className="last-num empty">—</div>
+                }
+              </div>
+              <button
+                className="draw-random draw-random--portrait"
+                onClick={drawRandom}
+                disabled={drawn.length >= 72}>
+                {drawn.length >= 72 ? "All numbers called" : "🎲 Next Number"}
+              </button>
             </div>
             <button
               className="draw-random draw-random--landscape"
@@ -325,13 +333,6 @@ function CallerScreen({ me, onLeave }) {
                     );
                   })}
                 </div>
-                <button
-                  className="draw-random draw-random--portrait"
-                  onClick={drawRandom}
-                  disabled={drawn.length >= 72}
-                  style={{width:'100%'}}>
-                  {drawn.length >= 72 ? "All numbers have been called" : "🎲 Next Number"}
-                </button>
               </div>
             </div>
           </div>
