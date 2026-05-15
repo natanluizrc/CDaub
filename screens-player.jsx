@@ -83,7 +83,7 @@ const PlayerScreen = () => {
           </div>
           <div>
             <div className="panel-head">
-              <h2>At the table</h2>
+              <h2>Room</h2>
               <span className="hint">4 players</span>
             </div>
             <div className="players-list">

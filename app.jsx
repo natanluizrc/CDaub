@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "1.5";
+const APP_VERSION = "1.6";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -359,7 +359,7 @@ function CallerScreen({ me, onLeave }) {
         onClose={() => setShowInfo(false)}
         tabs={[
           { key: "history", icon: "🕐", label: "History", badge: drawn.length || null },
-          { key: "players", icon: "👥", label: "At the table", badge: players.length || null },
+          { key: "players", icon: "👥", label: "Room", badge: players.length || null },
         ]}
         content={{
           history: (
@@ -381,7 +381,7 @@ function CallerScreen({ me, onLeave }) {
           players: (
             <div>
               <div className="panel-head">
-                <h2>At the table</h2>
+                <h2>Room</h2>
                 <span className="hint">{players.length} {players.length === 1 ? "player" : "players"}</span>
               </div>
               <div className="players-list sheet-list">
@@ -673,7 +673,7 @@ function PlayerGame({ me, conn, onLeave }) {
         onClose={() => setShowInfo(false)}
         tabs={[
           { key: "called", icon: "📋", label: "Called so far", badge: drawn.length || null },
-          { key: "players", icon: "👥", label: "At the table", badge: Object.keys(session.players || {}).length || null },
+          { key: "players", icon: "👥", label: "Room", badge: Object.keys(session.players || {}).length || null },
         ]}
         content={{
           called: (
@@ -695,7 +695,7 @@ function PlayerGame({ me, conn, onLeave }) {
           players: (
             <div>
               <div className="panel-head">
-                <h2>At the table</h2>
+                <h2>Room</h2>
                 <span className="hint">{Object.keys(session.players || {}).length} players</span>
               </div>
               <div className="players-list sheet-list">
