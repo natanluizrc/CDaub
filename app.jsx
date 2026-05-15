@@ -47,8 +47,8 @@ function Welcome({ onPick }) {
   const ok = name.trim().length >= 2;
 
   return (
-    <div style={{position:'relative', width:'100%', minHeight:'100vh', background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)', overflow:'hidden', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
-      <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 20% 20%, rgba(249,115,22,0.1), transparent 40%), radial-gradient(circle at 80% 80%, rgba(234,179,8,0.07), transparent 45%)', pointerEvents:'none'}} />
+    <div style={{position:'relative', width:'100%', minHeight:'100vh', background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)', overflow:'hidden', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
+      <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.025), transparent 60%)', pointerEvents:'none'}} />
       <div className="welcome">
         <div className="eyebrow">WELCOME TO</div>
         <h1>CDaub. <span className="version-tag">v{APP_VERSION}</span></h1>
@@ -72,7 +72,6 @@ function Welcome({ onPick }) {
               className="mode-card"
               disabled={!ok}
               onClick={() => onPick("caller", name.trim())}>
-              <div className="icon">🎙️</div>
               <h3>Host</h3>
               <p>Create a room, call the numbers and lead the game in real time.</p>
               <div className="meta">CREATE ROOM <span className="arrow">→</span></div>
@@ -81,7 +80,6 @@ function Welcome({ onPick }) {
               className="mode-card gold"
               disabled={!ok}
               onClick={() => onPick("player", name.trim())}>
-              <div className="icon gold">🎟️</div>
               <h3>Player</h3>
               <p>Join a room, get your card and play until BINGO.</p>
               <div className="meta">JOIN ROOM <span className="arrow">→</span></div>
@@ -112,7 +110,7 @@ function TopBar({ name, role, onLeave, onInfo }) {
 // ---------- Confetti / Celebration ----------
 function Celebrate({ word, sub, onClose }) {
   const pieces = useMemo(() => {
-    const colors = ["#fbbf24", "#ec4899", "#a855f7", "#c084fc", "#7c3aed", "#f97316"];
+    const colors = ["#f5f5f5", "#d0d0d0", "#b0b0b0", "#e0e0e0", "#ffffff", "#c8c8c8"];
     return Array.from({ length: 110 }, (_, i) => ({
       left: Math.random() * 100,
       delay: Math.random() * 0.8,
@@ -240,7 +238,7 @@ function CallerScreen({ me, onLeave }) {
 
   if (fsError) {
     return (
-      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)'}}>
+      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
         <TopBar name={me.name} role="caller" onLeave={onLeave} onInfo={null} />
         <div style={{ padding: 40, textAlign: "center", color: "#fca5a5" }}>
           Erro ao conectar ao Firestore:<br /><strong>{fsError}</strong>
@@ -251,7 +249,7 @@ function CallerScreen({ me, onLeave }) {
 
   if (!session) {
     return (
-      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)'}}>
+      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
         <TopBar name={me.name} role="caller" onLeave={onLeave} onInfo={null} />
         <div style={{ padding: 40, textAlign: "center", color: "var(--ink-dim)" }}>
           Conectando…
@@ -270,7 +268,7 @@ function CallerScreen({ me, onLeave }) {
   const players = Object.values(session.players || {});
 
   return (
-    <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)'}}>
+    <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
       <TopBar name={me.name} role="caller" onLeave={onLeave} onInfo={() => setShowInfo(true)} />
       <div className="caller">
         <div className="left">
@@ -283,7 +281,7 @@ function CallerScreen({ me, onLeave }) {
               <div className="players-pill">
                 <div className="lbl">Total Players</div>
                 <div className="count">
-                  {players.length}
+                  {String(players.length).padStart(2, "0")}
                   <span className="live-dot" />
                 </div>
               </div>
@@ -443,8 +441,8 @@ function ConnectModal({ me, onConnected, onLeave }) {
   };
 
   return (
-    <div style={{position:'relative', width:'100%', minHeight:'100vh', background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)', overflow:'hidden', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
-      <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 20% 20%, rgba(249,115,22,0.1), transparent 40%), radial-gradient(circle at 80% 80%, rgba(234,179,8,0.07), transparent 45%)', pointerEvents:'none'}} />
+    <div style={{position:'relative', width:'100%', minHeight:'100vh', background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)', overflow:'hidden', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
+      <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.025), transparent 60%)', pointerEvents:'none'}} />
       <div className="connect-card">
         <h2>Join the room</h2>
         <p className="sub">Grab the room code (01–72) from the host calling the numbers.</p>
@@ -518,7 +516,7 @@ function PlayerGame({ me, conn, onLeave }) {
 
   if (!loaded) {
     return (
-      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)'}}>
+      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
         <TopBar name={me.name} role="player" onLeave={onLeave} onInfo={null} />
         <div style={{ padding: 40, textAlign: "center", color: "var(--ink-dim)" }}>
           Conectando…
@@ -529,7 +527,7 @@ function PlayerGame({ me, conn, onLeave }) {
 
   if (!session) {
     return (
-      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)'}}>
+      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
         <TopBar name={me.name} role="player" onLeave={onLeave} onInfo={null} />
         <div style={{ padding: 40, textAlign: "center", color: "var(--ink-dim)" }}>
           The room has ended.
@@ -565,7 +563,7 @@ function PlayerGame({ me, conn, onLeave }) {
   const marksCount = (me_p.marked || []).length;
 
   return (
-    <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)'}}>
+    <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
       <TopBar name={me.name} role="player" onLeave={onLeave} onInfo={() => setShowInfo(true)} />
       <div className="player-shell">
         <div className="left">

@@ -5,23 +5,23 @@
    =========================================================== */
 
 :root {
-  --bg-0: #0c0c0e;
-  --bg-1: #141417;
-  --bg-2: #1e1e24;
-  --purple-1: #1a1a24;
-  --purple-2: #252535;
-  --purple-3: #38384e;
-  --purple-glow: #f97316;
-  --magenta: #ec4899;
-  --gold: #fbbf24;
+  --bg-0: #0c0c0c;
+  --bg-1: #141414;
+  --bg-2: #1e1e1e;
+  --purple-1: #1a1a1a;
+  --purple-2: #262626;
+  --purple-3: #383838;
+  --purple-glow: #c8c8c8;
+  --magenta: #888888;
+  --gold: #ebebeb;
   --cream: #fdf6e3;
   --ink: #f5f5f7;
-  --ink-dim: #a0a0b8;
-  --ink-dimmer: #66667a;
+  --ink-dim: #a0a0a0;
+  --ink-dimmer: #666666;
   --line: rgba(255, 255, 255, 0.1);
-  --line-strong: rgba(255, 255, 255, 0.2);
+  --line-strong: rgba(255, 255, 255, 0.18);
   --card-bg: rgba(255, 255, 255, 0.04);
-  --shadow-glow: 0 0 60px rgba(249, 115, 22, 0.35);
+  --shadow-glow: 0 0 60px rgba(255, 255, 255, 0.05);
   --shadow-deep: 0 30px 80px -20px rgba(0, 0, 0, 0.6);
   --font-display: "Bricolage Grotesque", "Fraunces", serif;
   --font-ui: "Space Grotesk", system-ui, sans-serif;
@@ -47,9 +47,7 @@ body::before {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.25), transparent 40%),
-    radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.18), transparent 45%),
-    radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.08), transparent 60%);
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.02), transparent 60%);
   z-index: 0;
 }
 
@@ -87,7 +85,7 @@ input {
   justify-content: space-between;
   padding: 8px 20px;
   border-bottom: 1px solid var(--line);
-  background: rgba(14, 4, 32, 0.65);
+  background: rgba(10, 10, 10, 0.75);
   backdrop-filter: blur(20px);
   flex-shrink: 0;
 }
@@ -158,9 +156,9 @@ input {
   letter-spacing: 0.12em;
   padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(168, 85, 247, 0.18);
+  background: rgba(255, 255, 255, 0.07);
   border: 1px solid var(--line-strong);
-  color: var(--purple-glow);
+  color: var(--ink-dim);
 }
 
 .top-bar button.leave {
@@ -173,12 +171,12 @@ input {
   border-radius: 8px;
   transition: color .2s, background .2s, border-color .2s;
 }
-.top-bar button.leave:hover { color: var(--magenta); background: rgba(236, 72, 153, 0.08); border-color: var(--magenta); }
+.top-bar button.leave:hover { color: var(--ink); background: rgba(255, 255, 255, 0.06); border-color: var(--line-strong); }
 
 /* ---------- Welcome modal ---------- */
 .modal-shroud {
   position: fixed; inset: 0;
-  background: radial-gradient(ellipse at center, rgba(42, 14, 84, 0.75), rgba(14, 4, 32, 0.95));
+  background: radial-gradient(ellipse at center, rgba(30, 30, 30, 0.85), rgba(10, 10, 10, 0.97));
   backdrop-filter: blur(8px);
   z-index: 50;
   display: flex; align-items: center; justify-content: center;
@@ -191,7 +189,7 @@ input {
 .welcome {
   width: 100%;
   max-width: 720px;
-  background: linear-gradient(160deg, rgba(91, 33, 182, 0.35), rgba(26, 8, 56, 0.95));
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(20, 20, 20, 0.97));
   border: 1px solid var(--line-strong);
   border-radius: 28px;
   padding: 32px min(56px, 6vw) 28px;
@@ -212,7 +210,7 @@ input {
   top: -120px; right: -120px;
   width: 320px; height: 320px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(236, 72, 153, 0.35), transparent 60%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.04), transparent 60%);
   filter: blur(20px);
 }
 .welcome::after {
@@ -221,7 +219,7 @@ input {
   bottom: -140px; left: -120px;
   width: 360px; height: 360px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.35), transparent 60%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.04), transparent 60%);
   filter: blur(20px);
 }
 
@@ -294,8 +292,8 @@ input {
 }
 .field input:focus {
   border-color: var(--purple-glow);
-  background: rgba(14, 4, 32, 0.85);
-  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.15);
+  background: rgba(14, 14, 14, 0.85);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.07);
 }
 .field input::placeholder { color: var(--ink-dimmer); }
 
@@ -322,9 +320,9 @@ input {
 .mode-card[disabled] { opacity: 0.4; cursor: not-allowed; }
 .mode-card:not([disabled]):hover {
   border-color: var(--purple-glow);
-  background: rgba(91, 33, 182, 0.25);
+  background: rgba(255, 255, 255, 0.06);
   transform: translateY(-3px);
-  box-shadow: 0 18px 40px -20px rgba(168, 85, 247, 0.6);
+  box-shadow: 0 18px 40px -20px rgba(255, 255, 255, 0.12);
 }
 .mode-card .icon {
   font-family: var(--font-display);
@@ -332,12 +330,12 @@ input {
   width: 56px; height: 56px;
   border-radius: 16px;
   display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, var(--purple-2), var(--magenta));
-  box-shadow: 0 8px 24px -8px rgba(236, 72, 153, 0.6);
+  background: linear-gradient(135deg, var(--purple-2), var(--purple-3));
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.5);
 }
 .mode-card .icon.gold {
-  background: linear-gradient(135deg, var(--gold), #f97316);
-  box-shadow: 0 8px 24px -8px rgba(251, 191, 36, 0.6);
+  background: linear-gradient(135deg, var(--purple-3), var(--purple-2));
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.4);
 }
 .mode-card h3 {
   font-family: var(--font-display);
@@ -400,7 +398,7 @@ input {
 
 .session-code {
   flex: 1;
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(236, 72, 153, 0.15));
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--line-strong);
   border-radius: 14px;
   padding: 8px 14px;
@@ -463,7 +461,7 @@ input {
 }
 
 .last-called-card {
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(236, 72, 153, 0.15));
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--line-strong);
   border-radius: 14px;
   padding: 8px 14px;
@@ -491,7 +489,7 @@ input {
   color: var(--ink-dimmer);
 }
 
-.draw-random--landscape { display: none; }
+/* hide in portrait — moved below .draw-random so the cascade is correct */
 
 /* Stage = the giant ball */
 .stage {
@@ -526,9 +524,9 @@ input {
   box-shadow:
     inset -20px -30px 60px rgba(0,0,0,0.45),
     inset 18px 22px 50px rgba(255,255,255,0.18),
-    0 30px 70px -10px rgba(168, 85, 247, 0.7),
-    0 0 0 8px rgba(168, 85, 247, 0.1),
-    0 0 0 1px rgba(192, 132, 252, 0.4);
+    0 30px 70px -10px rgba(255, 255, 255, 0.1),
+    0 0 0 8px rgba(255, 255, 255, 0.03),
+    0 0 0 1px rgba(255, 255, 255, 0.18);
   position: relative;
   animation: ball-float 4s ease-in-out infinite;
 }
@@ -681,7 +679,7 @@ input {
 /* --- Caller card layout (portrait default) --- */
 .caller-card {
   background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(192,132,252,0.28);
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 16px;
   padding: 10px 12px 12px;
   display: flex;
@@ -730,11 +728,12 @@ input {
   margin-top: 0;
   padding: 8px 14px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #f97316, #ea580c);
+  background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
+  border: 1px solid rgba(255,255,255,0.15);
   font-family: var(--font-display);
   color: white;
   transition: all .2s;
-  box-shadow: 0 8px 20px -8px rgba(249, 115, 22, 0.6);
+  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -750,12 +749,14 @@ input {
 }
 .draw-random:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 18px 40px -12px rgba(249, 115, 22, 0.8);
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.6);
+  border-color: rgba(255,255,255,0.28);
 }
 .draw-random:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
+.draw-random--landscape { display: none; }
 
 /* Players list */
 .players-list {
@@ -780,7 +781,7 @@ input {
   width: 34px; height: 34px;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, var(--purple-2), var(--magenta));
+  background: linear-gradient(135deg, var(--purple-2), var(--purple-3));
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 14px;
@@ -792,7 +793,7 @@ input {
   font-family: var(--font-mono);
 }
 .player-row.bingo {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.18), rgba(236, 72, 153, 0.18));
+  background: linear-gradient(135deg, rgba(235, 235, 235, 0.12), rgba(200, 200, 200, 0.07));
   border-color: var(--gold);
 }
 .player-row.bingo .marks {
@@ -888,7 +889,7 @@ input {
 .cartela {
   width: 100%;
   max-width: 380px;
-  background: linear-gradient(160deg, rgba(124, 58, 237, 0.18), rgba(14, 4, 32, 0.7));
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(14, 14, 14, 0.8));
   border: 1px solid var(--line-strong);
   border-radius: 18px;
   padding: 12px;
@@ -1002,12 +1003,12 @@ input {
   font-family: var(--font-display);
   font-size: 40px;
   font-weight: 700;
-  background: radial-gradient(circle at 30% 28%, #f5d0fe, var(--purple-3) 30%, var(--purple-1) 80%);
+  background: radial-gradient(circle at 30% 28%, #f0f0f0, var(--purple-3) 30%, var(--purple-1) 80%);
   color: white;
   box-shadow:
     inset -8px -12px 24px rgba(0,0,0,0.35),
     inset 8px 10px 18px rgba(255,255,255,0.2),
-    0 12px 30px -8px rgba(168, 85, 247, 0.6);
+    0 12px 30px -8px rgba(255, 255, 255, 0.1);
 }
 .mini-ball.empty {
   background: rgba(255,255,255,0.04);
@@ -1049,14 +1050,14 @@ input {
 .bingo-btn {
   padding: 10px 16px;
   border-radius: 14px;
-  background: linear-gradient(135deg, var(--gold), var(--magenta));
-  color: #0c0c0e;
+  background: linear-gradient(135deg, #e8e8e8, #c0c0c0);
+  color: #0c0c0c;
   font-family: var(--font-display);
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.12em;
   transition: all .2s;
-  box-shadow: 0 14px 28px -8px rgba(251, 191, 36, 0.5);
+  box-shadow: 0 14px 28px -8px rgba(255, 255, 255, 0.18);
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
@@ -1064,7 +1065,7 @@ input {
 }
 .bingo-btn:hover:not(:disabled) {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 24px 50px -10px rgba(251, 191, 36, 0.7);
+  box-shadow: 0 24px 50px -10px rgba(255, 255, 255, 0.28);
 }
 .bingo-btn:disabled {
   opacity: 0.35;
@@ -1092,7 +1093,7 @@ input {
 .connect-card {
   width: 100%;
   max-width: 520px;
-  background: linear-gradient(160deg, rgba(91, 33, 182, 0.4), rgba(26, 8, 56, 0.95));
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(18, 18, 18, 0.97));
   border: 1px solid var(--line-strong);
   border-radius: 24px;
   padding: 44px 44px 40px;
@@ -1124,7 +1125,7 @@ input {
 }
 .code-input:focus {
   border-color: var(--purple-glow);
-  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.15);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.07);
 }
 .code-input.shake { animation: shake 0.4s; }
 @keyframes shake {
@@ -1142,13 +1143,13 @@ input {
   flex: 1;
   padding: 16px;
   border-radius: 14px;
-  background: linear-gradient(135deg, var(--magenta), var(--purple-2));
-  color: white;
+  background: linear-gradient(135deg, #e0e0e0, #b8b8b8);
+  color: #0c0c0c;
   font-family: var(--font-display);
   font-size: 18px;
   font-weight: 600;
   transition: all .2s;
-  box-shadow: 0 12px 30px -10px rgba(236, 72, 153, 0.6);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
 }
 .btn-primary:hover:not(:disabled) { transform: translateY(-2px); }
 .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -1178,7 +1179,7 @@ input {
 .celebrate {
   position: fixed; inset: 0;
   z-index: 300;
-  background: radial-gradient(ellipse at center, rgba(91, 33, 182, 0.9), rgba(14, 4, 32, 0.97));
+  background: radial-gradient(ellipse at center, rgba(28, 28, 28, 0.96), rgba(8, 8, 8, 0.99));
   display: flex; align-items: center; justify-content: center;
   animation: shroud-in .4s ease;
 }
@@ -1240,10 +1241,10 @@ input {
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(168, 85, 247, 0.25);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 8px;
 }
-::-webkit-scrollbar-thumb:hover { background: rgba(168, 85, 247, 0.45); }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.22); }
 
 /* ---------- Responsive ---------- */
 
@@ -1256,7 +1257,7 @@ input {
   right: 0;
   z-index: 200;
   display: flex;
-  background: rgba(14, 4, 32, 0.96);
+  background: rgba(10, 10, 10, 0.96);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid var(--line-strong);
@@ -1467,7 +1468,7 @@ input {
 .top-bar button.info-btn:hover {
   color: var(--purple-glow);
   border-color: var(--purple-glow);
-  background: rgba(192, 132, 252, 0.08);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* ---------- Info panel overlay ---------- */
@@ -1538,7 +1539,7 @@ input {
 }
 
 .info-tab-btn.active {
-  background: rgba(192, 132, 252, 0.15);
+  background: rgba(255, 255, 255, 0.08);
   border-color: var(--purple-glow);
   color: var(--purple-glow);
 }
