@@ -1248,6 +1248,8 @@ input {
 
 /* ---------- Responsive ---------- */
 
+/* Landscape sidebar — hidden in portrait */
+.ls-sidebar { display: none; }
 
 /* ---------- Bottom tab bar ---------- */
 .bottom-tab-bar {
@@ -1416,6 +1418,105 @@ input {
     width: 100%;
   }
 
+  /* === Caller landscape: top-bar oculta, sidebar vertical à direita === */
+  .app--caller .top-bar { display: none; }
+  .app--caller .caller-info-col { display: none; }
+  .app--caller .caller { padding: 0; }
+  .app--caller .caller .left { gap: 0; }
+
+  .app--caller .ls-sidebar {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 152px;
+    min-height: 0;
+    gap: 6px;
+    padding: 10px 8px;
+    border-left: 1px solid var(--line);
+    overflow-y: auto;
+  }
+
+  .ls-name-chip {
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
+  }
+
+  .ls-btn {
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-dimmer);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-align: center;
+    transition: color .2s, background .2s;
+    flex-shrink: 0;
+    background: transparent;
+  }
+  .ls-btn:hover { color: var(--ink); background: rgba(255,255,255,0.06); }
+
+  .ls-widget {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 7px 9px;
+    flex-shrink: 0;
+  }
+
+  .ls-lbl {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-dimmer);
+    margin-bottom: 3px;
+  }
+
+  .ls-code {
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--ink);
+  }
+
+  .ls-num-val {
+    font-weight: 700;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .ls-reveal { animation: reveal 0.5s cubic-bezier(.2,1.4,.3,1); }
+
+  .ls-empty { color: var(--ink-dimmer) !important; font-weight: 400 !important; }
+
+  .ls-next-btn {
+    margin-top: auto;
+    padding: 12px 8px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: white;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: all .2s;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .ls-next-btn:hover:not(:disabled) {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.28);
+    transform: translateY(-1px);
+  }
+  .ls-next-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
   /* Player: cartela à esq, ação à dir */
   .player-shell .left {
     flex-direction: row;
@@ -1454,6 +1555,10 @@ input {
   .top-bar .brand .logo { font-size: 18px; }
   .top-bar .brand .brand-slogan { display: none; }
   .top-bar .who .role-chip { font-size: 10px; padding: 3px 8px; }
+
+  .app--caller .ls-sidebar { flex-basis: 132px; gap: 4px; padding: 6px; }
+  .ls-widget { padding: 5px 7px; }
+  .ls-next-btn { padding: 8px 6px; }
 
   .caller { padding: 4px 12px; gap: 5px; }
   .caller .left { gap: 6px; }

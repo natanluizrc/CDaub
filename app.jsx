@@ -267,7 +267,7 @@ function CallerScreen({ me, onLeave }) {
   const players = Object.values(session.players || {});
 
   return (
-    <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
+    <div className="app app--caller" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
       <TopBar name={me.name} role="caller" onLeave={onLeave} onInfo={() => setShowInfo(true)} />
       <div className="caller">
         <div className="left">
@@ -331,6 +331,36 @@ function CallerScreen({ me, onLeave }) {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="ls-sidebar">
+            <div className="ls-name-chip">{me.name}</div>
+            <button className="ls-btn" onClick={() => setShowInfo(true)}>Room</button>
+            <button className="ls-btn ls-btn--exit" onClick={onLeave}>Exit</button>
+            <div className="ls-widget">
+              <div className="ls-lbl">Room Code</div>
+              <div className="ls-code">{code}</div>
+            </div>
+            <div className="ls-widget">
+              <div className="ls-lbl">Total Players</div>
+              <div className="ls-num-val">
+                {String(players.length).padStart(2, "0")}
+                <span style={{display:'inline-block', width:7, height:7, borderRadius:'50%', background:'#4ade80', boxShadow:'0 0 10px #4ade80', animation:'pulse 1.4s ease-in-out infinite'}} />
+              </div>
+            </div>
+            <div className="ls-widget">
+              <div className="ls-lbl">Last Number</div>
+              {lastDrawn
+                ? <div className="ls-num-val ls-reveal" key={reveal}>{String(lastDrawn).padStart(2, "0")}</div>
+                : <div className="ls-num-val ls-empty">—</div>
+              }
+            </div>
+            <button
+              className="ls-next-btn"
+              onClick={drawRandom}
+              disabled={drawn.length >= 72}>
+              {drawn.length >= 72 ? "—" : "Next Number"}
+            </button>
           </div>
         </div>
 
