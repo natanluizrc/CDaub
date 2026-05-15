@@ -1557,7 +1557,7 @@ input {
     transition: all .2s;
     text-align: center;
     flex-shrink: 0;
-    height: calc((100vw - 196px) / 12);
+    height: calc((100vw - 196px) / 4);
   }
   .ls-next-btn:hover:not(:disabled) {
     background: linear-gradient(135deg, #252548, #1a1a38);
@@ -1608,7 +1608,7 @@ input {
 
   .app--caller .ls-sidebar { flex-basis: 132px; gap: 4px; padding: 4px 8px; }
   .ls-widget { padding: 4px 8px; height: calc((100vw - 176px) / 12); }
-  .ls-next-btn { padding: 8px; height: calc((100vw - 176px) / 12); }
+  .ls-next-btn { padding: 8px; height: calc((100vw - 176px) / 4); }
 
   .caller { padding: 4px 12px; gap: 4px; }
   .caller .left { gap: 8px; }
