@@ -14,8 +14,7 @@ const db = () => firebase.firestore();
 const sessionRef = (code) => db().collection("sessions").doc(code);
 
 function makeCode() {
-  const n = () => String(Math.floor(Math.random() * 72) + 1).padStart(2, "0");
-  return n() + n() + n();
+  return String(Math.floor(Math.random() * 72) + 1).padStart(2, "0");
 }
 
 function makeCard() {
@@ -429,7 +428,7 @@ function ConnectModal({ me, onConnected, onLeave }) {
 
   const submit = async () => {
     const c = code.trim().toUpperCase();
-    if (c.length < 4) {
+    if (c.length < 1) {
       setError("Code is too short.");
       triggerShake();
       return;
@@ -472,19 +471,19 @@ function ConnectModal({ me, onConnected, onLeave }) {
       <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 20% 20%, rgba(124,58,237,0.25), transparent 40%), radial-gradient(circle at 80% 80%, rgba(236,72,153,0.18), transparent 45%)', pointerEvents:'none'}} />
       <div className="connect-card">
         <h2>Join the room</h2>
-        <p className="sub">Grab the 6-character code from the host calling the numbers.</p>
+        <p className="sub">Grab the room code (01–72) from the host calling the numbers.</p>
         <input
           className={`code-input${shake ? " shake" : ""}`}
-          placeholder="053271"
+          placeholder="07"
           value={code}
           onChange={(e) => { setCode(e.target.value.toUpperCase()); setError(""); }}
-          maxLength={6}
+          maxLength={2}
           autoFocus
           onKeyDown={(e) => e.key === "Enter" && !joining && submit()}
         />
         {error && <div className="connect-error">{error}</div>}
         <div className="connect-actions">
-          <button className="btn-primary" onClick={submit} disabled={code.length < 4 || joining}>
+          <button className="btn-primary" onClick={submit} disabled={code.length < 1 || joining}>
             {joining ? "Entrando…" : "Enter"}
           </button>
           <button className="btn-ghost" onClick={onLeave}>Back</button>
