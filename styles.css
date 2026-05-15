@@ -1605,39 +1605,48 @@ input {
 
 .info-panel {
   position: fixed;
-  top: calc(100dvh / 6);
+  top: 0;
   left: 0;
-  height: calc(100dvh * 4 / 6);
+  right: 0;
   z-index: 150;
   background: linear-gradient(180deg, #1e1e24 0%, #141417 100%);
   border: 1px solid var(--line-strong);
-  border-left: none;
-  border-radius: 0 14px 14px 0;
-  width: 75vw;
+  border-top: none;
+  border-radius: 0 0 20px 20px;
+  max-height: 70vh;
   display: flex;
   flex-direction: column;
-  will-change: transform;
+  animation: sheet-down 0.28s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-.info-handle {
-  position: absolute;
-  right: 0;
-  top: 20px;
-  bottom: 20px;
-  width: 14px;
-  display: flex;
+@keyframes sheet-down {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(0); }
+}
+
+.top-bar--clickable {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.top-bar--clickable:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.info-icon {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: grab;
-}
-.info-handle:active { cursor: grabbing; }
-.info-handle::after {
-  content: '';
-  width: 3px;
-  height: 36px;
-  background: #60a5fa;
-  box-shadow: 0 0 8px rgba(96, 165, 250, 0.45);
-  border-radius: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-dimmer);
+  color: var(--ink-dimmer);
+  font-size: 10px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1;
+  margin-left: 8px;
+  flex-shrink: 0;
 }
 
 .info-panel-tabs {
@@ -1696,8 +1705,8 @@ input {
 
 .info-close-btn {
   position: absolute;
-  top: 12px;
-  right: 22px;
+  top: 14px;
+  right: 20px;
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -1719,7 +1728,7 @@ input {
 
 .info-panel-body {
   overflow-y: auto;
-  padding: 48px 22px 16px 20px;
+  padding: 52px 24px 24px;
   flex: 1;
 }
 

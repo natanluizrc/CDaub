@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "3.5";
+const APP_VERSION = "3.6";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -91,14 +91,15 @@ function Welcome({ onPick }) {
 }
 
 // ---------- Top bar ----------
-function TopBar({ onLeave }) {
+function TopBar({ onLeave, onInfo }) {
   return (
-    <div className="top-bar">
+    <div className={`top-bar${onInfo ? ' top-bar--clickable' : ''}`} onClick={onInfo}>
       <div className="brand">
         <span className="logo">CDaub.</span>
+        {onInfo && <span className="info-icon">i</span>}
       </div>
       <div className="who">
-        {onLeave && <button className="leave" onClick={onLeave}>Exit</button>}
+        {onLeave && <button className="leave" onClick={(e) => { e.stopPropagation(); onLeave(); }}>Exit</button>}
       </div>
     </div>
   );
@@ -197,79 +198,18 @@ function ExitConfirmDialog({ onConfirm, onCancel }) {
 }
 
 // ---------- Info Panel ----------
-function InfoPanel({ open, onOpen, onClose, onExit, children }) {
-  const startX = useRef(null);
-  const [delta, setDelta] = useState(0);
-  const [dragging, setDragging] = useState(false);
-
-  const PEEK = 14;
-  const SNAP = 80;
-
-  const onPointerDown = useCallback((e) => {
-    e.preventDefault();
-    startX.current = e.touches ? e.touches[0].clientX : e.clientX;
-    setDragging(true);
-  }, []);
-
-  useEffect(() => {
-    if (!dragging) return;
-
-    const onMove = (e) => {
-      e.preventDefault();
-      const x = e.touches ? e.touches[0].clientX : e.clientX;
-      setDelta(x - startX.current);
-    };
-
-    const onUp = (e) => {
-      const x = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
-      const d = x - startX.current;
-      setDragging(false);
-      setDelta(0);
-      if (!open && d > SNAP) onOpen();
-      else if (open && d < -SNAP) onClose();
-    };
-
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchmove', onMove, { passive: false });
-    window.addEventListener('mouseup', onUp);
-    window.addEventListener('touchend', onUp);
-
-    return () => {
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('touchmove', onMove);
-      window.removeEventListener('mouseup', onUp);
-      window.removeEventListener('touchend', onUp);
-    };
-  }, [dragging, open, onOpen, onClose]);
-
-  let transformValue;
-  if (dragging) {
-    const panelW = window.innerWidth * 0.75;
-    const closedX = -(panelW - PEEK);
-    const base = open ? 0 : closedX;
-    transformValue = `translateX(${Math.max(closedX, Math.min(0, base + delta))}px)`;
-  } else {
-    transformValue = open ? 'translateX(0)' : `translateX(calc(-100% + ${PEEK}px))`;
-  }
+function InfoPanel({ open, onClose, onExit, children }) {
+  if (!open) return null;
 
   return (
     <>
-      {open && <div className="info-backdrop" onClick={onClose} />}
-      <div
-        className="info-panel"
-        style={{
-          transform: transformValue,
-          transition: dragging ? 'none' : 'transform 0.32s cubic-bezier(0.32, 0.72, 0, 1)',
-          animation: 'none',
-        }}
-      >
-        {open && <button className="info-close-btn" onClick={onClose}>✕</button>}
-        {open && (
-          <div className="info-panel-body">
-            {children}
-          </div>
-        )}
-        {open && onExit && (
+      <div className="info-backdrop" onClick={onClose} />
+      <div className="info-panel">
+        <button className="info-close-btn" onClick={onClose}>✕</button>
+        <div className="info-panel-body">
+          {children}
+        </div>
+        {onExit && (
           <div style={{padding:'14px 20px 20px',borderTop:'1px solid rgba(255,255,255,0.07)'}}>
             <button
               onClick={onExit}
@@ -285,11 +225,6 @@ function InfoPanel({ open, onOpen, onClose, onExit, children }) {
             </button>
           </div>
         )}
-        <div
-          className="info-handle"
-          onMouseDown={onPointerDown}
-          onTouchStart={onPointerDown}
-        />
       </div>
     </>
   );
@@ -401,7 +336,7 @@ function CallerScreen({ me, onLeave }) {
 
   return (
     <div className="app app--caller" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
-      <TopBar />
+      <TopBar onInfo={() => setShowInfo(v => !v)} />
       <div className="caller">
         <div className="left">
           <div className="caller-info-col">
@@ -498,7 +433,6 @@ function CallerScreen({ me, onLeave }) {
 
       <InfoPanel
         open={showInfo}
-        onOpen={() => setShowInfo(true)}
         onClose={() => setShowInfo(false)}
         onExit={() => { setShowInfo(false); setShowExitConfirm(true); }}>
         <div>
@@ -734,7 +668,7 @@ function PlayerGame({ me, conn, onLeave }) {
 
   return (
     <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
-      <TopBar onLeave={onLeave} />
+      <TopBar onLeave={onLeave} onInfo={() => setShowInfo(v => !v)} />
       <div className="player-shell">
         <div className="left">
           <div className="player-card-col">
@@ -809,7 +743,7 @@ function PlayerGame({ me, conn, onLeave }) {
         </div>
       </div>
 
-      <InfoPanel open={showInfo} onOpen={() => setShowInfo(true)} onClose={() => setShowInfo(false)}>
+      <InfoPanel open={showInfo} onClose={() => setShowInfo(false)}>
         <div>
           <div className="panel-head">
             <h2>Called so far</h2>
