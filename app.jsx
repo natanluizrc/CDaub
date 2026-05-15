@@ -342,15 +342,19 @@ function CallerScreen({ me, onLeave }) {
           <div className="caller-info-col">
             <div className="session-bar">
               <div className="session-code">
-                <div className="lbl">Code</div>
+                <div className="lbl">Room</div>
                 <div className="code">{code}</div>
               </div>
               <div className="players-pill">
-                <div className="lbl">Players</div>
+                <div className="lbl">Cast</div>
                 <div className="count">
                   {String(players.length).padStart(2, "0")}
                   <span className="live-dot" />
                 </div>
+              </div>
+              <div className="players-pill">
+                <div className="lbl">Left</div>
+                <div className="count">{String(72 - drawn.length).padStart(2, "0")}</div>
               </div>
             </div>
             <button
@@ -366,7 +370,6 @@ function CallerScreen({ me, onLeave }) {
               <div className="board-section">
                 <div className="board-section-head">
                   <span className="lbl">Board</span>
-                  <span className="lbl">{72 - drawn.length} left</span>
                 </div>
                 <div className="numbers-grid">
                   {Array.from({ length: 72 }, (_, i) => i + 1).map((n) => {
@@ -403,15 +406,19 @@ function CallerScreen({ me, onLeave }) {
 
           <div className="ls-sidebar">
             <div className="ls-widget">
-              <div className="ls-lbl">Code</div>
+              <div className="ls-lbl">Room</div>
               <div className="ls-code">{code}</div>
             </div>
             <div className="ls-widget">
-              <div className="ls-lbl">Players</div>
+              <div className="ls-lbl">Cast</div>
               <div className="ls-num-val">
                 {String(players.length).padStart(2, "0")}
                 <span style={{display:'inline-block', width:7, height:7, borderRadius:'50%', background:'#4ade80', boxShadow:'0 0 10px #4ade80', animation:'pulse 1.4s ease-in-out infinite'}} />
               </div>
+            </div>
+            <div className="ls-widget">
+              <div className="ls-lbl">Left</div>
+              <div className="ls-num-val">{String(72 - drawn.length).padStart(2, "0")}</div>
             </div>
             <div className="ls-widget">
               <div className="ls-lbl">Last</div>
