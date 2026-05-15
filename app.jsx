@@ -403,7 +403,7 @@ function CallerScreen({ me, onLeave }) {
 <div className="numbers-grid">
                   {Array.from({ length: 72 }, (_, i) => i + 1).map((n) => {
                     const isDrawn = drawnSet.has(n);
-                    const isLast = n === effectiveLast;
+                    const isLast = spinning ? n === spinDisplay : n === effectiveLast;
                     return (
                       <div
                         key={n}
