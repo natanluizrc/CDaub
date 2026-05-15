@@ -1169,8 +1169,8 @@ input {
   .caller .left, .player-shell .left { padding: 16px 16px 90px; }
 
   /* Session bar lado a lado no mobile */
-  .session-code { flex: 2; }
-  .players-pill { flex: 1; min-width: unset; }
+  .session-code { flex: 1; }
+  .players-pill { flex: none; min-width: unset; padding: 10px 16px; }
 
   /* Bola do número */
   .ball { width: 130px; height: 130px; font-size: 68px; }
