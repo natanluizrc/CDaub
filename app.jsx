@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "3.0";
+const APP_VERSION = "3.1";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -198,16 +198,16 @@ function ExitConfirmDialog({ onConfirm, onCancel }) {
 
 // ---------- Info Panel ----------
 function InfoPanel({ open, onOpen, onClose, onExit, children }) {
-  const startY = useRef(null);
+  const startX = useRef(null);
   const [delta, setDelta] = useState(0);
   const [dragging, setDragging] = useState(false);
 
-  const PEEK = 20;
+  const PEEK = 28;
   const SNAP = 80;
 
   const onPointerDown = useCallback((e) => {
     e.preventDefault();
-    startY.current = e.touches ? e.touches[0].clientY : e.clientY;
+    startX.current = e.touches ? e.touches[0].clientX : e.clientX;
     setDragging(true);
   }, []);
 
@@ -216,17 +216,17 @@ function InfoPanel({ open, onOpen, onClose, onExit, children }) {
 
     const onMove = (e) => {
       e.preventDefault();
-      const y = e.touches ? e.touches[0].clientY : e.clientY;
-      setDelta(y - startY.current);
+      const x = e.touches ? e.touches[0].clientX : e.clientX;
+      setDelta(x - startX.current);
     };
 
     const onUp = (e) => {
-      const y = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
-      const d = y - startY.current;
+      const x = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+      const d = x - startX.current;
       setDragging(false);
       setDelta(0);
-      if (!open && d > SNAP) onOpen();
-      else if (open && d < -SNAP) onClose();
+      if (!open && d < -SNAP) onOpen();
+      else if (open && d > SNAP) onClose();
     };
 
     window.addEventListener('mousemove', onMove);
@@ -244,12 +244,12 @@ function InfoPanel({ open, onOpen, onClose, onExit, children }) {
 
   let transformValue;
   if (dragging) {
-    const panelH = window.innerHeight * 0.7;
-    const closedY = -(panelH - PEEK);
-    const base = open ? 0 : closedY;
-    transformValue = `translateY(${Math.max(closedY, Math.min(0, base + delta))}px)`;
+    const panelW = window.innerWidth * 0.75;
+    const closedX = panelW - PEEK;
+    const base = open ? 0 : closedX;
+    transformValue = `translateX(${Math.max(0, Math.min(closedX, base + delta))}px)`;
   } else {
-    transformValue = open ? 'translateY(0)' : `translateY(calc(-100% + ${PEEK}px))`;
+    transformValue = open ? 'translateX(0)' : `translateX(calc(100% - ${PEEK}px))`;
   }
 
   return (
