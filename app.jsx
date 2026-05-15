@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "1.6";
+const APP_VERSION = "1.7";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -150,9 +150,7 @@ function Celebrate({ word, sub, onClose }) {
 }
 
 // ---------- Info Panel ----------
-function InfoPanel({ open, onClose, tabs, content }) {
-  const [activeTab, setActiveTab] = useState(tabs[0]?.key ?? null);
-
+function InfoPanel({ open, onClose, children }) {
   if (!open) return null;
 
   return (
@@ -160,22 +158,9 @@ function InfoPanel({ open, onClose, tabs, content }) {
       <div className="info-backdrop" onClick={onClose} />
       <div className="info-panel">
         <div className="info-handle" onClick={onClose} />
-        <div className="info-panel-tabs">
-          {tabs.map(t => (
-            <button
-              key={t.key}
-              className={`info-tab-btn${activeTab === t.key ? " active" : ""}`}
-              onClick={() => setActiveTab(t.key)}
-            >
-              <span className="info-tab-icon">{t.icon}</span>
-              <span className="info-tab-label">{t.label}</span>
-              {t.badge != null && <span className="tab-badge">{t.badge}</span>}
-            </button>
-          ))}
-          <button className="info-close-btn" onClick={onClose}>✕</button>
-        </div>
+        <button className="info-close-btn" onClick={onClose}>✕</button>
         <div className="info-panel-body">
-          {activeTab && content[activeTab]}
+          {children}
         </div>
       </div>
     </>
@@ -354,57 +339,45 @@ function CallerScreen({ me, onLeave }) {
 
       </div>
 
-      <InfoPanel
-        open={showInfo}
-        onClose={() => setShowInfo(false)}
-        tabs={[
-          { key: "history", icon: "🕐", label: "History", badge: drawn.length || null },
-          { key: "players", icon: "👥", label: "Room", badge: players.length || null },
-        ]}
-        content={{
-          history: (
-            <div>
-              <div className="panel-head">
-                <h2>History</h2>
-                <span className="hint">Newest first</span>
+      <InfoPanel open={showInfo} onClose={() => setShowInfo(false)}>
+        <div>
+          <div className="panel-head">
+            <h2>History</h2>
+            <span className="hint">Newest first</span>
+          </div>
+          <div className="history sheet-list">
+            {drawn.length === 0 && <div className="empty-hist">No numbers called yet.</div>}
+            {[...drawn].reverse().map((n, i) =>
+              <div key={n} className={`h-num${i === 0 ? " newest" : ""}`}>
+                {String(n).padStart(2, "0")}
               </div>
-              <div className="history sheet-list">
-                {drawn.length === 0 && <div className="empty-hist">No numbers called yet.</div>}
-                {[...drawn].reverse().map((n, i) =>
-                  <div key={n} className={`h-num${i === 0 ? " newest" : ""}`}>
-                    {String(n).padStart(2, "0")}
-                  </div>
-                )}
+            )}
+          </div>
+        </div>
+        <div>
+          <div className="panel-head">
+            <h2>Room</h2>
+            <span className="hint">{players.length} {players.length === 1 ? "player" : "players"}</span>
+          </div>
+          <div className="players-list sheet-list">
+            {players.length === 0 &&
+              <div className="empty-p">
+                Share the code <strong style={{ color: "var(--purple-glow)" }}>{code}</strong> for players to join.
               </div>
-            </div>
-          ),
-          players: (
-            <div>
-              <div className="panel-head">
-                <h2>Room</h2>
-                <span className="hint">{players.length} {players.length === 1 ? "player" : "players"}</span>
-              </div>
-              <div className="players-list sheet-list">
-                {players.length === 0 &&
-                  <div className="empty-p">
-                    Share the code <strong style={{ color: "var(--purple-glow)" }}>{code}</strong> for players to join.
-                  </div>
-                }
-                {players.map((p) => {
-                  const marks = (p.marked || []).length;
-                  return (
-                    <div key={p.id} className={`player-row${p.bingo ? " bingo" : ""}`}>
-                      <div className="avatar">{p.name.slice(0, 1).toUpperCase()}</div>
-                      <div className="name">{p.name}</div>
-                      <div className="marks">{p.bingo ? "BINGO!" : `${marks} mark${marks === 1 ? "" : "s"}`}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ),
-        }}
-      />
+            }
+            {players.map((p) => {
+              const marks = (p.marked || []).length;
+              return (
+                <div key={p.id} className={`player-row${p.bingo ? " bingo" : ""}`}>
+                  <div className="avatar">{p.name.slice(0, 1).toUpperCase()}</div>
+                  <div className="name">{p.name}</div>
+                  <div className="marks">{p.bingo ? "BINGO!" : `${marks} mark${marks === 1 ? "" : "s"}`}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </InfoPanel>
 
       {session.winner &&
         <Celebrate
@@ -668,55 +641,43 @@ function PlayerGame({ me, conn, onLeave }) {
         </div>
       </div>
 
-      <InfoPanel
-        open={showInfo}
-        onClose={() => setShowInfo(false)}
-        tabs={[
-          { key: "called", icon: "📋", label: "Called so far", badge: drawn.length || null },
-          { key: "players", icon: "👥", label: "Room", badge: Object.keys(session.players || {}).length || null },
-        ]}
-        content={{
-          called: (
-            <div>
-              <div className="panel-head">
-                <h2>Called so far</h2>
-                <span className="hint">{drawn.length} of 72</span>
+      <InfoPanel open={showInfo} onClose={() => setShowInfo(false)}>
+        <div>
+          <div className="panel-head">
+            <h2>Called so far</h2>
+            <span className="hint">{drawn.length} of 72</span>
+          </div>
+          <div className="drawn-strip sheet-list">
+            {drawn.length === 0 && <div className="empty-hist" style={{ padding: 10, fontStyle: "italic", color: "var(--ink-dimmer)" }}>None yet.</div>}
+            {[...drawn].reverse().map((n) =>
+              <div key={n} className={`ds-num${cardSet.has(n) ? " on-card" : ""}`}>
+                {String(n).padStart(2, "0")}
               </div>
-              <div className="drawn-strip sheet-list">
-                {drawn.length === 0 && <div className="empty-hist" style={{ padding: 10, fontStyle: "italic", color: "var(--ink-dimmer)" }}>None yet.</div>}
-                {[...drawn].reverse().map((n) =>
-                  <div key={n} className={`ds-num${cardSet.has(n) ? " on-card" : ""}`}>
-                    {String(n).padStart(2, "0")}
+            )}
+          </div>
+        </div>
+        <div>
+          <div className="panel-head">
+            <h2>Room</h2>
+            <span className="hint">{Object.keys(session.players || {}).length} players</span>
+          </div>
+          <div className="players-list sheet-list">
+            {Object.values(session.players || {}).map((p) => {
+              const marks = (p.marked || []).length;
+              return (
+                <div key={p.id} className={`player-row${p.bingo ? " bingo" : ""}`}>
+                  <div className="avatar">{p.name.slice(0, 1).toUpperCase()}</div>
+                  <div className="name">
+                    {p.name}
+                    {p.id === playerId && <span style={{ color: "var(--purple-glow)", marginLeft: 6, fontSize: 12 }}>(you)</span>}
                   </div>
-                )}
-              </div>
-            </div>
-          ),
-          players: (
-            <div>
-              <div className="panel-head">
-                <h2>Room</h2>
-                <span className="hint">{Object.keys(session.players || {}).length} players</span>
-              </div>
-              <div className="players-list sheet-list">
-                {Object.values(session.players || {}).map((p) => {
-                  const marks = (p.marked || []).length;
-                  return (
-                    <div key={p.id} className={`player-row${p.bingo ? " bingo" : ""}`}>
-                      <div className="avatar">{p.name.slice(0, 1).toUpperCase()}</div>
-                      <div className="name">
-                        {p.name}
-                        {p.id === playerId && <span style={{ color: "var(--purple-glow)", marginLeft: 6, fontSize: 12 }}>(you)</span>}
-                      </div>
-                      <div className="marks">{p.bingo ? "BINGO!" : `${marks} mark${marks === 1 ? "" : "s"}`}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ),
-        }}
-      />
+                  <div className="marks">{p.bingo ? "BINGO!" : `${marks} mark${marks === 1 ? "" : "s"}`}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </InfoPanel>
 
       {(celebrate || session.winner) &&
         <Celebrate

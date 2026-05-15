@@ -1536,8 +1536,9 @@ input {
 }
 
 .info-close-btn {
-  margin-left: auto;
-  flex-shrink: 0;
+  position: absolute;
+  top: 16px;
+  right: 20px;
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -1559,7 +1560,7 @@ input {
 
 .info-panel-body {
   overflow-y: auto;
-  padding: 8px 24px 40px;
+  padding: 20px 24px 40px;
   flex: 1;
 }
 
