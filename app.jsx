@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "3.1";
+const APP_VERSION = "3.2";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -225,8 +225,8 @@ function InfoPanel({ open, onOpen, onClose, onExit, children }) {
       const d = x - startX.current;
       setDragging(false);
       setDelta(0);
-      if (!open && d < -SNAP) onOpen();
-      else if (open && d > SNAP) onClose();
+      if (!open && d > SNAP) onOpen();
+      else if (open && d < -SNAP) onClose();
     };
 
     window.addEventListener('mousemove', onMove);
@@ -245,11 +245,11 @@ function InfoPanel({ open, onOpen, onClose, onExit, children }) {
   let transformValue;
   if (dragging) {
     const panelW = window.innerWidth * 0.75;
-    const closedX = panelW - PEEK;
+    const closedX = -(panelW - PEEK);
     const base = open ? 0 : closedX;
-    transformValue = `translateX(${Math.max(0, Math.min(closedX, base + delta))}px)`;
+    transformValue = `translateX(${Math.max(closedX, Math.min(0, base + delta))}px)`;
   } else {
-    transformValue = open ? 'translateX(0)' : `translateX(calc(100% - ${PEEK}px))`;
+    transformValue = open ? 'translateX(0)' : `translateX(calc(-100% + ${PEEK}px))`;
   }
 
   return (
