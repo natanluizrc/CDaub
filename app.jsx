@@ -104,7 +104,7 @@ function Welcome({ onPick }) {
 }
 
 // ---------- Top bar ----------
-function TopBar({ name, role, onLeave }) {
+function TopBar({ name, role, onLeave, onInfo }) {
   return (
     <div className="top-bar">
       <div className="brand">
@@ -117,6 +117,7 @@ function TopBar({ name, role, onLeave }) {
       <div className="who">
         <span className="role-chip">{role === "caller" ? "Host" : "Player"}</span>
         <span className="name">{name}</span>
+        {onInfo && <button className="info-btn" onClick={onInfo}>Room</button>}
         <button className="leave" onClick={onLeave}>Leave</button>
       </div>
     </div>
@@ -162,28 +163,34 @@ function Celebrate({ word, sub, onClose }) {
   );
 }
 
-// ---------- Bottom Sheet ----------
-function BottomSheet({ sheet, onSheet, tabs, content }) {
-  const open = sheet !== null;
+// ---------- Info Panel ----------
+function InfoPanel({ open, onClose, tabs, content }) {
+  const [activeTab, setActiveTab] = useState(tabs[0]?.key ?? null);
+
+  if (!open) return null;
+
   return (
     <>
-      <div className="bottom-tab-bar">
-        {tabs.map(t => (
-          <button
-            key={t.key}
-            className={`tab-btn${sheet === t.key ? " active" : ""}`}
-            onClick={() => onSheet(sheet === t.key ? null : t.key)}
-          >
-            <span className="tab-icon">{t.icon}</span>
-            <span className="tab-label">{t.label}</span>
-            {t.badge ? <span className="tab-badge">{t.badge}</span> : null}
-          </button>
-        ))}
-      </div>
-      {open && <div className="sheet-backdrop" onClick={() => onSheet(null)} />}
-      <div className={`bottom-sheet${open ? " open" : ""}`}>
-        <div className="sheet-handle" onClick={() => onSheet(null)} />
-        {open && content[sheet]}
+      <div className="info-backdrop" onClick={onClose} />
+      <div className="info-panel">
+        <div className="info-handle" onClick={onClose} />
+        <div className="info-panel-tabs">
+          {tabs.map(t => (
+            <button
+              key={t.key}
+              className={`info-tab-btn${activeTab === t.key ? " active" : ""}`}
+              onClick={() => setActiveTab(t.key)}
+            >
+              <span className="info-tab-icon">{t.icon}</span>
+              <span className="info-tab-label">{t.label}</span>
+              {t.badge != null && <span className="tab-badge">{t.badge}</span>}
+            </button>
+          ))}
+          <button className="info-close-btn" onClick={onClose}>✕</button>
+        </div>
+        <div className="info-panel-body">
+          {activeTab && content[activeTab]}
+        </div>
       </div>
     </>
   );
@@ -195,7 +202,7 @@ function CallerScreen({ me, onLeave }) {
   const [session, setSession] = useState(null);
   const [reveal, setReveal] = useState(0);
   const [fsError, setFsError] = useState(null);
-  const [sheet, setSheet] = useState(null);
+  const [showInfo, setShowInfo] = useState(false);
   const createdRef = useRef(false);
 
   // Persist "me" + session code locally so we can reconnect on refresh
@@ -264,7 +271,7 @@ function CallerScreen({ me, onLeave }) {
   if (fsError) {
     return (
       <div className="app" style={{background:'radial-gradient(ellipse at top, #2a0e54 0%, #1a0838 35%, #0e0420 70%)'}}>
-        <TopBar name={me.name} role="caller" onLeave={onLeave} />
+        <TopBar name={me.name} role="caller" onLeave={onLeave} onInfo={null} />
         <div style={{ padding: 40, textAlign: "center", color: "#fca5a5" }}>
           Erro ao conectar ao Firestore:<br /><strong>{fsError}</strong>
         </div>
@@ -275,7 +282,7 @@ function CallerScreen({ me, onLeave }) {
   if (!session) {
     return (
       <div className="app" style={{background:'radial-gradient(ellipse at top, #2a0e54 0%, #1a0838 35%, #0e0420 70%)'}}>
-        <TopBar name={me.name} role="caller" onLeave={onLeave} />
+        <TopBar name={me.name} role="caller" onLeave={onLeave} onInfo={null} />
         <div style={{ padding: 40, textAlign: "center", color: "var(--ink-dim)" }}>
           Conectando…
         </div>
@@ -294,7 +301,7 @@ function CallerScreen({ me, onLeave }) {
 
   return (
     <div className="app" style={{background:'radial-gradient(ellipse at top, #2a0e54 0%, #1a0838 35%, #0e0420 70%)'}}>
-      <TopBar name={me.name} role="caller" onLeave={onLeave} />
+      <TopBar name={me.name} role="caller" onLeave={onLeave} onInfo={() => setShowInfo(true)} />
       <div className="caller">
         <div className="left">
           <div className="session-bar">
@@ -353,9 +360,9 @@ function CallerScreen({ me, onLeave }) {
 
       </div>
 
-      <BottomSheet
-        sheet={sheet}
-        onSheet={setSheet}
+      <InfoPanel
+        open={showInfo}
+        onClose={() => setShowInfo(false)}
         tabs={[
           { key: "history", icon: "🕐", label: "History", badge: drawn.length || null },
           { key: "players", icon: "👥", label: "At the table", badge: players.length || null },
@@ -502,7 +509,7 @@ function PlayerGame({ me, conn, onLeave }) {
   const [session, setSession] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [celebrate, setCelebrate] = useState(false);
-  const [sheet, setSheet] = useState(null);
+  const [showInfo, setShowInfo] = useState(false);
 
   // Persist identity for reconnection
   useEffect(() => {
@@ -545,7 +552,7 @@ function PlayerGame({ me, conn, onLeave }) {
   if (!loaded) {
     return (
       <div className="app" style={{background:'radial-gradient(ellipse at top, #2a0e54 0%, #1a0838 35%, #0e0420 70%)'}}>
-        <TopBar name={me.name} role="player" onLeave={onLeave} />
+        <TopBar name={me.name} role="player" onLeave={onLeave} onInfo={null} />
         <div style={{ padding: 40, textAlign: "center", color: "var(--ink-dim)" }}>
           Conectando…
         </div>
@@ -556,7 +563,7 @@ function PlayerGame({ me, conn, onLeave }) {
   if (!session) {
     return (
       <div className="app" style={{background:'radial-gradient(ellipse at top, #2a0e54 0%, #1a0838 35%, #0e0420 70%)'}}>
-        <TopBar name={me.name} role="player" onLeave={onLeave} />
+        <TopBar name={me.name} role="player" onLeave={onLeave} onInfo={null} />
         <div style={{ padding: 40, textAlign: "center", color: "var(--ink-dim)" }}>
           The room has ended.
           <div style={{ marginTop: 20 }}>
@@ -592,7 +599,7 @@ function PlayerGame({ me, conn, onLeave }) {
 
   return (
     <div className="app" style={{background:'radial-gradient(ellipse at top, #2a0e54 0%, #1a0838 35%, #0e0420 70%)'}}>
-      <TopBar name={me.name} role="player" onLeave={onLeave} />
+      <TopBar name={me.name} role="player" onLeave={onLeave} onInfo={() => setShowInfo(true)} />
       <div className="player-shell">
         <div className="left">
           <div className="session-mini">
@@ -664,9 +671,9 @@ function PlayerGame({ me, conn, onLeave }) {
         </div>
       </div>
 
-      <BottomSheet
-        sheet={sheet}
-        onSheet={setSheet}
+      <InfoPanel
+        open={showInfo}
+        onClose={() => setShowInfo(false)}
         tabs={[
           { key: "called", icon: "📋", label: "Called so far", badge: drawn.length || null },
           { key: "players", icon: "👥", label: "At the table", badge: Object.keys(session.players || {}).length || null },
