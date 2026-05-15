@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "2.5";
+const APP_VERSION = "2.6";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -98,7 +98,6 @@ function TopBar({ name, role, onLeave, onInfo }) {
         <span className="logo">CDaub.</span>
       </div>
       <div className="who">
-        <span className="role-chip">{role === "caller" ? "Host" : "Player"}</span>
         {onInfo && <button className="info-btn" onClick={onInfo}>Room</button>}
         <button className="leave" onClick={onLeave}>Exit</button>
       </div>
@@ -285,22 +284,6 @@ function CallerScreen({ me, onLeave }) {
                 </div>
               </div>
             </div>
-
-            <div className="last-called-row">
-              <div className="last-called-card">
-                <div className="lbl">Last</div>
-                {lastDrawn
-                  ? <div className="last-num reveal" key={reveal}>{String(lastDrawn).padStart(2, "0")}</div>
-                  : <div className="last-num empty">—</div>
-                }
-              </div>
-              <button
-                className="draw-random draw-random--portrait"
-                onClick={drawRandom}
-                disabled={drawn.length >= 72}>
-                <span className="btn-val">{drawn.length >= 72 ? "—" : "Next"}</span>
-              </button>
-            </div>
             <button
               className="draw-random draw-random--landscape"
               onClick={drawRandom}
@@ -331,6 +314,22 @@ function CallerScreen({ me, onLeave }) {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="last-called-row">
+            <div className="last-called-card">
+              <div className="lbl">Last</div>
+              {lastDrawn
+                ? <div className="last-num reveal" key={reveal}>{String(lastDrawn).padStart(2, "0")}</div>
+                : <div className="last-num empty">—</div>
+              }
+            </div>
+            <button
+              className="draw-random draw-random--portrait"
+              onClick={drawRandom}
+              disabled={drawn.length >= 72}>
+              <span className="btn-val">{drawn.length >= 72 ? "—" : "Next"}</span>
+            </button>
           </div>
 
           <div className="ls-sidebar">

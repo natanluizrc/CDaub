@@ -453,6 +453,7 @@ input {
   display: flex;
   gap: 10px;
   align-items: stretch;
+  flex-shrink: 0;
 }
 .last-called-row .last-called-card,
 .last-called-row .draw-random--portrait {
@@ -1421,6 +1422,7 @@ input {
   /* === Caller landscape: top-bar oculta, sidebar vertical à direita === */
   .app--caller .top-bar { display: none; }
   .app--caller .caller-info-col { display: none; }
+  .app--caller .last-called-row { display: none; }
   .app--caller .caller { padding: 0; }
   .app--caller .caller .left { gap: 0; }
 
