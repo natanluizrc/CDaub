@@ -47,9 +47,9 @@ function Welcome({ onPick }) {
   const ok = name.trim().length >= 2;
 
   return (
-    <div style={{position:'relative', width:'100%', minHeight:'100vh', background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)', overflow:'hidden', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
+    <div style={{position:'fixed', inset:0, background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)', overflow:'auto', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
       <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.025), transparent 60%)', pointerEvents:'none'}} />
-      <div className="welcome">
+      <div className="welcome" style={{flexShrink:0}}>
         <h1>CDaub. <span className="version-tag">v{APP_VERSION}</span></h1>
         <div className="slogan">Cards that build Moments.</div>
 
@@ -469,7 +469,7 @@ function ConnectModal({ me, onConnected, onLeave }) {
   };
 
   return (
-    <div style={{position:'relative', width:'100%', minHeight:'100vh', background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)', overflow:'hidden', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
+    <div style={{position:'fixed', inset:0, background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)', overflow:'auto', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
       <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.025), transparent 60%)', pointerEvents:'none'}} />
       <div className="connect-card">
         <h2>Join the room</h2>
