@@ -194,7 +194,7 @@ input {
   background: linear-gradient(160deg, rgba(91, 33, 182, 0.35), rgba(26, 8, 56, 0.95));
   border: 1px solid var(--line-strong);
   border-radius: 28px;
-  padding: 56px 56px 48px;
+  padding: 32px min(56px, 6vw) 28px;
   box-shadow: var(--shadow-deep), var(--shadow-glow);
   position: relative;
   overflow: hidden;
@@ -237,7 +237,7 @@ input {
 
 .welcome h1 {
   font-family: var(--font-display);
-  font-size: 88px;
+  font-size: clamp(52px, 14vw, 88px);
   line-height: 0.9;
   font-weight: 700;
   letter-spacing: -0.04em;
@@ -1155,7 +1155,7 @@ input {
 }
 .celebrate .word {
   font-family: var(--font-display);
-  font-size: 200px;
+  font-size: clamp(72px, 22vw, 200px);
   font-weight: 700;
   letter-spacing: -0.04em;
   background: linear-gradient(135deg, var(--gold) 0%, var(--magenta) 50%, var(--purple-glow) 100%);
@@ -1218,38 +1218,6 @@ input {
 
 /* ---------- Responsive ---------- */
 
-/* Mobile (≤ 640px) */
-@media (max-width: 640px) {
-  /* Welcome */
-  .welcome { padding: 32px 20px 28px; }
-  .welcome h1 { font-size: 56px; }
-  .welcome .sub { font-size: 15px; }
-  .mode-pick { grid-template-columns: 1fr; }
-
-  /* Top bar compacta */
-  .top-bar { padding: 6px 14px; }
-  .top-bar .brand .brand-slogan { display: none; }
-  .top-bar .who { gap: 8px; }
-  .top-bar .who .role-chip { font-size: 10px; padding: 3px 8px; }
-
-  /* Grade de números */
-  .numbers-grid { gap: 4px; }
-  .num-btn { font-size: 11px; border-radius: 5px; }
-
-  /* Celebração */
-  .celebrate .word { font-size: 80px; }
-}
-
-/* Celulares muito pequenos (≤ 380px) */
-@media (max-width: 380px) {
-  .welcome h1 { font-size: 44px; }
-  .top-bar .who .name {
-    max-width: 80px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
 
 /* ---------- Bottom tab bar ---------- */
 .bottom-tab-bar {
