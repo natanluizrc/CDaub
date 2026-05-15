@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "2.7";
+const APP_VERSION = "2.8";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -99,7 +99,7 @@ function TopBar({ name, role, onLeave, onInfo }) {
       </div>
       <div className="who">
         {onInfo && <button className="info-btn" onClick={onInfo}>Room</button>}
-        <button className="leave" onClick={onLeave}>Exit</button>
+        {onLeave && <button className="leave" onClick={onLeave}>Exit</button>}
       </div>
     </div>
   );
@@ -337,7 +337,7 @@ function CallerScreen({ me, onLeave }) {
 
   return (
     <div className="app app--caller" style={{background:'radial-gradient(ellipse at top, #1e1e1e 0%, #141414 35%, #0c0c0c 70%)'}}>
-      <TopBar name={me.name} role="caller" onLeave={onLeave} onInfo={() => setShowInfo(true)} />
+      <TopBar name={me.name} role="caller" onInfo={() => setShowInfo(true)} />
       <div className="caller">
         <div className="left">
           <div className="caller-info-col">
@@ -404,7 +404,6 @@ function CallerScreen({ me, onLeave }) {
 
           <div className="ls-sidebar">
             <button className="ls-btn" onClick={() => setShowInfo(true)}>Room</button>
-            <button className="ls-btn ls-btn--exit" onClick={onLeave}>Exit</button>
             <div className="ls-widget">
               <div className="ls-lbl">Code</div>
               <div className="ls-code">{code}</div>
