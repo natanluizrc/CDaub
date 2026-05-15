@@ -609,7 +609,6 @@ input {
 
 @media (orientation: portrait) {
   .numbers-grid { grid-template-columns: repeat(8, 1fr); }
-  .role-label { display: none; }
 }
 
 .num-btn {
@@ -1436,19 +1435,6 @@ input {
     overflow-y: auto;
   }
 
-  .ls-name-chip {
-    padding: 7px 10px;
-    border-radius: 8px;
-    border: 1px solid var(--line-strong);
-    color: var(--ink-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex-shrink: 0;
-  }
 
   .ls-btn {
     padding: 7px 10px;

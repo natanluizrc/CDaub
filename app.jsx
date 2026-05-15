@@ -98,7 +98,7 @@ function TopBar({ name, role, onLeave, onInfo }) {
         <span className="logo">CDaub.</span>
       </div>
       <div className="who">
-        <span className="role-chip"><span className="role-label">{role === "caller" ? "Host" : "Player"} · </span>{name}</span>
+        <span className="role-chip">{role === "caller" ? "Host" : "Player"}</span>
         {onInfo && <button className="info-btn" onClick={onInfo}>Room</button>}
         <button className="leave" onClick={onLeave}>Exit</button>
       </div>
@@ -334,7 +334,6 @@ function CallerScreen({ me, onLeave }) {
           </div>
 
           <div className="ls-sidebar">
-            <div className="ls-name-chip">{me.name}</div>
             <button className="ls-btn" onClick={() => setShowInfo(true)}>Room</button>
             <button className="ls-btn ls-btn--exit" onClick={onLeave}>Exit</button>
             <div className="ls-widget">
