@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "2.4";
+const APP_VERSION = "2.5";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -274,11 +274,11 @@ function CallerScreen({ me, onLeave }) {
           <div className="caller-info-col">
             <div className="session-bar">
               <div className="session-code">
-                <div className="lbl">Room code</div>
+                <div className="lbl">Code</div>
                 <div className="code">{code}</div>
               </div>
               <div className="players-pill">
-                <div className="lbl">Total Players</div>
+                <div className="lbl">Players</div>
                 <div className="count">
                   {String(players.length).padStart(2, "0")}
                   <span className="live-dot" />
@@ -288,7 +288,7 @@ function CallerScreen({ me, onLeave }) {
 
             <div className="last-called-row">
               <div className="last-called-card">
-                <div className="lbl">Last Number</div>
+                <div className="lbl">Last</div>
                 {lastDrawn
                   ? <div className="last-num reveal" key={reveal}>{String(lastDrawn).padStart(2, "0")}</div>
                   : <div className="last-num empty">—</div>
@@ -298,14 +298,14 @@ function CallerScreen({ me, onLeave }) {
                 className="draw-random draw-random--portrait"
                 onClick={drawRandom}
                 disabled={drawn.length >= 72}>
-                <span className="btn-val">{drawn.length >= 72 ? "—" : "Next Number"}</span>
+                <span className="btn-val">{drawn.length >= 72 ? "—" : "Next"}</span>
               </button>
             </div>
             <button
               className="draw-random draw-random--landscape"
               onClick={drawRandom}
               disabled={drawn.length >= 72}>
-              <span className="btn-val">{drawn.length >= 72 ? "—" : "Next Number"}</span>
+              <span className="btn-val">{drawn.length >= 72 ? "—" : "Next"}</span>
             </button>
           </div>
 
@@ -313,7 +313,7 @@ function CallerScreen({ me, onLeave }) {
             <div className="caller-card-body">
               <div className="board-section">
                 <div className="board-section-head">
-                  <span className="lbl">Number Board</span>
+                  <span className="lbl">Board</span>
                   <span className="lbl">{72 - drawn.length} left</span>
                 </div>
                 <div className="numbers-grid">
@@ -338,18 +338,18 @@ function CallerScreen({ me, onLeave }) {
             <button className="ls-btn" onClick={() => setShowInfo(true)}>Room</button>
             <button className="ls-btn ls-btn--exit" onClick={onLeave}>Exit</button>
             <div className="ls-widget">
-              <div className="ls-lbl">Room Code</div>
+              <div className="ls-lbl">Code</div>
               <div className="ls-code">{code}</div>
             </div>
             <div className="ls-widget">
-              <div className="ls-lbl">Total Players</div>
+              <div className="ls-lbl">Players</div>
               <div className="ls-num-val">
                 {String(players.length).padStart(2, "0")}
                 <span style={{display:'inline-block', width:7, height:7, borderRadius:'50%', background:'#4ade80', boxShadow:'0 0 10px #4ade80', animation:'pulse 1.4s ease-in-out infinite'}} />
               </div>
             </div>
             <div className="ls-widget">
-              <div className="ls-lbl">Last Number</div>
+              <div className="ls-lbl">Last</div>
               {lastDrawn
                 ? <div className="ls-num-val ls-reveal" key={reveal}>{String(lastDrawn).padStart(2, "0")}</div>
                 : <div className="ls-num-val ls-empty">—</div>
@@ -359,7 +359,7 @@ function CallerScreen({ me, onLeave }) {
               className="ls-next-btn"
               onClick={drawRandom}
               disabled={drawn.length >= 72}>
-              {drawn.length >= 72 ? "—" : "Next Number"}
+              {drawn.length >= 72 ? "—" : "Next"}
             </button>
           </div>
         </div>
@@ -651,7 +651,7 @@ function PlayerGame({ me, conn, onLeave }) {
             </button>
 
             <div className="latest-panel">
-              <div className="latest-head">Last number called</div>
+              <div className="latest-head">Last</div>
               {lastDrawn
                 ? <div className="mini-ball" key={lastDrawn}>
                     {String(lastDrawn).padStart(2, "0")}

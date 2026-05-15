@@ -66,7 +66,7 @@ const PlayerScreen = () => {
         </div>
         <div className="right">
           <div className="latest-panel">
-            <div className="latest-head">Last number called</div>
+            <div className="latest-head">Last</div>
             <div className="mini-ball">{String(lastDrawn).padStart(2,'0')}</div>
             <div style={{textAlign:'center', color:'var(--ink-dim)', fontSize:14}}>🎯 it's on your card!</div>
           </div>

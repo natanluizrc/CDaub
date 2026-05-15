@@ -27,7 +27,7 @@ const HostScreen = () => {
           <div className="session-bar">
             <div className="session-code">
               <div>
-                <div className="lbl">Room code</div>
+                <div className="lbl">Code</div>
                 <div className="code">KPQ472</div>
               </div>
               <button className="copy">Copy</button>
@@ -62,7 +62,7 @@ const HostScreen = () => {
               </div>
               <div style={{flex:1, display:'flex', flexDirection:'column', gap:8}}>
                 <div style={{display:'flex', alignItems:'baseline', justifyContent:'space-between'}}>
-                  <span style={{fontFamily:'var(--font-display)', fontSize:16, fontWeight:600, letterSpacing:'-0.01em'}}>Number board</span>
+                  <span style={{fontFamily:'var(--font-display)', fontSize:16, fontWeight:600, letterSpacing:'-0.01em'}}>Board</span>
                   <span style={{fontSize:12, color:'var(--ink-dimmer)'}}>38 left</span>
                 </div>
                 <div className="numbers-grid">
