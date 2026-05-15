@@ -1168,9 +1168,9 @@ input {
   /* Padding dos painéis */
   .caller .left, .player-shell .left { padding: 16px 16px 90px; }
 
-  /* Session bar lado a lado no mobile */
-  .session-code { flex: 1; }
-  .players-pill { flex: none; min-width: unset; padding: 10px 16px; }
+  /* Session bar lado a lado no mobile — grid fixa o tamanho do Players */
+  .session-bar { display: grid; grid-template-columns: 1fr 88px; }
+  .players-pill { min-width: unset; padding: 10px 10px; }
 
   /* Bola do número */
   .ball { width: 130px; height: 130px; font-size: 68px; }
