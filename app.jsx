@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "2.8";
+const APP_VERSION = "2.9";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -205,7 +205,6 @@ function InfoPanel({ open, onClose, onExit, children }) {
     <>
       <div className="info-backdrop" onClick={onClose} />
       <div className="info-panel">
-        <div className="info-handle" onClick={onClose} />
         <button className="info-close-btn" onClick={onClose}>✕</button>
         <div className="info-panel-body">
           {children}
@@ -226,6 +225,7 @@ function InfoPanel({ open, onClose, onExit, children }) {
             </button>
           </div>
         )}
+        <div className="info-handle" onClick={onClose} />
       </div>
     </>
   );
