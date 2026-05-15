@@ -706,10 +706,10 @@ input {
 
 /* --- Caller card layout (portrait default) --- */
 .caller-card {
-  background: rgba(129,140,248,0.03);
-  border: 1px solid rgba(129,140,248,0.13);
-  border-radius: 16px;
-  padding: 10px 12px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   flex: 1;
