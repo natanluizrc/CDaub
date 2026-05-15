@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "2.1";
+const APP_VERSION = "2.2";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -47,13 +47,12 @@ function Welcome({ onPick }) {
   const ok = name.trim().length >= 2;
 
   return (
-    <div style={{position:'relative', width:'100%', minHeight:'100vh', background:'radial-gradient(ellipse at top, #2a0e54 0%, #1a0838 35%, #0e0420 70%)', overflow:'hidden', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
-      <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 20% 20%, rgba(124,58,237,0.25), transparent 40%), radial-gradient(circle at 80% 80%, rgba(236,72,153,0.18), transparent 45%)', pointerEvents:'none'}} />
+    <div style={{position:'relative', width:'100%', minHeight:'100vh', background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)', overflow:'hidden', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
+      <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 20% 20%, rgba(249,115,22,0.1), transparent 40%), radial-gradient(circle at 80% 80%, rgba(234,179,8,0.07), transparent 45%)', pointerEvents:'none'}} />
       <div className="welcome">
         <div className="eyebrow">WELCOME TO</div>
         <h1>CDaub. <span className="version-tag">v{APP_VERSION}</span></h1>
         <div className="slogan">Cards that build Moments.</div>
-        <p className="sub">The excitement begins before the first number is called. Tell us who you are — and how you'll join the game.</p>
 
         <div className="field">
           <label>YOUR NAME</label>
@@ -241,7 +240,7 @@ function CallerScreen({ me, onLeave }) {
 
   if (fsError) {
     return (
-      <div className="app" style={{background:'radial-gradient(ellipse at top, #2a0e54 0%, #1a0838 35%, #0e0420 70%)'}}>
+      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)'}}>
         <TopBar name={me.name} role="caller" onLeave={onLeave} onInfo={null} />
         <div style={{ padding: 40, textAlign: "center", color: "#fca5a5" }}>
           Erro ao conectar ao Firestore:<br /><strong>{fsError}</strong>
@@ -252,7 +251,7 @@ function CallerScreen({ me, onLeave }) {
 
   if (!session) {
     return (
-      <div className="app" style={{background:'radial-gradient(ellipse at top, #2a0e54 0%, #1a0838 35%, #0e0420 70%)'}}>
+      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)'}}>
         <TopBar name={me.name} role="caller" onLeave={onLeave} onInfo={null} />
         <div style={{ padding: 40, textAlign: "center", color: "var(--ink-dim)" }}>
           Conectando…
@@ -271,7 +270,7 @@ function CallerScreen({ me, onLeave }) {
   const players = Object.values(session.players || {});
 
   return (
-    <div className="app" style={{background:'radial-gradient(ellipse at top, #2a0e54 0%, #1a0838 35%, #0e0420 70%)'}}>
+    <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)'}}>
       <TopBar name={me.name} role="caller" onLeave={onLeave} onInfo={() => setShowInfo(true)} />
       <div className="caller">
         <div className="left">
@@ -302,7 +301,6 @@ function CallerScreen({ me, onLeave }) {
                 className="draw-random draw-random--portrait"
                 onClick={drawRandom}
                 disabled={drawn.length >= 72}>
-                <span className="btn-lbl">{drawn.length >= 72 ? "Done" : "Tap to draw"}</span>
                 <span className="btn-val">{drawn.length >= 72 ? "—" : "Next Number"}</span>
               </button>
             </div>
@@ -310,7 +308,6 @@ function CallerScreen({ me, onLeave }) {
               className="draw-random draw-random--landscape"
               onClick={drawRandom}
               disabled={drawn.length >= 72}>
-              <span className="btn-lbl">{drawn.length >= 72 ? "Done" : "Tap to draw"}</span>
               <span className="btn-val">{drawn.length >= 72 ? "—" : "Next Number"}</span>
             </button>
           </div>
@@ -446,8 +443,8 @@ function ConnectModal({ me, onConnected, onLeave }) {
   };
 
   return (
-    <div style={{position:'relative', width:'100%', minHeight:'100vh', background:'radial-gradient(ellipse at top, #2a0e54 0%, #1a0838 35%, #0e0420 70%)', overflow:'hidden', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
-      <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 20% 20%, rgba(124,58,237,0.25), transparent 40%), radial-gradient(circle at 80% 80%, rgba(236,72,153,0.18), transparent 45%)', pointerEvents:'none'}} />
+    <div style={{position:'relative', width:'100%', minHeight:'100vh', background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)', overflow:'hidden', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
+      <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 20% 20%, rgba(249,115,22,0.1), transparent 40%), radial-gradient(circle at 80% 80%, rgba(234,179,8,0.07), transparent 45%)', pointerEvents:'none'}} />
       <div className="connect-card">
         <h2>Join the room</h2>
         <p className="sub">Grab the room code (01–72) from the host calling the numbers.</p>
@@ -521,7 +518,7 @@ function PlayerGame({ me, conn, onLeave }) {
 
   if (!loaded) {
     return (
-      <div className="app" style={{background:'radial-gradient(ellipse at top, #2a0e54 0%, #1a0838 35%, #0e0420 70%)'}}>
+      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)'}}>
         <TopBar name={me.name} role="player" onLeave={onLeave} onInfo={null} />
         <div style={{ padding: 40, textAlign: "center", color: "var(--ink-dim)" }}>
           Conectando…
@@ -532,7 +529,7 @@ function PlayerGame({ me, conn, onLeave }) {
 
   if (!session) {
     return (
-      <div className="app" style={{background:'radial-gradient(ellipse at top, #2a0e54 0%, #1a0838 35%, #0e0420 70%)'}}>
+      <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)'}}>
         <TopBar name={me.name} role="player" onLeave={onLeave} onInfo={null} />
         <div style={{ padding: 40, textAlign: "center", color: "var(--ink-dim)" }}>
           The room has ended.
@@ -568,7 +565,7 @@ function PlayerGame({ me, conn, onLeave }) {
   const marksCount = (me_p.marked || []).length;
 
   return (
-    <div className="app" style={{background:'radial-gradient(ellipse at top, #2a0e54 0%, #1a0838 35%, #0e0420 70%)'}}>
+    <div className="app" style={{background:'radial-gradient(ellipse at top, #1e1e24 0%, #141417 35%, #0c0c0e 70%)'}}>
       <TopBar name={me.name} role="player" onLeave={onLeave} onInfo={() => setShowInfo(true)} />
       <div className="player-shell">
         <div className="left">
