@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "3.7";
+const APP_VERSION = "3.8";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
