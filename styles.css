@@ -420,7 +420,7 @@ input {
   border: 1px solid var(--line-strong);
   border-radius: 8px;
   padding: 8px 12px;
-  height: calc((100vw - 60px) / 4);
+  height: clamp(44px, calc((100vw - 60px) / 4), 96px);
 }
 .session-code .lbl {
   font-size: 10px;
@@ -446,7 +446,7 @@ input {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--line);
   border-radius: 8px;
-  height: calc((100vw - 60px) / 4);
+  height: clamp(44px, calc((100vw - 60px) / 4), 96px);
 }
 .players-pill .lbl {
   font-size: 10px;
@@ -491,7 +491,7 @@ input {
   padding: 8px 12px;
   box-sizing: border-box;
   flex-shrink: 0;
-  height: calc((100vw - 60px) / 4);
+  height: clamp(44px, calc((100vw - 60px) / 4), 96px);
 }
 .last-called-card .lbl {
   font-size: 10px;
@@ -646,12 +646,15 @@ input {
 }
 
 @media (orientation: portrait) {
+  .caller-info-col {
+    flex: 1;
+    min-height: 0;
+  }
   .numbers-grid {
     grid-template-columns: repeat(8, minmax(0, 1fr));
     grid-template-rows: repeat(9, 1fr);
     flex: 1;
     min-height: 0;
-    height: 100%;
     overflow: hidden;
   }
   .num-btn {
@@ -813,7 +816,7 @@ input {
   cursor: not-allowed;
 }
 .draw-random--landscape { display: none; }
-.draw-random--portrait { height: calc((100vw - 60px) / 4); }
+.draw-random--portrait { height: clamp(44px, calc((100vw - 60px) / 4), 96px); }
 
 /* Players list */
 .players-list {
@@ -1478,7 +1481,7 @@ input {
 
   /* === Caller landscape: chips inline com o grid === */
   .app--caller .caller .left { flex-direction: column; }
-  .app--caller .caller-info-col { display: flex; flex: none; }
+  .app--caller .caller-info-col { display: flex; flex: 1; min-height: 0; }
   .app--caller .session-bar { flex: none; flex-direction: row; }
   .app--caller .last-called-row { flex: none; }
   .app--caller .draw-random--landscape { display: none; }
@@ -1487,7 +1490,6 @@ input {
   .app--caller .numbers-grid {
     flex: 1;
     min-height: 0;
-    height: 100%;
     grid-template-rows: repeat(6, 1fr);
     grid-auto-rows: unset;
     overflow: hidden;
