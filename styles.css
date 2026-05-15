@@ -1486,7 +1486,9 @@ input {
   .app--caller .numbers-grid {
     flex: 1;
     min-height: 0;
-    grid-auto-rows: minmax(0, 1fr);
+    height: 0;
+    grid-template-rows: repeat(6, 1fr);
+    grid-auto-rows: unset;
     overflow: hidden;
   }
   .app--caller .num-btn {
