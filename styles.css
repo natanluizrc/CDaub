@@ -651,7 +651,7 @@ input {
     grid-template-rows: repeat(9, 1fr);
     flex: 1;
     min-height: 0;
-    height: 0;
+    height: 100%;
     overflow: hidden;
   }
   .num-btn {
@@ -1487,7 +1487,7 @@ input {
   .app--caller .numbers-grid {
     flex: 1;
     min-height: 0;
-    height: 0;
+    height: 100%;
     grid-template-rows: repeat(6, 1fr);
     grid-auto-rows: unset;
     overflow: hidden;
