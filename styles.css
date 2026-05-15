@@ -109,7 +109,7 @@ input {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2px;
+  gap: 4px;
   font-family: var(--font-display);
   position: relative;
 }
@@ -160,7 +160,7 @@ input {
 .top-bar .who {
   font-size: 13px;
   color: var(--ink-dim);
-  display: flex; align-items: center; gap: 14px;
+  display: flex; align-items: center; gap: 16px;
 }
 
 .top-bar .who .name { color: var(--ink); font-weight: 500; }
@@ -328,7 +328,7 @@ input {
   transition: all .25s cubic-bezier(.2,.9,.3,1.2);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   position: relative;
   overflow: hidden;
 }
@@ -370,7 +370,7 @@ input {
   text-transform: uppercase;
   letter-spacing: 0.16em;
   color: var(--ink-dimmer);
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; gap: 8px;
 }
 .mode-card .meta .arrow { transition: transform .2s; }
 .mode-card:not([disabled]):hover .meta { color: var(--purple-glow); }
@@ -384,7 +384,7 @@ input {
   flex-direction: column;
   overflow: hidden;
   padding: 8px 16px;
-  gap: 6px;
+  gap: 8px;
 }
 
 .caller .left {
@@ -392,7 +392,7 @@ input {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   overflow: hidden;
   padding: 0;
 }
@@ -401,22 +401,26 @@ input {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .session-bar {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: stretch;
   flex-shrink: 0;
 }
 
 .session-code {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--line-strong);
   border-radius: 8px;
-  padding: 5px 12px;
+  padding: 8px 12px;
+  height: calc((100vw - 60px) / 4);
 }
 .session-code .lbl {
   font-size: 10px;
@@ -438,10 +442,11 @@ input {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 5px 12px;
+  padding: 8px 12px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--line);
   border-radius: 8px;
+  height: calc((100vw - 60px) / 4);
 }
 .players-pill .lbl {
   font-size: 10px;
@@ -466,7 +471,7 @@ input {
 
 .last-called-row {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: stretch;
   flex-shrink: 0;
 }
@@ -477,12 +482,16 @@ input {
 }
 
 .last-called-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--line-strong);
   border-radius: 8px;
-  padding: 5px 12px;
+  padding: 8px 12px;
   box-sizing: border-box;
   flex-shrink: 0;
+  height: calc((100vw - 60px) / 4);
 }
 .last-called-card .lbl {
   font-size: 10px;
@@ -631,7 +640,7 @@ input {
 .numbers-grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 5px;
+  gap: 4px;
   min-height: 0;
   overflow: hidden;
 }
@@ -693,7 +702,7 @@ input {
 .history {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
   max-height: 96px;
   overflow-y: auto;
   padding-right: 4px;
@@ -738,7 +747,7 @@ input {
 .caller-card-body {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   flex: 1;
   min-height: 0;
 }
@@ -746,13 +755,13 @@ input {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-shrink: 0;
 }
 .board-section {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   flex: 1;
   min-height: 0;
 }
@@ -803,12 +812,13 @@ input {
   cursor: not-allowed;
 }
 .draw-random--landscape { display: none; }
+.draw-random--portrait { height: calc((100vw - 60px) / 4); }
 
 /* Players list */
 .players-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   flex: 1;
   min-height: 0;
   overflow-y: auto;
@@ -817,7 +827,7 @@ input {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 14px;
+  padding: 8px 12px;
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -881,7 +891,7 @@ input {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .player-action-col {
@@ -896,7 +906,7 @@ input {
 
 .session-mini {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
   align-self: stretch;
   padding: 8px 12px;
@@ -921,7 +931,7 @@ input {
   margin-left: auto;
 }
 .session-mini .live {
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; gap: 8px;
   font-size: 12px;
   color: #4ade80;
 }
@@ -967,7 +977,7 @@ input {
 .cart-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 6px;
+  gap: 4px;
 }
 
 .cart-cell {
@@ -1071,7 +1081,7 @@ input {
 .drawn-strip {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
   max-height: 120px;
   overflow-y: auto;
 }
@@ -1419,7 +1429,7 @@ input {
   }
   .caller .left {
     flex-direction: row;
-    gap: 10px;
+    gap: 8px;
     align-items: stretch;
   }
   .caller-info-col {
@@ -1441,6 +1451,7 @@ input {
   .players-pill {
     flex: 1;
     min-height: 0;
+    height: auto;
   }
 
   /* last-called-row: 1 unidade, mostra só last-called-card */
@@ -1475,8 +1486,8 @@ input {
     flex-direction: column;
     flex: 0 0 152px;
     min-height: 0;
-    gap: 6px;
-    padding: 10px 8px;
+    gap: 8px;
+    padding: 8px;
     border-left: 1px solid rgba(129, 140, 248, 0.15);
     overflow-y: auto;
   }
@@ -1500,7 +1511,7 @@ input {
     background: rgba(255,255,255,0.04);
     border: 1px solid var(--line);
     border-radius: 8px;
-    padding: 7px 9px;
+    padding: 8px 12px;
     flex-shrink: 0;
   }
 
@@ -1522,7 +1533,7 @@ input {
     color: var(--ink);
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
   }
 
   .ls-reveal { animation: reveal 0.5s cubic-bezier(.2,1.4,.3,1); }
@@ -1590,27 +1601,27 @@ input {
   .top-bar .brand .brand-slogan { display: none; }
   .top-bar .who .role-chip { font-size: 10px; padding: 3px 8px; }
 
-  .app--caller .ls-sidebar { flex-basis: 132px; gap: 4px; padding: 6px; }
-  .ls-widget { padding: 5px 7px; }
-  .ls-next-btn { padding: 8px 6px; }
+  .app--caller .ls-sidebar { flex-basis: 132px; gap: 4px; padding: 4px 8px; }
+  .ls-widget { padding: 4px 8px; }
+  .ls-next-btn { padding: 8px; }
 
-  .caller { padding: 4px 12px; gap: 5px; }
-  .caller .left { gap: 6px; }
+  .caller { padding: 4px 12px; gap: 4px; }
+  .caller .left { gap: 8px; }
   .caller-info-col { flex: 0 0 156px; gap: 4px; }
-  .session-code, .players-pill { padding: 5px 10px; }
+  .session-code, .players-pill { padding: 4px 8px; height: auto; }
   .session-code .code, .players-pill .count { font-size: 16px; }
-  .last-called-card { padding: 5px 10px; }
+  .last-called-card { padding: 4px 8px; height: auto; }
   .last-called-card .last-num { font-size: 16px; }
   .caller-card { padding: 6px 8px 8px; }
   .caller-card-body { gap: 4px; }
   .board-section { gap: 4px; }
-  .numbers-grid { gap: 3px; }
+  .numbers-grid { gap: 4px; }
   .num-btn { font-size: 10px; border-radius: 4px; }
   .draw-random { padding: 5px 10px; }
   .draw-random .btn-val { font-size: 16px; }
 
   .player-shell .left { padding: 5px 12px; gap: 8px; }
-  .player-card-col { gap: 5px; }
+  .player-card-col { gap: 4px; }
   .session-mini { padding: 5px 8px; }
   .cartela { max-width: 200px; padding: 8px; }
   .cartela .cart-head { margin-bottom: 8px; }
@@ -1714,8 +1725,8 @@ input {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
+  gap: 8px;
+  padding: 8px 16px;
   border-radius: 20px;
   border: 1.5px solid var(--line-strong);
   background: transparent;
