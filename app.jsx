@@ -100,7 +100,6 @@ function TopBar({ name, role, onLeave, onInfo }) {
     <div className="top-bar">
       <div className="brand">
         <span className="logo">CDaub.</span>
-        <span className="brand-slogan">Cards that build Moments.</span>
       </div>
       <div className="who">
         <span className="role-chip">{role === "caller" ? "Host" : "Player"} · {name}</span>
