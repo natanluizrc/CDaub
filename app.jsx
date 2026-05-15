@@ -368,10 +368,7 @@ function CallerScreen({ me, onLeave }) {
           <div className="caller-card">
             <div className="caller-card-body">
               <div className="board-section">
-                <div className="board-section-head">
-                  <span className="lbl">Board</span>
-                </div>
-                <div className="numbers-grid">
+<div className="numbers-grid">
                   {Array.from({ length: 72 }, (_, i) => i + 1).map((n) => {
                     const isDrawn = drawnSet.has(n);
                     const isLast = n === lastDrawn;
