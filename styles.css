@@ -1608,7 +1608,7 @@ input {
   position: fixed;
   top: calc(100dvh / 6);
   left: 0;
-  height: calc(100dvh / 3);
+  height: calc(100dvh * 4 / 6);
   z-index: 150;
   background: linear-gradient(180deg, #1e1e24 0%, #141417 100%);
   border: 1px solid var(--line-strong);
@@ -1625,7 +1625,7 @@ input {
   right: 0;
   top: 0;
   bottom: 0;
-  width: 28px;
+  width: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1634,8 +1634,8 @@ input {
 .info-handle:active { cursor: grabbing; }
 .info-handle::after {
   content: '';
-  width: 4px;
-  height: 44px;
+  width: 3px;
+  height: 36px;
   background: var(--line-strong);
   border-radius: 2px;
 }
@@ -1697,7 +1697,7 @@ input {
 .info-close-btn {
   position: absolute;
   top: 12px;
-  right: 36px;
+  right: 22px;
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -1719,7 +1719,7 @@ input {
 
 .info-panel-body {
   overflow-y: auto;
-  padding: 48px 36px 16px 20px;
+  padding: 48px 22px 16px 20px;
   flex: 1;
 }
 

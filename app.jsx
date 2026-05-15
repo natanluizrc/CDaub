@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "3.2";
+const APP_VERSION = "3.3";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -202,7 +202,7 @@ function InfoPanel({ open, onOpen, onClose, onExit, children }) {
   const [delta, setDelta] = useState(0);
   const [dragging, setDragging] = useState(false);
 
-  const PEEK = 28;
+  const PEEK = 14;
   const SNAP = 80;
 
   const onPointerDown = useCallback((e) => {
