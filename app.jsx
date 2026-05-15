@@ -188,7 +188,6 @@ function BottomSheet({ sheet, onSheet, tabs, content }) {
 function CallerScreen({ me, onLeave }) {
   const [code] = useState(() => makeCode());
   const [session, setSession] = useState(null);
-  const [copied, setCopied] = useState(false);
   const [reveal, setReveal] = useState(0);
   const [fsError, setFsError] = useState(null);
   const [sheet, setSheet] = useState(null);
@@ -286,12 +285,6 @@ function CallerScreen({ me, onLeave }) {
     drawNumber(avail[Math.floor(Math.random() * avail.length)]);
   };
 
-  const copy = () => {
-    navigator.clipboard?.writeText(code).catch(() => {});
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1400);
-  };
-
   const players = Object.values(session.players || {});
 
   return (
@@ -301,13 +294,8 @@ function CallerScreen({ me, onLeave }) {
         <div className="left">
           <div className="session-bar">
             <div className="session-code">
-              <div>
-                <div className="lbl">Room code</div>
-                <div className="code">{code}</div>
-              </div>
-              <button className={`copy${copied ? " copied" : ""}`} onClick={copy}>
-                {copied ? "✓ Copied" : "Copy"}
-              </button>
+              <div className="lbl">Room code</div>
+              <div className="code">{code}</div>
             </div>
             <div className="players-pill">
               <div className="lbl">Players</div>

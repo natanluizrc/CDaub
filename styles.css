@@ -378,10 +378,6 @@ input {
   border: 1px solid var(--line-strong);
   border-radius: 18px;
   padding: 14px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
 }
 .session-code .lbl {
   font-size: 11px;
@@ -397,18 +393,6 @@ input {
   color: var(--ink);
   margin-top: 2px;
 }
-.session-code .copy {
-  padding: 10px 14px;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--line);
-  transition: all .2s;
-}
-.session-code .copy:hover { background: rgba(168, 85, 247, 0.2); color: var(--ink); }
-.session-code .copy.copied { background: var(--purple-2); color: white; }
 
 .players-pill {
   display: flex;
@@ -1168,9 +1152,9 @@ input {
   /* Padding dos painéis */
   .caller .left, .player-shell .left { padding: 16px 16px 90px; }
 
-  /* Session bar lado a lado no mobile — grid fixa o tamanho do Players */
-  .session-bar { display: grid; grid-template-columns: 1fr 88px; }
-  .players-pill { min-width: unset; padding: 10px 10px; }
+  /* Session bar 50/50 no mobile */
+  .session-bar { display: grid; grid-template-columns: 1fr 1fr; }
+  .players-pill { min-width: unset; }
 
   /* Bola do número */
   .ball { width: 130px; height: 130px; font-size: 68px; }
