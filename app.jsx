@@ -312,6 +312,12 @@ function CallerScreen({ me, onLeave }) {
                 : <div className="last-num empty">—</div>
               }
             </div>
+            <button
+              className="draw-random draw-random--landscape"
+              onClick={drawRandom}
+              disabled={drawn.length >= 72}>
+              {drawn.length >= 72 ? "All numbers have been called" : "🎲 Call the next number"}
+            </button>
           </div>
 
           <div className="caller-card">
@@ -335,7 +341,7 @@ function CallerScreen({ me, onLeave }) {
                   })}
                 </div>
                 <button
-                  className="draw-random"
+                  className="draw-random draw-random--portrait"
                   onClick={drawRandom}
                   disabled={drawn.length >= 72}
                   style={{width:'100%'}}>

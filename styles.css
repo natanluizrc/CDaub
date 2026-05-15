@@ -481,6 +481,8 @@ input {
   color: var(--ink-dimmer);
 }
 
+.draw-random--landscape { display: none; }
+
 /* Stage = the giant ball */
 .stage {
   display: flex;
@@ -1333,6 +1335,9 @@ input {
 
 /* ---------- Landscape: layout 2 colunas ---------- */
 @media (orientation: landscape) {
+  .draw-random--landscape { display: block; width: 100%; }
+  .draw-random--portrait { display: none; }
+
   .session-bar { flex-direction: column; }
 
   /* Caller: controles à esq, grid de números à dir */
