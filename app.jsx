@@ -295,26 +295,28 @@ function CallerScreen({ me, onLeave }) {
       <TopBar name={me.name} role="caller" onLeave={onLeave} onInfo={() => setShowInfo(true)} />
       <div className="caller">
         <div className="left">
-          <div className="session-bar">
-            <div className="session-code">
-              <div className="lbl">Room code</div>
-              <div className="code">{code}</div>
-            </div>
-            <div className="players-pill">
-              <div className="lbl">Players</div>
-              <div className="count">
-                {players.length}
-                <span className="live-dot" />
+          <div className="caller-info-col">
+            <div className="session-bar">
+              <div className="session-code">
+                <div className="lbl">Room code</div>
+                <div className="code">{code}</div>
+              </div>
+              <div className="players-pill">
+                <div className="lbl">Players</div>
+                <div className="count">
+                  {players.length}
+                  <span className="live-dot" />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="last-called-card">
-            <div className="lbl">Last called</div>
-            {lastDrawn
-              ? <div className="last-num reveal" key={reveal}>{String(lastDrawn).padStart(2, "0")}</div>
-              : <div className="last-num empty">—</div>
-            }
+            <div className="last-called-card">
+              <div className="lbl">Last called</div>
+              {lastDrawn
+                ? <div className="last-num reveal" key={reveal}>{String(lastDrawn).padStart(2, "0")}</div>
+                : <div className="last-num empty">—</div>
+              }
+            </div>
           </div>
 
           <div className="caller-card">
@@ -593,71 +595,74 @@ function PlayerGame({ me, conn, onLeave }) {
       <TopBar name={me.name} role="player" onLeave={onLeave} onInfo={() => setShowInfo(true)} />
       <div className="player-shell">
         <div className="left">
-          <div className="session-mini">
-            <div>
-              <div className="lbl">Room</div>
-              <div style={{ fontSize: 14, marginTop: 2 }}>with <strong>{session.callerName}</strong></div>
-            </div>
-            <div className="code">{code}</div>
-            <div className="live"><span className="dot" /> live</div>
-          </div>
-
-          <div className="cartela">
-            <div className="cart-head">
-              <h2>Your card</h2>
-              <div className="progress">
-                <strong>{marksCount}</strong> / 24 marked
+          <div className="player-card-col">
+            <div className="session-mini">
+              <div>
+                <div className="lbl">Room</div>
+                <div style={{ fontSize: 13, marginTop: 2 }}>with <strong>{session.callerName}</strong></div>
               </div>
+              <div className="code">{code}</div>
+              <div className="live"><span className="dot" /> live</div>
             </div>
-            <div className="cart-grid">
-              {grid.map((row, r) => row.map((val, c) => {
-                if (val === "FREE") {
+
+            <div className="cartela">
+              <div className="cart-head">
+                <h2>Your card</h2>
+                <div className="progress">
+                  <strong>{marksCount}</strong> / 24 marked
+                </div>
+              </div>
+              <div className="cart-grid">
+                {grid.map((row, r) => row.map((val, c) => {
+                  if (val === "FREE") {
+                    return (
+                      <button key={`${r}-${c}`} className="cart-cell free" disabled>
+                        FREE
+                      </button>
+                    );
+                  }
+                  const isDrawn = drawnSet.has(val);
+                  const isMarked = (me_p.marked || []).includes(val);
+                  let cls = "cart-cell";
+                  if (isMarked) cls += " marked";
+                  else if (isDrawn) cls += " drawable";
+                  else if (drawn.length > 8) cls += " missed";
                   return (
-                    <button key={`${r}-${c}`} className="cart-cell free" disabled>
-                      FREE
+                    <button
+                      key={`${r}-${c}`}
+                      className={cls}
+                      onClick={() => toggleMark(val)}
+                      disabled={!isDrawn && !isMarked}>
+                      {String(val).padStart(2, "0")}
                     </button>
                   );
-                }
-                const isDrawn = drawnSet.has(val);
-                const isMarked = (me_p.marked || []).includes(val);
-                let cls = "cart-cell";
-                if (isMarked) cls += " marked";
-                else if (isDrawn) cls += " drawable";
-                else if (drawn.length > 8) cls += " missed";
-                return (
-                  <button
-                    key={`${r}-${c}`}
-                    className={cls}
-                    onClick={() => toggleMark(val)}
-                    disabled={!isDrawn && !isMarked}>
-                    {String(val).padStart(2, "0")}
-                  </button>
-                );
-              }))}
+                }))}
+              </div>
             </div>
           </div>
 
-          <button
-            className="bingo-btn"
-            style={{ marginTop: 28, width: "100%", maxWidth: 460 }}
-            onClick={callBingo}
-            disabled={!hasBingo || me_p.bingo}>
-            {me_p.bingo ? "✓ BINGO confirmed" : hasBingo ? "BINGO!" : "Keep marking..."}
-          </button>
+          <div className="player-action-col">
+            <button
+              className="bingo-btn"
+              onClick={callBingo}
+              disabled={!hasBingo || me_p.bingo}>
+              {me_p.bingo ? "✓ BINGO confirmed" : hasBingo ? "BINGO!" : "Keep marking..."}
+            </button>
 
-          <div className="latest-panel" style={{ marginTop: 24, width: "100%", maxWidth: 460 }}>
-            <div className="latest-head">Last number called</div>
-            {lastDrawn
-              ? <div className="mini-ball" key={lastDrawn}>
-                  {String(lastDrawn).padStart(2, "0")}
+            <div className="latest-panel">
+              <div className="latest-head">Last number called</div>
+              {lastDrawn
+                ? <div className="mini-ball" key={lastDrawn}>
+                    {String(lastDrawn).padStart(2, "0")}
+                  </div>
+                : <div className="mini-ball empty">Waiting for the host...</div>
+              }
+              {lastDrawn &&
+                <div style={{ textAlign: "center", color: "var(--ink-dim)", fontSize: 13 }}>
+                  {cardSet.has(lastDrawn) ? "🎯 it's on your card!" : "not on your card."}
                 </div>
-              : <div className="mini-ball empty">Waiting for the host...</div>
-            }
-            {lastDrawn &&
-              <div style={{ textAlign: "center", color: "var(--ink-dim)", fontSize: 14 }}>
-                {cardSet.has(lastDrawn) ? "🎯 it's on your card!" : "not on your card."}
-              </div>
-            }
+              }
+            </div>
           </div>
         </div>
       </div>

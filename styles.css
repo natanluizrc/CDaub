@@ -75,16 +75,17 @@ input {
 
 /* ---------- App shell ---------- */
 .app {
-  min-height: 100dvh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 32px;
+  padding: 8px 20px;
   border-bottom: 1px solid var(--line);
   background: rgba(14, 4, 32, 0.65);
   backdrop-filter: blur(20px);
@@ -102,7 +103,7 @@ input {
 
 .top-bar .brand .logo {
   font-family: var(--font-display);
-  font-size: 28px;
+  font-size: 22px;
   line-height: 0.9;
   font-weight: 700;
   letter-spacing: -0.04em;
@@ -364,25 +365,35 @@ input {
 /* ---------- Caller screen ---------- */
 .caller {
   flex: 1;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
-  padding: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 8px 16px;
+  gap: 6px;
 }
 
 .caller .left {
-  padding: 18px 28px 90px;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  min-height: 0;
-  overflow-y: auto;
+  gap: 6px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.caller-info-col {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .session-bar {
   display: flex;
-  gap: 14px;
+  gap: 10px;
   align-items: stretch;
-  margin-bottom: 14px;
   flex-shrink: 0;
 }
 
@@ -390,46 +401,46 @@ input {
   flex: 1;
   background: linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(236, 72, 153, 0.15));
   border: 1px solid var(--line-strong);
-  border-radius: 18px;
-  padding: 14px 20px;
+  border-radius: 14px;
+  padding: 8px 14px;
 }
 .session-code .lbl {
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.22em;
   color: var(--ink-dimmer);
 }
 .session-code .code {
   font-family: var(--font-mono);
-  font-size: 30px;
+  font-size: 20px;
   letter-spacing: 0.18em;
   font-weight: 700;
   color: var(--ink);
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .players-pill {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 14px 20px;
+  padding: 8px 14px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--line);
-  border-radius: 18px;
-  min-width: 130px;
+  border-radius: 14px;
+  min-width: 100px;
 }
 .players-pill .lbl {
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.22em;
   color: var(--ink-dimmer);
 }
 .players-pill .count {
   font-family: var(--font-display);
-  font-size: 30px;
+  font-size: 20px;
   font-weight: 700;
   line-height: 1;
-  margin-top: 4px;
+  margin-top: 2px;
   display: flex; align-items: baseline; gap: 8px;
 }
 .players-pill .count .live-dot {
@@ -442,25 +453,25 @@ input {
 .last-called-card {
   background: linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(236, 72, 153, 0.15));
   border: 1px solid var(--line-strong);
-  border-radius: 18px;
-  padding: 14px 20px;
+  border-radius: 14px;
+  padding: 8px 14px;
   width: 100%;
   box-sizing: border-box;
   flex-shrink: 0;
 }
 .last-called-card .lbl {
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.22em;
   color: var(--ink-dimmer);
 }
 .last-called-card .last-num {
   font-family: var(--font-mono);
-  font-size: 30px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.12em;
   line-height: 1;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 .last-called-card .last-num.reveal {
   animation: reveal 0.5s cubic-bezier(.2,1.4,.3,1);
@@ -582,20 +593,20 @@ input {
 .numbers-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 6px;
+  gap: 5px;
 }
 
 @media (orientation: portrait) {
-  .numbers-grid { grid-template-columns: repeat(6, 1fr); }
+  .numbers-grid { grid-template-columns: repeat(8, 1fr); }
 }
 
 .num-btn {
   aspect-ratio: 1;
-  border-radius: 10px;
+  border-radius: 8px;
   background: rgba(255,255,255,0.04);
   border: 1px solid var(--line);
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--ink-dim);
@@ -665,8 +676,8 @@ input {
 .caller-card {
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(192,132,252,0.28);
-  border-radius: 20px;
-  padding: 16px 18px 18px;
+  border-radius: 16px;
+  padding: 10px 12px 12px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -678,7 +689,7 @@ input {
 .caller-card-body {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
   flex: 1;
   min-height: 0;
 }
@@ -692,24 +703,24 @@ input {
 .board-section {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   flex: 1;
   min-height: 0;
 }
 
 /* Big action button */
 .draw-random {
-  margin-top: 8px;
-  padding: 12px;
-  border-radius: 14px;
+  margin-top: 4px;
+  padding: 8px 12px;
+  border-radius: 12px;
   background: linear-gradient(135deg, var(--magenta), var(--purple-2));
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.01em;
   color: white;
   transition: all .2s;
-  box-shadow: 0 12px 30px -10px rgba(236, 72, 153, 0.6);
+  box-shadow: 0 8px 20px -8px rgba(236, 72, 153, 0.6);
 }
 .draw-random:hover:not(:disabled) {
   transform: translateY(-2px);
@@ -774,31 +785,54 @@ input {
 /* ---------- Player (cartela) screen ---------- */
 .player-shell {
   flex: 1;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 .player-shell .left {
-  padding: 24px 32px 90px;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 0;
-  overflow-y: auto;
+  padding: 8px 16px;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.player-card-col {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.player-action-col {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
 .session-mini {
   display: flex;
-  gap: 14px;
+  gap: 10px;
   align-items: center;
   align-self: stretch;
-  padding: 12px 16px;
+  padding: 8px 12px;
   background: rgba(255,255,255,0.04);
   border: 1px solid var(--line);
-  border-radius: 14px;
-  margin-bottom: 16px;
+  border-radius: 12px;
   flex-shrink: 0;
+  width: 100%;
+  max-width: 400px;
 }
 .session-mini .lbl {
   font-size: 11px;
@@ -827,18 +861,18 @@ input {
 /* Card */
 .cartela {
   width: 100%;
-  max-width: 420px;
+  max-width: 380px;
   background: linear-gradient(160deg, rgba(124, 58, 237, 0.18), rgba(14, 4, 32, 0.7));
   border: 1px solid var(--line-strong);
-  border-radius: 22px;
-  padding: 18px;
+  border-radius: 18px;
+  padding: 12px;
   box-shadow: var(--shadow-deep);
   position: relative;
   flex-shrink: 0;
 }
 .cartela .cart-head {
   display: flex; align-items: baseline; justify-content: space-between;
-  margin-bottom: 14px;
+  margin-bottom: 8px;
 }
 .cartela .cart-head h2 {
   font-family: var(--font-display);
@@ -865,11 +899,11 @@ input {
 
 .cart-cell {
   aspect-ratio: 1;
-  border-radius: 12px;
+  border-radius: 10px;
   background: rgba(255,255,255,0.05);
   border: 1px solid var(--line);
   font-family: var(--font-display);
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--ink);
   display: flex; align-items: center; justify-content: center;
@@ -933,29 +967,29 @@ input {
   color: var(--ink-dimmer);
 }
 .mini-ball {
-  width: 110px; height: 110px;
+  width: 80px; height: 80px;
   margin: 0 auto;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-family: var(--font-display);
-  font-size: 56px;
+  font-size: 40px;
   font-weight: 700;
   background: radial-gradient(circle at 30% 28%, #f5d0fe, var(--purple-3) 30%, var(--purple-1) 80%);
   color: white;
   box-shadow:
-    inset -10px -16px 30px rgba(0,0,0,0.35),
-    inset 10px 12px 24px rgba(255,255,255,0.2),
-    0 16px 40px -8px rgba(168, 85, 247, 0.6);
+    inset -8px -12px 24px rgba(0,0,0,0.35),
+    inset 8px 10px 18px rgba(255,255,255,0.2),
+    0 12px 30px -8px rgba(168, 85, 247, 0.6);
 }
 .mini-ball.empty {
   background: rgba(255,255,255,0.04);
   border: 2px dashed var(--line-strong);
-  font-size: 13px;
+  font-size: 11px;
   color: var(--ink-dimmer);
   font-family: var(--font-ui);
   font-weight: 400;
   text-align: center;
-  padding: 0 20px;
+  padding: 0 16px;
   box-shadow: none;
 }
 
@@ -983,19 +1017,20 @@ input {
 }
 
 .bingo-btn {
-  padding: 16px;
-  border-radius: 16px;
+  padding: 10px 16px;
+  border-radius: 14px;
   background: linear-gradient(135deg, var(--gold), var(--magenta));
   color: #1a0838;
   font-family: var(--font-display);
-  font-size: 26px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.12em;
   transition: all .2s;
-  box-shadow: 0 20px 40px -10px rgba(251, 191, 36, 0.5);
+  box-shadow: 0 14px 28px -8px rgba(251, 191, 36, 0.5);
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
+  width: 100%;
 }
 .bingo-btn:hover:not(:disabled) {
   transform: translateY(-3px) scale(1.02);
@@ -1191,33 +1226,14 @@ input {
   .mode-pick { grid-template-columns: 1fr; }
 
   /* Top bar compacta */
-  .top-bar { padding: 10px 16px; }
+  .top-bar { padding: 6px 14px; }
   .top-bar .brand .brand-slogan { display: none; }
-  .top-bar .brand .logo { font-size: 22px; }
   .top-bar .who { gap: 8px; }
   .top-bar .who .role-chip { display: none; }
 
-  /* Padding dos painéis */
-  .caller .left, .player-shell .left { padding: 16px 16px 90px; }
-
-  /* Session bar 50/50 no mobile */
-  .session-bar { display: grid; grid-template-columns: 1fr 1fr; }
-  .players-pill { min-width: unset; }
-
-  /* Bola do número */
-  .ball { width: 130px; height: 130px; font-size: 68px; }
-  .ball.empty { font-size: 14px; }
-  .stage { padding: 8px 0; }
-  .stage .caption { font-size: 14px; }
-
-  /* Grade de números — células menores no mobile */
+  /* Grade de números */
   .numbers-grid { gap: 4px; }
-  .num-btn { font-size: 11px; border-radius: 6px; }
-
-  /* Cartela do jogador */
-  .cartela { padding: 14px; }
-  .cart-cell { font-size: 18px; border-radius: 8px; }
-  .drawn-strip { max-height: 160px; overflow-y: auto; }
+  .num-btn { font-size: 11px; border-radius: 5px; }
 
   /* Celebração */
   .celebrate .word { font-size: 80px; }
@@ -1226,8 +1242,6 @@ input {
 /* Celulares muito pequenos (≤ 380px) */
 @media (max-width: 380px) {
   .welcome h1 { font-size: 44px; }
-  .ball { width: 110px; height: 110px; font-size: 56px; }
-  .session-code .code { font-size: 22px; letter-spacing: 0.1em; }
   .top-bar .who .name {
     max-width: 80px;
     overflow: hidden;
@@ -1348,25 +1362,90 @@ input {
   overflow: visible !important;
 }
 
-/* Paisagem em celulares — tudo cabe sem rolar */
-@media (orientation: landscape) and (max-height: 520px) {
-  .top-bar { padding: 5px 16px; }
-  .caller .left, .player-shell .left { padding: 6px 16px 64px; }
-  .session-bar { margin-bottom: 6px; }
-  .session-code { padding: 6px 14px; }
-  .session-code .code { font-size: 18px; margin-top: 0; }
-  .players-pill { padding: 6px 14px; }
-  .players-pill .count { font-size: 18px; margin-top: 0; }
+/* ---------- Landscape: layout 2 colunas ---------- */
+@media (orientation: landscape) {
+  /* Caller: controles à esq, grid de números à dir */
+  .caller {
+    padding: 6px 14px;
+  }
+  .caller .left {
+    flex-direction: row;
+    gap: 10px;
+    align-items: stretch;
+  }
+  .caller-info-col {
+    flex: 0 0 180px;
+  }
+  .caller-card {
+    flex: 1;
+    min-width: 0;
+  }
 
-  .last-called-card { padding: 6px 14px; }
-  .last-called-card .last-num { font-size: 18px; margin-top: 0; }
-  .caller-card { padding: 8px 12px 10px; }
-  .board-section { min-width: 0; }
+  /* Player: cartela à esq, ação à dir */
+  .player-shell .left {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 16px;
+  }
+  .player-card-col {
+    flex: 0 0 auto;
+    max-width: none;
+    width: auto;
+  }
+  .player-action-col {
+    flex: 1;
+    min-width: 0;
+    max-width: 260px;
+    width: auto;
+    justify-content: center;
+    align-self: center;
+  }
+  .session-mini {
+    max-width: none;
+    width: auto;
+  }
+  .cartela {
+    max-width: 300px;
+  }
+  .bingo-btn {
+    width: 100%;
+  }
+}
 
-  /* Grid e botão compactos */
+/* Paisagem em celulares (altura ≤ 500px) */
+@media (orientation: landscape) and (max-height: 500px) {
+  .top-bar { padding: 4px 14px; }
+  .top-bar .brand .logo { font-size: 18px; }
+  .top-bar .brand .brand-slogan { display: none; }
+  .top-bar .who .role-chip { display: none; }
+
+  .caller { padding: 4px 12px; gap: 5px; }
+  .caller .left { gap: 6px; }
+  .caller-info-col { flex: 0 0 156px; gap: 4px; }
+  .session-code, .players-pill { padding: 5px 10px; }
+  .session-code .code, .players-pill .count { font-size: 16px; }
+  .last-called-card { padding: 5px 10px; }
+  .last-called-card .last-num { font-size: 16px; }
+  .caller-card { padding: 6px 8px 8px; }
+  .caller-card-body { gap: 4px; }
+  .board-section { gap: 4px; }
   .numbers-grid { gap: 3px; }
-  .num-btn { font-size: 9px; border-radius: 4px; }
-  .draw-random { padding: 7px 12px; font-size: 13px; margin-top: 0; }
+  .num-btn { font-size: 10px; border-radius: 4px; }
+  .draw-random { padding: 5px 8px; font-size: 12px; margin-top: 2px; }
+
+  .player-shell .left { padding: 5px 12px; gap: 8px; }
+  .player-card-col { gap: 5px; }
+  .session-mini { padding: 5px 8px; }
+  .cartela { max-width: 200px; padding: 8px; }
+  .cartela .cart-head { margin-bottom: 8px; }
+  .cartela .cart-head h2 { font-size: 14px; }
+  .cartela .cart-head .progress { font-size: 11px; }
+  .cart-cell { font-size: 13px; border-radius: 6px; }
+  .mini-ball { width: 70px; height: 70px; font-size: 34px; }
+  .mini-ball.empty { font-size: 9px; padding: 0 12px; }
+  .bingo-btn { padding: 7px 12px; font-size: 16px; }
+  .latest-panel .latest-head { font-size: 10px; }
 }
 
 /* ---------- Top-bar Room / Info button ---------- */
@@ -1508,10 +1587,3 @@ input {
   flex: 1;
 }
 
-/* Remove bottom padding that was compensating for the old fixed tab bar */
-@media (max-width: 640px) {
-  .caller .left, .player-shell .left { padding-bottom: 24px !important; }
-}
-@media (orientation: landscape) and (max-height: 520px) {
-  .caller .left, .player-shell .left { padding-bottom: 16px !important; }
-}
