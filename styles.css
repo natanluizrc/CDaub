@@ -1513,6 +1513,10 @@ input {
     border-radius: 8px;
     padding: 8px 12px;
     flex-shrink: 0;
+    height: calc((100vw - 196px) / 12);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .ls-lbl {
@@ -1541,8 +1545,8 @@ input {
   .ls-empty { color: var(--ink-dimmer) !important; font-weight: 400 !important; }
 
   .ls-next-btn {
-    margin-top: auto;
-    padding: 12px 8px;
+    margin-top: 0;
+    padding: 8px;
     border-radius: 12px;
     background: linear-gradient(135deg, #1e1e38, #141428);
     border: 1px solid rgba(129, 140, 248, 0.25);
@@ -1553,6 +1557,7 @@ input {
     transition: all .2s;
     text-align: center;
     flex-shrink: 0;
+    height: calc((100vw - 196px) / 12);
   }
   .ls-next-btn:hover:not(:disabled) {
     background: linear-gradient(135deg, #252548, #1a1a38);
@@ -1602,8 +1607,8 @@ input {
   .top-bar .who .role-chip { font-size: 10px; padding: 3px 8px; }
 
   .app--caller .ls-sidebar { flex-basis: 132px; gap: 4px; padding: 4px 8px; }
-  .ls-widget { padding: 4px 8px; }
-  .ls-next-btn { padding: 8px; }
+  .ls-widget { padding: 4px 8px; height: calc((100vw - 176px) / 12); }
+  .ls-next-btn { padding: 8px; height: calc((100vw - 176px) / 12); }
 
   .caller { padding: 4px 12px; gap: 4px; }
   .caller .left { gap: 8px; }
