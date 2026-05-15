@@ -169,10 +169,11 @@ input {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 8px 12px;
+  border: 1px solid var(--line-strong);
   border-radius: 8px;
-  transition: color .2s, background .2s;
+  transition: color .2s, background .2s, border-color .2s;
 }
-.top-bar button.leave:hover { color: var(--magenta); background: rgba(236, 72, 153, 0.08); }
+.top-bar button.leave:hover { color: var(--magenta); background: rgba(236, 72, 153, 0.08); border-color: var(--magenta); }
 
 /* ---------- Welcome modal ---------- */
 .modal-shroud {
@@ -1229,7 +1230,7 @@ input {
   .top-bar { padding: 6px 14px; }
   .top-bar .brand .brand-slogan { display: none; }
   .top-bar .who { gap: 8px; }
-  .top-bar .who .role-chip { display: none; }
+  .top-bar .who .role-chip { font-size: 10px; padding: 3px 8px; }
 
   /* Grade de números */
   .numbers-grid { gap: 4px; }
@@ -1418,7 +1419,7 @@ input {
   .top-bar { padding: 4px 14px; }
   .top-bar .brand .logo { font-size: 18px; }
   .top-bar .brand .brand-slogan { display: none; }
-  .top-bar .who .role-chip { display: none; }
+  .top-bar .who .role-chip { font-size: 10px; padding: 3px 8px; }
 
   .caller { padding: 4px 12px; gap: 5px; }
   .caller .left { gap: 6px; }

@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "1.3";
+const APP_VERSION = "1.4";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -99,15 +99,11 @@ function TopBar({ name, role, onLeave, onInfo }) {
   return (
     <div className="top-bar">
       <div className="brand">
-        <div style={{display:'flex', alignItems:'baseline', gap:6}}>
-          <span className="logo">CDaub.</span>
-          <span className="version-tag">v{APP_VERSION}</span>
-        </div>
+        <span className="logo">CDaub.</span>
         <span className="brand-slogan">Cards that build Moments.</span>
       </div>
       <div className="who">
-        <span className="role-chip">{role === "caller" ? "Host" : "Player"}</span>
-        <span className="name">{name}</span>
+        <span className="role-chip">{role === "caller" ? "Host" : "Player"} · {name}</span>
         {onInfo && <button className="info-btn" onClick={onInfo}>Room</button>}
         <button className="leave" onClick={onLeave}>Leave</button>
       </div>
