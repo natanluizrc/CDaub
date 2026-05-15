@@ -6,7 +6,7 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "2.6";
+const APP_VERSION = "2.7";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -144,8 +144,61 @@ function Celebrate({ word, sub, onClose }) {
   );
 }
 
+// ---------- Exit Confirm Dialog ----------
+function ExitConfirmDialog({ onConfirm, onCancel }) {
+  return (
+    <>
+      <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.7)',zIndex:400}} onClick={onCancel} />
+      <div style={{
+        position:'fixed',top:'50%',left:'50%',
+        transform:'translate(-50%,-50%)',
+        zIndex:401,
+        background:'#181818',
+        border:'1px solid rgba(239,68,68,0.32)',
+        borderRadius:20,
+        padding:'28px 24px',
+        width:'min(340px, 90vw)',
+        display:'flex',flexDirection:'column',gap:18,
+        textAlign:'center',
+      }}>
+        <div style={{fontFamily:'var(--font-display)',fontSize:18,fontWeight:700}}>
+          Exit the room?
+        </div>
+        <div style={{fontSize:14,color:'var(--ink-dim)',lineHeight:1.55}}>
+          Once you leave, you won't be able to return to this room. The session will end for all players.
+        </div>
+        <div style={{display:'flex',flexDirection:'column',gap:10}}>
+          <button
+            onClick={onConfirm}
+            style={{
+              padding:'12px',
+              background:'rgba(239,68,68,0.14)',
+              border:'1px solid rgba(239,68,68,0.42)',
+              borderRadius:12,color:'#fca5a5',
+              fontSize:14,fontWeight:700,cursor:'pointer',
+              letterSpacing:'0.04em',
+            }}>
+            Exit anyway
+          </button>
+          <button
+            onClick={onCancel}
+            style={{
+              padding:'12px',
+              background:'rgba(255,255,255,0.05)',
+              border:'1px solid rgba(255,255,255,0.1)',
+              borderRadius:12,color:'var(--ink)',
+              fontSize:14,fontWeight:600,cursor:'pointer',
+            }}>
+            Stay in room
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
 // ---------- Info Panel ----------
-function InfoPanel({ open, onClose, children }) {
+function InfoPanel({ open, onClose, onExit, children }) {
   if (!open) return null;
 
   return (
@@ -157,6 +210,22 @@ function InfoPanel({ open, onClose, children }) {
         <div className="info-panel-body">
           {children}
         </div>
+        {onExit && (
+          <div style={{padding:'14px 20px 20px',borderTop:'1px solid rgba(255,255,255,0.07)'}}>
+            <button
+              onClick={onExit}
+              style={{
+                width:'100%',padding:'11px',
+                background:'rgba(239,68,68,0.1)',
+                border:'1px solid rgba(239,68,68,0.32)',
+                borderRadius:12,color:'#fca5a5',
+                fontSize:14,fontWeight:700,cursor:'pointer',
+                letterSpacing:'0.04em',
+              }}>
+              Exit room
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
@@ -169,6 +238,7 @@ function CallerScreen({ me, onLeave }) {
   const [reveal, setReveal] = useState(0);
   const [fsError, setFsError] = useState(null);
   const [showInfo, setShowInfo] = useState(false);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
   const createdRef = useRef(false);
 
   // Persist "me" + session code locally so we can reconnect on refresh
@@ -364,7 +434,10 @@ function CallerScreen({ me, onLeave }) {
 
       </div>
 
-      <InfoPanel open={showInfo} onClose={() => setShowInfo(false)}>
+      <InfoPanel
+        open={showInfo}
+        onClose={() => setShowInfo(false)}
+        onExit={() => { setShowInfo(false); setShowExitConfirm(true); }}>
         <div>
           <div className="panel-head">
             <h2>History</h2>
@@ -409,6 +482,13 @@ function CallerScreen({ me, onLeave }) {
           word="BINGO!"
           sub={`${session.winner} filled the card!`}
           onClose={() => sessionRef(code).update({ winner: null })}
+        />
+      }
+
+      {showExitConfirm &&
+        <ExitConfirmDialog
+          onConfirm={onLeave}
+          onCancel={() => setShowExitConfirm(false)}
         />
       }
     </div>
