@@ -206,7 +206,7 @@ input {
   max-width: 720px;
   background: linear-gradient(160deg, rgba(129, 140, 248, 0.07), rgba(13, 12, 26, 0.97));
   border: 1px solid var(--line-strong);
-  border-radius: 28px;
+  border-radius: 20px;
   padding: 32px min(56px, 6vw) 28px;
   box-shadow: var(--shadow-deep), var(--shadow-glow);
   position: relative;
@@ -301,7 +301,7 @@ input {
   padding: 16px 18px;
   background: rgba(14, 4, 32, 0.55);
   border: 1px solid var(--line-strong);
-  border-radius: 14px;
+  border-radius: 12px;
   font-size: 18px;
   transition: border-color .2s, background .2s;
 }
@@ -322,7 +322,7 @@ input {
 .mode-card {
   text-align: left;
   padding: 24px 22px;
-  border-radius: 18px;
+  border-radius: 16px;
   background: rgba(14, 4, 32, 0.5);
   border: 1px solid var(--line);
   transition: all .25s cubic-bezier(.2,.9,.3,1.2);
@@ -415,7 +415,7 @@ input {
   flex: 1;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--line-strong);
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 5px 12px;
 }
 .session-code .lbl {
@@ -441,7 +441,7 @@ input {
   padding: 5px 12px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 8px;
 }
 .players-pill .lbl {
   font-size: 10px;
@@ -479,7 +479,7 @@ input {
 .last-called-card {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--line-strong);
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 5px 12px;
   box-sizing: border-box;
   flex-shrink: 0;
@@ -772,7 +772,7 @@ input {
 .draw-random {
   margin-top: 0;
   padding: 8px 14px;
-  border-radius: 14px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #1e1e38, #141428);
   border: 1px solid rgba(129, 140, 248, 0.25);
   font-family: var(--font-display);
@@ -820,7 +820,7 @@ input {
   padding: 10px 14px;
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 14px;
 }
 .player-row .avatar {
@@ -902,7 +902,7 @@ input {
   padding: 8px 12px;
   background: rgba(255,255,255,0.04);
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 8px;
   flex-shrink: 0;
   width: 100%;
   max-width: 400px;
@@ -937,7 +937,7 @@ input {
   max-width: 380px;
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(14, 14, 14, 0.8));
   border: 1px solid var(--line-strong);
-  border-radius: 18px;
+  border-radius: 16px;
   padding: 12px;
   box-shadow: var(--shadow-deep);
   position: relative;
@@ -972,7 +972,7 @@ input {
 
 .cart-cell {
   aspect-ratio: 1;
-  border-radius: 10px;
+  border-radius: 8px;
   background: linear-gradient(135deg, #7f1d1d, #991b1b);
   border: 1px solid #b91c1c;
   font-family: var(--font-display);
@@ -1095,7 +1095,7 @@ input {
 
 .bingo-btn {
   padding: 10px 16px;
-  border-radius: 14px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #e8e8e8, #c0c0c0);
   color: #0c0c0c;
   font-family: var(--font-display);
@@ -1141,7 +1141,7 @@ input {
   max-width: 520px;
   background: linear-gradient(160deg, rgba(129, 140, 248, 0.07), rgba(13, 12, 24, 0.97));
   border: 1px solid var(--line-strong);
-  border-radius: 24px;
+  border-radius: 20px;
   padding: 44px 44px 40px;
   box-shadow: var(--shadow-deep), var(--shadow-glow);
   animation: welcome-in .55s cubic-bezier(.2,.9,.3,1.2);
@@ -1166,7 +1166,7 @@ input {
   text-transform: uppercase;
   background: rgba(14, 4, 32, 0.75);
   border: 1px solid var(--line-strong);
-  border-radius: 16px;
+  border-radius: 12px;
   transition: all .2s;
 }
 .code-input:focus {
@@ -1188,7 +1188,7 @@ input {
 .btn-primary {
   flex: 1;
   padding: 16px;
-  border-radius: 14px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #e0e0e0, #b8b8b8);
   color: #0c0c0c;
   font-family: var(--font-display);
@@ -1202,7 +1202,7 @@ input {
 
 .btn-ghost {
   padding: 16px 22px;
-  border-radius: 14px;
+  border-radius: 12px;
   background: rgba(255,255,255,0.04);
   border: 1px solid var(--line);
   color: var(--ink-dim);
@@ -1216,7 +1216,7 @@ input {
   padding: 12px 14px;
   background: rgba(239, 68, 68, 0.12);
   border: 1px solid rgba(239, 68, 68, 0.35);
-  border-radius: 10px;
+  border-radius: 8px;
   font-size: 13px;
   color: #fca5a5;
 }
@@ -1380,7 +1380,7 @@ input {
   background: linear-gradient(180deg, #1a1a2e 0%, #11111f 100%);
   border: 1px solid var(--line-strong);
   border-bottom: none;
-  border-radius: 24px 24px 0 0;
+  border-radius: 20px 20px 0 0;
   padding: 0 24px 28px;
   max-height: 65vh;
   overflow-y: auto;
@@ -1499,7 +1499,7 @@ input {
   .ls-widget {
     background: rgba(255,255,255,0.04);
     border: 1px solid var(--line);
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 7px 9px;
     flex-shrink: 0;
   }
@@ -1616,7 +1616,7 @@ input {
   .cartela .cart-head { margin-bottom: 8px; }
   .cartela .cart-head h2 { font-size: 14px; }
   .cartela .cart-head .progress { font-size: 11px; }
-  .cart-cell { font-size: 13px; border-radius: 6px; }
+  .cart-cell { font-size: 13px; border-radius: 4px; }
   .mini-ball { width: 70px; height: 70px; font-size: 34px; }
   .mini-ball.empty { font-size: 9px; padding: 0 12px; }
   .bingo-btn { padding: 7px 12px; font-size: 16px; }
@@ -1658,7 +1658,7 @@ input {
   background: linear-gradient(180deg, #1a1a2e 0%, #11111f 100%);
   border: 1px solid var(--line-strong);
   border-top: none;
-  border-radius: 0 0 20px 20px;
+  border-radius: 0 0 16px 16px;
   max-height: 70vh;
   display: flex;
   flex-direction: column;
