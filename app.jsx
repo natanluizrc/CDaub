@@ -6,6 +6,8 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
+const APP_VERSION = "1.1";
+
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
 const db = () => firebase.firestore();
@@ -58,7 +60,7 @@ function Welcome({ onPick }) {
       <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 20% 20%, rgba(124,58,237,0.25), transparent 40%), radial-gradient(circle at 80% 80%, rgba(236,72,153,0.18), transparent 45%)', pointerEvents:'none'}} />
       <div className="welcome">
         <div className="eyebrow">WELCOME TO</div>
-        <h1>CDaub.</h1>
+        <h1>CDaub. <span className="version-tag">v{APP_VERSION}</span></h1>
         <div className="slogan">Cards that build Moments.</div>
         <p className="sub">The excitement begins before the first number is called. Tell us who you are — and how you'll join the game.</p>
 
@@ -106,7 +108,10 @@ function TopBar({ name, role, onLeave }) {
   return (
     <div className="top-bar">
       <div className="brand">
-        <span className="logo">CDaub.</span>
+        <div style={{display:'flex', alignItems:'baseline', gap:6}}>
+          <span className="logo">CDaub.</span>
+          <span className="version-tag">v{APP_VERSION}</span>
+        </div>
         <span className="brand-slogan">Cards that build Moments.</span>
       </div>
       <div className="who">
@@ -306,27 +311,16 @@ function CallerScreen({ me, onLeave }) {
             </div>
           </div>
 
+          <div className="last-called-card">
+            <div className="lbl">Last called</div>
+            {lastDrawn
+              ? <div className="last-num reveal" key={reveal}>{String(lastDrawn).padStart(2, "0")}</div>
+              : <div className="last-num empty">—</div>
+            }
+          </div>
+
           <div className="caller-card">
             <div className="caller-card-body">
-              <div className="last-called-section">
-                <div style={{fontSize:10, textTransform:'uppercase', letterSpacing:'0.22em', color:'var(--ink-dimmer)'}}>
-                  Last called
-                </div>
-                {lastDrawn
-                  ? <div className="ball reveal" key={reveal} style={{width:96, height:96, fontSize:52}}>
-                      <span className="num-text">{String(lastDrawn).padStart(2, "0")}</span>
-                    </div>
-                  : <div className="ball empty" style={{width:96, height:96, fontSize:13, padding:'0 14px'}}>
-                      Waiting...
-                    </div>
-                }
-                <div style={{fontSize:12, textAlign:'center', color:'var(--ink-dim)', minHeight:18}}>
-                  {lastDrawn
-                    ? <><em style={{fontStyle:'normal', background:'linear-gradient(90deg,var(--magenta),var(--gold))', WebkitBackgroundClip:'text', backgroundClip:'text', color:'transparent'}}>{callPhrase}</em>{' · '}{drawn.length}/50</>
-                    : <span style={{color:'var(--ink-dimmer)'}}>0 / 50</span>
-                  }
-                </div>
-              </div>
               <div className="board-section">
                 <div style={{display:'flex', alignItems:'baseline', justifyContent:'space-between'}}>
                   <span style={{fontFamily:'var(--font-display)', fontSize:16, fontWeight:600, letterSpacing:'-0.01em'}}>Number board</span>

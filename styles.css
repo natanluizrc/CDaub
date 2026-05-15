@@ -119,6 +119,20 @@ input {
   color: var(--gold);
 }
 
+.version-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-dimmer);
+  background: rgba(255,255,255,0.07);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 2px 6px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
 .top-bar .brand .dot {
   position: absolute;
   top: 4px;
@@ -423,6 +437,36 @@ input {
   background: #4ade80;
   box-shadow: 0 0 12px #4ade80;
   animation: pulse 1.4s ease-in-out infinite;
+}
+
+.last-called-card {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(236, 72, 153, 0.15));
+  border: 1px solid var(--line-strong);
+  border-radius: 18px;
+  padding: 14px 20px;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+.last-called-card .lbl {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--ink-dimmer);
+}
+.last-called-card .last-num {
+  font-family: var(--font-mono);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  margin-top: 2px;
+}
+.last-called-card .last-num.reveal {
+  animation: reveal 0.5s cubic-bezier(.2,1.4,.3,1);
+}
+.last-called-card .last-num.empty {
+  color: var(--ink-dimmer);
 }
 
 /* Stage = the giant ball */
@@ -1310,12 +1354,9 @@ input {
   .players-pill { padding: 6px 14px; }
   .players-pill .count { font-size: 18px; margin-top: 0; }
 
-  /* Card vira duas colunas: bola | board + botão */
+  .last-called-card { padding: 6px 14px; }
+  .last-called-card .last-num { font-size: 18px; margin-top: 0; }
   .caller-card { padding: 8px 12px 10px; }
-  .caller-card-body { flex-direction: row; align-items: stretch; gap: 14px; }
-  .last-called-section { width: 80px; flex-shrink: 0; justify-content: center; }
-  .last-called-section .ball { width: 60px !important; height: 60px !important; font-size: 28px !important; }
-  .last-called-section .ball.empty { font-size: 9px !important; }
   .board-section { min-width: 0; }
 
   /* Grid e botão compactos */
