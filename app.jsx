@@ -499,7 +499,7 @@ function HostScreen({ me, room, onExit }) {
         )}
 
         {/* Number grid */}
-        <div style={{ ...(isMobile ? { flex: 1, minHeight: 0 } : { height: '50vh', flexShrink: 0 }), display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 'clamp(14px, 2vw, 24px)', boxShadow: '0 4px 0 #e5e5e5' }}>
+        <div style={{ ...(isMobile ? { height: '70vh', flexShrink: 0 } : { height: '50vh', flexShrink: 0 }), display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 'clamp(14px, 2vw, 24px)', boxShadow: '0 4px 0 #e5e5e5' }}>
           {cells.map(({ n, r, c }) => {
             const isCalled = drawnSet.has(n);
             const isLatest = n === latest && !rolling;
@@ -519,7 +519,7 @@ function HostScreen({ me, room, onExit }) {
         </div>
 
         {/* Draw button */}
-        <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} />
+        <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} height={isMobile ? '10vh' : '15vh'} />
 
         {callout && <HostCallout n={callout} msg={hostMsg} />}
         {confetti && <GameConfetti />}
@@ -542,12 +542,12 @@ function StatTile({ label, value, accent }) {
   );
 }
 
-function DrawButton({ onClick, disabled, rolling }) {
+function DrawButton({ onClick, disabled, rolling, height = '15vh' }) {
   const [pressed, setPressed] = useState(false);
   const label = rolling ? 'Drawing…' : disabled ? 'All drawn!' : 'Draw Next →';
   return (
     <button onMouseDown={() => setPressed(true)} onMouseUp={() => setPressed(false)} onMouseLeave={() => setPressed(false)} onClick={onClick} disabled={disabled}
-      style={{ width: '100%', height: '15vh', flexShrink: 0, padding: 0, background: rolling ? '#1cb0f6' : disabled ? '#cfd2d6' : '#58cc02', color: '#ffffff', border: 'none', borderRadius: 'clamp(14px, 2vw, 20px)', boxShadow: rolling ? '0 5px 0 #0d8fcc' : disabled ? '0 2px 0 #b3b6ba' : pressed ? '0 1px 0 #46a302' : '0 5px 0 #46a302', transform: pressed && !disabled && !rolling ? 'translateY(4px)' : 'translateY(0)', transition: 'transform 60ms ease, box-shadow 60ms ease, background 200ms ease', fontFamily: 'inherit', fontWeight: 900, fontSize: 'clamp(15px, 2vw, 20px)', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: disabled && !rolling ? 'not-allowed' : rolling ? 'progress' : 'pointer' }}>
+      style={{ width: '100%', height, flexShrink: 0, padding: 0, background: rolling ? '#1cb0f6' : disabled ? '#cfd2d6' : '#58cc02', color: '#ffffff', border: 'none', borderRadius: 'clamp(14px, 2vw, 20px)', boxShadow: rolling ? '0 5px 0 #0d8fcc' : disabled ? '0 2px 0 #b3b6ba' : pressed ? '0 1px 0 #46a302' : '0 5px 0 #46a302', transform: pressed && !disabled && !rolling ? 'translateY(4px)' : 'translateY(0)', transition: 'transform 60ms ease, box-shadow 60ms ease, background 200ms ease', fontFamily: 'inherit', fontWeight: 900, fontSize: 'clamp(15px, 2vw, 20px)', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: disabled && !rolling ? 'not-allowed' : rolling ? 'progress' : 'pointer' }}>
       {label}{rolling && <span style={{ display: 'inline-block', marginLeft: 8, animation: 'rollDots 1s infinite' }}>•••</span>}
     </button>
   );
