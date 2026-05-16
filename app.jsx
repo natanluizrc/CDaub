@@ -299,10 +299,10 @@ function useIsMobile() {
   return val;
 }
 
-function StatChip({ value, accent, style = {} }) {
+function StatChip({ value, accent, textColor, style = {} }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', ...style }}>
-      <span style={{ fontSize: 15, fontWeight: 900, color: accent, lineHeight: 1 }}>{value}</span>
+      <span style={{ fontSize: 15, fontWeight: 900, color: textColor || accent, lineHeight: 1 }}>{value}</span>
     </div>
   );
 }
@@ -472,8 +472,8 @@ function HostScreen({ me, room, onExit }) {
             <div style={{ gridColumn: 'span 4', height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', overflow: 'hidden' }}>
               <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', borderRadius: 10, transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)' }} />
             </div>
-            <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" style={{ width: '100%', height: 40 }} />
-            <StatChip value={String(left).padStart(2, '0')} accent="#ff4b4b" style={{ width: '100%', height: 40 }} />
+            <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" textColor="#ffffff" style={{ width: '100%', height: 40, background: '#58cc02', border: '2px solid #46a302', boxShadow: '0 2px 0 #46a302' }} />
+            <StatChip value={String(left).padStart(2, '0')} accent="#ff4b4b" textColor="#ffffff" style={{ width: '100%', height: 40, background: '#ff4b4b', border: '2px solid #d63030', boxShadow: '0 2px 0 #d63030' }} />
             <IconButton onClick={() => setShowLeaderboard(true)} title="Room info" style={{ width: '100%', height: 40 }}><InfoIcon /></IconButton>
             <IconButton onClick={() => setShowExit(true)} title="Exit room" style={{ width: '100%', height: 40 }}><ExitIcon /></IconButton>
           </div>
