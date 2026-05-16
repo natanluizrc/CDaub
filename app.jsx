@@ -288,7 +288,7 @@ function GameConfetti() {
 const TOTAL = 72, COLS = 12, ROWS = 6;
 
 function useIsPortraitMobile() {
-  const check = () => window.innerWidth < 768 && window.innerHeight > window.innerWidth;
+  const check = () => window.innerHeight > window.innerWidth;
   const [val, setVal] = useState(check);
   useEffect(() => {
     const handler = () => setVal(check());
