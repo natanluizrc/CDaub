@@ -1802,8 +1802,8 @@ input {
 }
 
 .app--caller .caller-info-col {
+  flex: none;
   height: 10dvh;
-  flex-shrink: 0;
   gap: 0;
 }
 
