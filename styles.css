@@ -668,21 +668,23 @@ input {
 .num-btn {
   aspect-ratio: 1;
   border-radius: 8px;
-  background: linear-gradient(135deg, #111827, #1a1a2e);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: #f0effc;
+  border: 1px solid #dddcf0;
+  border-bottom: 2px solid #c8c7e4;
   font-family: var(--font-display);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: -0.01em;
-  color: rgba(255,255,255,0.30);
+  color: rgba(26,26,60,0.40);
   transition: all .18s cubic-bezier(.2,.9,.3,1.2);
   display: flex; align-items: center; justify-content: center;
   position: relative;
 }
 .num-btn:not(.drawn):not(.last-drawn):hover {
-  background: linear-gradient(135deg, #1e2a45, #252550);
-  border-color: rgba(129, 140, 248, 0.3);
-  color: rgba(255,255,255,0.65);
+  background: #e4e3f7;
+  border-color: #818cf8;
+  border-bottom-color: #6366f1;
+  color: rgba(26,26,60,0.75);
 }
 
 .num-btn.drawn {
