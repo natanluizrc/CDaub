@@ -469,8 +469,8 @@ function HostScreen({ me, room, onExit }) {
             <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
           </div>
           {isMobile && (
-            <div style={{ flex: 1, height: 10, background: '#e5e5e5', borderRadius: 999, overflow: 'hidden' }}>
-              <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', borderRadius: 999, transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)' }} />
+            <div style={{ flex: 1, height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', overflow: 'hidden' }}>
+              <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', borderRadius: 10, transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)' }} />
             </div>
           )}
           <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginLeft: isMobile ? 0 : 'auto' }}>
