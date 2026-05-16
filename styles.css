@@ -37,8 +37,8 @@ html, body {
   color: var(--ink);
   background: radial-gradient(ellipse at top, var(--bg-2) 0%, var(--bg-1) 35%, var(--bg-0) 70%);
   background-attachment: fixed;
-  min-height: 100vh;
-  overflow-x: hidden;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 body::before {
@@ -1802,7 +1802,7 @@ input {
 }
 
 .app--caller .caller-info-col {
-  height: 20dvh;
+  height: 10dvh;
   flex-shrink: 0;
   gap: 0;
 }
@@ -1827,7 +1827,7 @@ input {
 
 .app--caller .caller-card {
   flex: none;
-  height: 50dvh;
+  height: 70dvh;
   overflow: hidden;
 }
 
@@ -1856,7 +1856,7 @@ input {
 
 .app--caller .last-called-row {
   flex: none;
-  height: 20dvh;
+  height: 10dvh;
   gap: 0;
   align-items: stretch;
 }
