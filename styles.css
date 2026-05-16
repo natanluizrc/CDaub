@@ -1786,39 +1786,39 @@ input {
   flex: 1;
 }
 
-/* === Caller: 4 faixas de altura fixa (portrait + landscape) === */
+/* === Caller: 4 faixas proporcionais + gap uniforme (portrait + landscape) === */
 .app--caller .top-bar {
   height: 10dvh;
 }
 
 .app--caller .caller {
-  padding: 0;
+  padding: 6px;
   gap: 0;
 }
 
 .app--caller .caller > .left {
   flex-direction: column;
-  gap: 0;
+  gap: 6px;
 }
 
 .app--caller .caller-info-col {
-  flex: none;
-  height: 10dvh;
+  flex: 1;
+  min-height: 0;
   gap: 0;
 }
 
 .app--caller .session-bar {
-  flex: none;
+  flex: 1;
+  min-height: 0;
   flex-direction: row;
-  height: 100%;
-  gap: 0;
+  gap: 6px;
   align-items: stretch;
 }
 
 .app--caller .session-code,
 .app--caller .players-pill {
   flex: 1;
-  height: 100%;
+  min-height: 0;
 }
 
 .app--caller .draw-random--landscape {
@@ -1826,18 +1826,20 @@ input {
 }
 
 .app--caller .caller-card {
-  flex: none;
-  height: 70dvh;
+  flex: 7;
+  min-height: 0;
   overflow: hidden;
 }
 
 .app--caller .caller-card-body {
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   gap: 0;
 }
 
 .app--caller .board-section {
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   gap: 0;
 }
 
@@ -1855,21 +1857,21 @@ input {
 }
 
 .app--caller .last-called-row {
-  flex: none;
-  height: 10dvh;
-  gap: 0;
+  flex: 1;
+  min-height: 0;
+  gap: 6px;
   align-items: stretch;
 }
 
 .app--caller .last-called-card {
   flex: 1;
-  height: 100%;
+  min-height: 0;
 }
 
 .app--caller .draw-random--portrait {
   display: flex;
   flex: 1;
-  height: 100%;
+  min-height: 0;
 }
 
 .app--caller .ls-sidebar {
