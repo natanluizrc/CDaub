@@ -1,12 +1,12 @@
-// ===========================================================
-// BINGO! — Main app
+﻿// ===========================================================
+// BINGO! â€” Main app
 // Two modes: Cantador (sorteia) & Jogador (marca cartela)
 // Real-time sync via Firebase Firestore
 // ===========================================================
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "3.9";
+const APP_VERSION = "202605160957";
 
 // ---------- Firestore helpers ----------
 const ME_KEY = "bingo_me";
@@ -73,7 +73,7 @@ function Welcome({ onPick }) {
               onClick={() => onPick("caller", name.trim())}>
               <h3>Host</h3>
               <p>Create a room, call the numbers and lead the game in real time.</p>
-              <div className="meta">CREATE ROOM <span className="arrow">→</span></div>
+              <div className="meta">CREATE ROOM <span className="arrow">â†’</span></div>
             </button>
             <button
               className="mode-card gold"
@@ -81,7 +81,7 @@ function Welcome({ onPick }) {
               onClick={() => onPick("player", name.trim())}>
               <h3>Player</h3>
               <p>Join a room, get your card and play until BINGO.</p>
-              <div className="meta">JOIN ROOM <span className="arrow">→</span></div>
+              <div className="meta">JOIN ROOM <span className="arrow">â†’</span></div>
             </button>
           </div>
         </div>
@@ -205,7 +205,7 @@ function InfoPanel({ open, onClose, onExit, children }) {
     <>
       <div className="info-backdrop" onClick={onClose} />
       <div className="info-panel">
-        <button className="info-close-btn" onClick={onClose}>✕</button>
+        <button className="info-close-btn" onClick={onClose}>âœ•</button>
         <div className="info-panel-body">
           {children}
         </div>
@@ -249,7 +249,7 @@ function CallerScreen({ me, onLeave }) {
     localStorage.setItem(ME_KEY, JSON.stringify({ ...me, session: code }));
   }, [me, code]);
 
-  // Connect to Firestore — create session if new, then listen for real-time updates
+  // Connect to Firestore â€” create session if new, then listen for real-time updates
   useEffect(() => {
     const ref = sessionRef(code);
 
@@ -277,7 +277,7 @@ function CallerScreen({ me, onLeave }) {
     return () => unsub();
   }, [code]);
 
-  // Derived values — safe to compute before the conditional return
+  // Derived values â€” safe to compute before the conditional return
   const drawn = session ? (session.drawn || []) : [];
   const drawnSet = new Set(drawn);
   const lastDrawn = session ? session.lastDrawn : null;
@@ -324,7 +324,7 @@ function CallerScreen({ me, onLeave }) {
       <div className="app" style={{background:'radial-gradient(ellipse at top, #16162c 0%, #0d0d1c 45%, #07070f 80%)'}}>
         <TopBar name={me.name} role="caller" onLeave={onLeave} />
         <div style={{ padding: 40, textAlign: "center", color: "var(--ink-dim)" }}>
-          Conectando…
+          Conectandoâ€¦
         </div>
       </div>
     );
@@ -337,7 +337,7 @@ function CallerScreen({ me, onLeave }) {
     if (!avail.length) return;
 
     const finalNum = avail[Math.floor(Math.random() * avail.length)];
-    // Frame delays (ms): fast → slow, total ≈ 1820ms
+    // Frame delays (ms): fast â†’ slow, total â‰ˆ 1820ms
     const INTERVALS = [55, 65, 80, 95, 115, 140, 170, 205, 245, 295, 355];
 
     setSpinning(true);
@@ -386,7 +386,7 @@ function CallerScreen({ me, onLeave }) {
               className="draw-random draw-random--landscape"
               onClick={drawRandom}
               disabled={drawn.length >= 72 || spinning}>
-              <span className="btn-val">{drawn.length >= 72 ? "—" : spinning ? "Picking…" : "Next"}</span>
+              <span className="btn-val">{drawn.length >= 72 ? "â€”" : spinning ? "Pickingâ€¦" : "Next"}</span>
             </button>
           </div>
 
@@ -417,14 +417,14 @@ function CallerScreen({ me, onLeave }) {
                 ? <div className="last-num spinning" key={`s${spinTick}`}>{String(spinDisplay).padStart(2, "0")}</div>
                 : effectiveLast
                   ? <div className="last-num reveal" key={reveal}>{String(effectiveLast).padStart(2, "0")}</div>
-                  : <div className="last-num empty">—</div>
+                  : <div className="last-num empty">â€”</div>
               }
             </div>
             <button
               className="draw-random draw-random--portrait"
               onClick={drawRandom}
               disabled={drawn.length >= 72 || spinning}>
-              <span className="btn-val">{drawn.length >= 72 ? "—" : spinning ? "Picking…" : "Next"}</span>
+              <span className="btn-val">{drawn.length >= 72 ? "â€”" : spinning ? "Pickingâ€¦" : "Next"}</span>
             </button>
           </div>
 
@@ -443,14 +443,14 @@ function CallerScreen({ me, onLeave }) {
                 ? <div className="ls-num-val spinning" key={`s${spinTick}`}>{String(spinDisplay).padStart(2, "0")}</div>
                 : effectiveLast
                   ? <div className="ls-num-val ls-reveal" key={reveal}>{String(effectiveLast).padStart(2, "0")}</div>
-                  : <div className="ls-num-val ls-empty">—</div>
+                  : <div className="ls-num-val ls-empty">â€”</div>
               }
             </div>
             <button
               className="ls-next-btn"
               onClick={drawRandom}
               disabled={drawn.length >= 72 || spinning}>
-              {drawn.length >= 72 ? "—" : spinning ? "Picking…" : "Next"}
+              {drawn.length >= 72 ? "â€”" : spinning ? "Pickingâ€¦" : "Next"}
             </button>
           </div>
         </div>
@@ -575,7 +575,7 @@ function ConnectModal({ me, onConnected, onLeave }) {
       <div style={{position:'absolute', inset:0, background:'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.025), transparent 60%)', pointerEvents:'none'}} />
       <div className="connect-card">
         <h2>Join the room</h2>
-        <p className="sub">Grab the room code (01–72) from the host calling the numbers.</p>
+        <p className="sub">Grab the room code (01â€“72) from the host calling the numbers.</p>
         <input
           className={`code-input${shake ? " shake" : ""}`}
           placeholder="07"
@@ -588,7 +588,7 @@ function ConnectModal({ me, onConnected, onLeave }) {
         {error && <div className="connect-error">{error}</div>}
         <div className="connect-actions">
           <button className="btn-primary" onClick={submit} disabled={code.length < 1 || joining}>
-            {joining ? "Entrando…" : "Enter"}
+            {joining ? "Entrandoâ€¦" : "Enter"}
           </button>
           <button className="btn-ghost" onClick={onLeave}>Back</button>
         </div>
@@ -620,7 +620,7 @@ function PlayerGame({ me, conn, onLeave }) {
     return () => unsub();
   }, [code]);
 
-  // Derived values — computed before any conditional return
+  // Derived values â€” computed before any conditional return
   const me_p = session ? ((session.players || {})[playerId]) : null;
   const card = me_p ? me_p.card : null; // flat array of 25 elements
   const grid = card ? [0,1,2,3,4].map(r => card.slice(r*5, r*5+5)) : null; // 5x5 for rendering
@@ -649,7 +649,7 @@ function PlayerGame({ me, conn, onLeave }) {
       <div className="app" style={{background:'radial-gradient(ellipse at top, #16162c 0%, #0d0d1c 45%, #07070f 80%)'}}>
         <TopBar name={me.name} role="player" onLeave={onLeave} />
         <div style={{ padding: 40, textAlign: "center", color: "var(--ink-dim)" }}>
-          Conectando…
+          Conectandoâ€¦
         </div>
       </div>
     );
@@ -748,7 +748,7 @@ function PlayerGame({ me, conn, onLeave }) {
               className="bingo-btn"
               onClick={callBingo}
               disabled={!hasBingo || me_p.bingo}>
-              {me_p.bingo ? "✓ BINGO confirmed" : hasBingo ? "BINGO!" : "Keep marking..."}
+              {me_p.bingo ? "âœ“ BINGO confirmed" : hasBingo ? "BINGO!" : "Keep marking..."}
             </button>
 
             <div className="latest-panel">
@@ -761,7 +761,7 @@ function PlayerGame({ me, conn, onLeave }) {
               }
               {lastDrawn &&
                 <div style={{ textAlign: "center", color: "var(--ink-dim)", fontSize: 13 }}>
-                  {cardSet.has(lastDrawn) ? "🎯 it's on your card!" : "not on your card."}
+                  {cardSet.has(lastDrawn) ? "ðŸŽ¯ it's on your card!" : "not on your card."}
                 </div>
               }
             </div>
