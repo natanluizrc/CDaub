@@ -463,12 +463,17 @@ function HostScreen({ me, room, onExit }) {
       <div style={{ width: '100%', maxWidth: 1400, height: '100%', display: 'flex', flexDirection: 'column', gap: '1vh', position: 'relative' }}>
 
         {/* Header — 10vh */}
-        <div style={{ height: '10vh', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 6px' }}>
-          <div>
+        <div style={{ height: '10vh', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 10, padding: '0 6px' }}>
+          <div style={{ flexShrink: 0 }}>
             <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.01em' }}>CDaub.</div>
             <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
           </div>
-          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          {isMobile && (
+            <div style={{ flex: 1, height: 10, background: '#e5e5e5', borderRadius: 999, overflow: 'hidden' }}>
+              <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', borderRadius: 999, transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)' }} />
+            </div>
+          )}
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginLeft: isMobile ? 0 : 'auto' }}>
             {isMobile && <>
               <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" />
               <StatChip value={String(left).padStart(2, '0')} accent="#ff4b4b" />
@@ -478,10 +483,12 @@ function HostScreen({ me, room, onExit }) {
           </div>
         </div>
 
-        {/* Progress bar — 5vh */}
-        <div style={{ height: '5vh', flexShrink: 0, background: '#e5e5e5', borderRadius: 999, overflow: 'hidden' }}>
-          <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', borderRadius: 999, transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -3px 0 rgba(0,0,0,0.12)' }} />
-        </div>
+        {/* Progress bar — 5vh (oculta no mobile) */}
+        {!isMobile && (
+          <div style={{ height: '5vh', flexShrink: 0, background: '#e5e5e5', borderRadius: 999, overflow: 'hidden' }}>
+            <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', borderRadius: 999, transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -3px 0 rgba(0,0,0,0.12)' }} />
+          </div>
+        )}
 
         {/* Stat tiles — 15vh (ocultos no mobile) */}
         {!isMobile && (
