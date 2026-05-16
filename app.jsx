@@ -165,10 +165,10 @@ function IconButton({ onClick, children, title, style = {} }) {
 }
 
 function InfoIcon() {
-  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#3c3c3c" strokeWidth="2.5" /><circle cx="12" cy="7.5" r="1.3" fill="#3c3c3c" /><path d="M12 11v6.5" stroke="#3c3c3c" strokeWidth="2.5" strokeLinecap="round" /></svg>;
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2.5" /><circle cx="12" cy="7.5" r="1.3" fill="currentColor" /><path d="M12 11v6.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" /></svg>;
 }
 function ExitIcon() {
-  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 4h3.5a1.5 1.5 0 0 1 1.5 1.5v13a1.5 1.5 0 0 1-1.5 1.5H15" stroke="#3c3c3c" strokeWidth="2.2" strokeLinecap="round" /><path d="M10 8l-4 4 4 4" stroke="#3c3c3c" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /><path d="M6 12h10" stroke="#3c3c3c" strokeWidth="2.2" strokeLinecap="round" /></svg>;
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 4h3.5a1.5 1.5 0 0 1 1.5 1.5v13a1.5 1.5 0 0 1-1.5 1.5H15" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /><path d="M10 8l-4 4 4 4" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /><path d="M6 12h10" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /></svg>;
 }
 function HistoryIcon() {
   return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7" stroke="#3c3c3c" strokeWidth="2.2" strokeLinecap="round" /><path d="M3 3v5h5" stroke="#3c3c3c" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 7v5l3 2" stroke="#3c3c3c" strokeWidth="2.2" strokeLinecap="round" /></svg>;
@@ -474,8 +474,8 @@ function HostScreen({ me, room, onExit }) {
             </div>
             <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" textColor="#ffffff" style={{ width: '100%', height: 40, background: '#58cc02', border: '2px solid #46a302', boxShadow: '0 2px 0 #46a302' }} />
             <StatChip value={String(left).padStart(2, '0')} accent="#ff4b4b" textColor="#ffffff" style={{ width: '100%', height: 40, background: '#ff4b4b', border: '2px solid #d63030', boxShadow: '0 2px 0 #d63030' }} />
-            <IconButton onClick={() => setShowLeaderboard(true)} title="Room info" style={{ width: '100%', height: 40 }}><InfoIcon /></IconButton>
-            <IconButton onClick={() => setShowExit(true)} title="Exit room" style={{ width: '100%', height: 40 }}><ExitIcon /></IconButton>
+            <IconButton onClick={() => setShowLeaderboard(true)} title="Room info" style={{ width: '100%', height: 40, background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff' }}><InfoIcon /></IconButton>
+            <IconButton onClick={() => setShowExit(true)} title="Exit room" style={{ width: '100%', height: 40, background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff' }}><ExitIcon /></IconButton>
           </div>
         ) : (
           <div style={{ height: '10vh', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 6px' }}>
