@@ -420,7 +420,7 @@ input {
   border: 1px solid var(--line-strong);
   border-radius: 8px;
   padding: 8px 12px;
-  height: clamp(44px, calc((100vw - 60px) / 4), 96px);
+  height: calc((100vw - 60px) / 4);
 }
 .session-code .lbl {
   font-size: 10px;
@@ -446,7 +446,7 @@ input {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--line);
   border-radius: 8px;
-  height: clamp(44px, calc((100vw - 60px) / 4), 96px);
+  height: calc((100vw - 60px) / 4);
 }
 .players-pill .lbl {
   font-size: 10px;
@@ -491,7 +491,7 @@ input {
   padding: 8px 12px;
   box-sizing: border-box;
   flex-shrink: 0;
-  height: clamp(44px, calc((100vw - 60px) / 4), 96px);
+  height: calc((100vw - 60px) / 4);
 }
 .last-called-card .lbl {
   font-size: 10px;
@@ -646,15 +646,12 @@ input {
 }
 
 @media (orientation: portrait) {
-  .caller-info-col {
-    flex: 1;
-    min-height: 0;
-  }
   .numbers-grid {
     grid-template-columns: repeat(8, minmax(0, 1fr));
     grid-template-rows: repeat(9, 1fr);
     flex: 1;
     min-height: 0;
+    height: 0;
     overflow: hidden;
   }
   .num-btn {
@@ -816,7 +813,7 @@ input {
   cursor: not-allowed;
 }
 .draw-random--landscape { display: none; }
-.draw-random--portrait { height: clamp(44px, calc((100vw - 60px) / 4), 96px); }
+.draw-random--portrait { height: calc((100vw - 60px) / 4); }
 
 /* Players list */
 .players-list {
@@ -1479,25 +1476,11 @@ input {
     width: 100%;
   }
 
-  /* === Caller landscape: chips inline com o grid === */
-  .app--caller .caller .left { flex-direction: column; }
-  .app--caller .caller-info-col { display: flex; flex: 1; min-height: 0; }
-  .app--caller .session-bar { flex: none; flex-direction: row; }
-  .app--caller .last-called-row { flex: none; }
-  .app--caller .draw-random--landscape { display: none; }
-  .app--caller .draw-random--portrait { display: flex; height: auto; }
-  .app--caller .ls-sidebar { display: none; }
+  /* Caller landscape: grid 12×6 */
   .app--caller .numbers-grid {
-    flex: 1;
-    min-height: 0;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     grid-template-rows: repeat(6, 1fr);
     grid-auto-rows: unset;
-    overflow: hidden;
-  }
-  .app--caller .num-btn {
-    aspect-ratio: unset;
-    min-height: 0;
-    min-width: 0;
   }
 
 
@@ -1801,6 +1784,103 @@ input {
   overflow-y: auto;
   padding: 52px 24px 24px;
   flex: 1;
+}
+
+/* === Caller: 4 faixas de altura fixa (portrait + landscape) === */
+.app--caller .top-bar {
+  height: 10dvh;
+}
+
+.app--caller .caller {
+  padding: 0;
+  gap: 0;
+}
+
+.app--caller .caller > .left {
+  flex-direction: column;
+  gap: 0;
+}
+
+.app--caller .caller-info-col {
+  height: 20dvh;
+  flex-shrink: 0;
+  gap: 0;
+}
+
+.app--caller .session-bar {
+  flex: none;
+  flex-direction: row;
+  height: 100%;
+  gap: 0;
+  align-items: stretch;
+}
+
+.app--caller .session-code,
+.app--caller .players-pill {
+  flex: 1;
+  height: 100%;
+}
+
+.app--caller .draw-random--landscape {
+  display: none;
+}
+
+.app--caller .caller-card {
+  flex: none;
+  height: 50dvh;
+  overflow: hidden;
+}
+
+.app--caller .caller-card-body {
+  height: 100%;
+  gap: 0;
+}
+
+.app--caller .board-section {
+  height: 100%;
+  gap: 0;
+}
+
+.app--caller .numbers-grid {
+  flex: 1;
+  min-height: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.app--caller .num-btn {
+  aspect-ratio: unset;
+  min-height: 0;
+  min-width: 0;
+}
+
+.app--caller .last-called-row {
+  flex: none;
+  height: 20dvh;
+  gap: 0;
+  align-items: stretch;
+}
+
+.app--caller .last-called-card {
+  flex: 1;
+  height: 100%;
+}
+
+.app--caller .draw-random--portrait {
+  display: flex;
+  flex: 1;
+  height: 100%;
+}
+
+.app--caller .ls-sidebar {
+  display: none;
+}
+
+@media (orientation: portrait) {
+  .app--caller .numbers-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-template-rows: repeat(9, 1fr);
+  }
 }
 
 /* === Universal font normalization === */
