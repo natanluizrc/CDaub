@@ -1819,6 +1819,7 @@ input {
 .app--caller .players-pill {
   flex: 1;
   min-height: 0;
+  height: auto;
 }
 
 .app--caller .draw-random--landscape {
@@ -1866,12 +1867,14 @@ input {
 .app--caller .last-called-card {
   flex: 1;
   min-height: 0;
+  height: auto;
 }
 
 .app--caller .draw-random--portrait {
   display: flex;
   flex: 1;
   min-height: 0;
+  height: auto;
 }
 
 .app--caller .ls-sidebar {
