@@ -156,9 +156,9 @@ function ChunkyButton({ onClick, variant = 'primary', children }) {
   );
 }
 
-function IconButton({ onClick, children, title }) {
+function IconButton({ onClick, children, title, style = {} }) {
   return (
-    <button onClick={onClick} title={title} style={{ width: 40, height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}>
+    <button onClick={onClick} title={title} style={{ width: 40, height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, ...style }}>
       {children}
     </button>
   );
@@ -299,9 +299,9 @@ function useIsMobile() {
   return val;
 }
 
-function StatChip({ value, accent }) {
+function StatChip({ value, accent, style = {} }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', ...style }}>
       <span style={{ fontSize: 15, fontWeight: 900, color: accent, lineHeight: 1 }}>{value}</span>
     </div>
   );
@@ -463,27 +463,34 @@ function HostScreen({ me, room, onExit }) {
       <div style={{ width: '100%', maxWidth: 1400, height: '100%', display: 'flex', flexDirection: 'column', gap: isMobile ? 0 : '1vh', position: 'relative' }}>
 
         {/* Header — 10vh */}
-        <div style={{ height: '10vh', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 10, padding: '0 6px', marginBottom: isMobile ? '2vh' : 0 }}>
-          <div style={{ flexShrink: 0 }}>
-            <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.01em' }}>CDaub.</div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
-          </div>
-          {isMobile && (
-            <div style={{ flex: 1, height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', overflow: 'hidden' }}>
+        {isMobile ? (
+          <div style={{ height: '10vh', flexShrink: 0, marginBottom: '2vh', display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)', alignItems: 'center' }}>
+            <div style={{ gridColumn: 'span 4' }}>
+              <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.01em' }}>CDaub.</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
+            </div>
+            <div style={{ gridColumn: 'span 4', height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', overflow: 'hidden' }}>
               <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', borderRadius: 10, transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)' }} />
             </div>
-          )}
-          <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginLeft: isMobile ? 0 : 'auto' }}>
-            {isMobile && <>
-              <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" />
-              <StatChip value={String(left).padStart(2, '0')} accent="#ff4b4b" />
-            </>}
-            <IconButton onClick={() => setShowLeaderboard(true)} title="Room info"><InfoIcon /></IconButton>
-            <IconButton onClick={() => setShowExit(true)} title="Exit room"><ExitIcon /></IconButton>
+            <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" style={{ width: '100%', height: 40 }} />
+            <StatChip value={String(left).padStart(2, '0')} accent="#ff4b4b" style={{ width: '100%', height: 40 }} />
+            <IconButton onClick={() => setShowLeaderboard(true)} title="Room info" style={{ width: '100%', height: 40 }}><InfoIcon /></IconButton>
+            <IconButton onClick={() => setShowExit(true)} title="Exit room" style={{ width: '100%', height: 40 }}><ExitIcon /></IconButton>
           </div>
-        </div>
+        ) : (
+          <div style={{ height: '10vh', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 6px' }}>
+            <div>
+              <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.01em' }}>CDaub.</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
+            </div>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <IconButton onClick={() => setShowLeaderboard(true)} title="Room info"><InfoIcon /></IconButton>
+              <IconButton onClick={() => setShowExit(true)} title="Exit room"><ExitIcon /></IconButton>
+            </div>
+          </div>
+        )}
 
-        {/* Progress bar — 5vh (oculta no mobile) */}
+        {/* Progress bar — 5vh (desktop/tablet apenas) */}
         {!isMobile && (
           <div style={{ height: '5vh', flexShrink: 0, background: '#e5e5e5', borderRadius: 999, overflow: 'hidden' }}>
             <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', borderRadius: 999, transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -3px 0 rgba(0,0,0,0.12)' }} />
