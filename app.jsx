@@ -464,7 +464,7 @@ function HostScreen({ me, room, onExit }) {
 
         {/* Header — 10vh */}
         {isMobile ? (
-          <div style={{ height: '10vh', flexShrink: 0, marginBottom: '3vh', display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)', alignItems: 'center' }}>
+          <div style={{ height: '10vh', flexShrink: 0, marginBottom: '3vh', display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 calc(clamp(6px, 1vw, 12px) + 2px)', alignItems: 'center' }}>
             <div style={{ gridColumn: 'span 4' }}>
               <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.01em' }}>CDaub.</div>
               <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
@@ -526,7 +526,7 @@ function HostScreen({ me, room, onExit }) {
         </div>
 
         {/* Draw button */}
-        <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} height={isMobile ? '10vh' : '15vh'} margin={isMobile ? 'clamp(6px, 1vw, 12px)' : undefined} />
+        <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} height={isMobile ? '10vh' : '15vh'} margin={isMobile ? 'calc(clamp(6px, 1vw, 12px) + 2px)' : undefined} />
 
         {callout && <HostCallout n={callout} msg={hostMsg} />}
         {confetti && <GameConfetti />}
