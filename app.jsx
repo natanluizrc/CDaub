@@ -299,11 +299,10 @@ function useIsMobile() {
   return val;
 }
 
-function StatChip({ value, label, accent }) {
+function StatChip({ value, accent }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4px 10px', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', minWidth: 44 }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5' }}>
       <span style={{ fontSize: 15, fontWeight: 900, color: accent, lineHeight: 1 }}>{value}</span>
-      <span style={{ fontSize: 8, fontWeight: 900, color: '#afafaf', letterSpacing: '0.12em', marginTop: 2 }}>{label}</span>
     </div>
   );
 }
@@ -471,8 +470,8 @@ function HostScreen({ me, room, onExit }) {
           </div>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
             {isMobile && <>
-              <StatChip value={String(drawn.length).padStart(2, '0')} label="DRAWN" accent="#58cc02" />
-              <StatChip value={String(left).padStart(2, '0')} label="LEFT" accent="#ff4b4b" />
+              <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" />
+              <StatChip value={String(left).padStart(2, '0')} accent="#ff4b4b" />
             </>}
             <IconButton onClick={() => setShowLeaderboard(true)} title="Room info"><InfoIcon /></IconButton>
             <IconButton onClick={() => setShowExit(true)} title="Exit room"><ExitIcon /></IconButton>
