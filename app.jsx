@@ -464,7 +464,7 @@ function HostScreen({ me, room, onExit }) {
 
         {/* Header — 10vh */}
         {isMobile ? (
-          <div style={{ height: '10vh', flexShrink: 0, marginBottom: '2vh', display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)', alignItems: 'center' }}>
+          <div style={{ height: '10vh', flexShrink: 0, marginBottom: '3vh', display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)', alignItems: 'center' }}>
             <div style={{ gridColumn: 'span 4' }}>
               <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.01em' }}>CDaub.</div>
               <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
@@ -506,7 +506,7 @@ function HostScreen({ me, room, onExit }) {
         )}
 
         {/* Number grid */}
-        <div style={{ ...(isMobile ? { height: '70vh', flexShrink: 0, marginBottom: '2vh' } : { height: '50vh', flexShrink: 0 }), display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 'clamp(14px, 2vw, 24px)', boxShadow: '0 4px 0 #e5e5e5' }}>
+        <div style={{ ...(isMobile ? { height: '68vh', flexShrink: 0, marginBottom: '3vh' } : { height: '50vh', flexShrink: 0 }), display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 'clamp(14px, 2vw, 24px)', boxShadow: '0 4px 0 #e5e5e5' }}>
           {cells.map(({ n, r, c }) => {
             const isCalled = drawnSet.has(n);
             const isLatest = n === latest && !rolling;
