@@ -459,11 +459,11 @@ function HostScreen({ me, room, onExit }) {
   const leaderboard = players.map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), color: '#1cb0f6', isYou: false, bingo: p.bingo })).sort((a, b) => b.hits - a.hits);
 
   return (
-    <div style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#f7fafc', fontFamily: '"Nunito", system-ui, sans-serif', color: '#3c3c3c', display: 'flex', justifyContent: 'center', padding: '0.5vh clamp(14px, 3vw, 24px)', boxSizing: 'border-box' }}>
-      <div style={{ width: '100%', maxWidth: 1400, height: '100%', display: 'flex', flexDirection: 'column', gap: '1vh', position: 'relative' }}>
+    <div style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#f7fafc', fontFamily: '"Nunito", system-ui, sans-serif', color: '#3c3c3c', display: 'flex', justifyContent: 'center', padding: isMobile ? '3vh clamp(14px, 3vw, 24px)' : '0.5vh clamp(14px, 3vw, 24px)', boxSizing: 'border-box' }}>
+      <div style={{ width: '100%', maxWidth: 1400, height: '100%', display: 'flex', flexDirection: 'column', gap: isMobile ? 0 : '1vh', position: 'relative' }}>
 
         {/* Header — 10vh */}
-        <div style={{ height: '10vh', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 10, padding: '0 6px' }}>
+        <div style={{ height: '10vh', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 10, padding: '0 6px', marginBottom: isMobile ? '2vh' : 0 }}>
           <div style={{ flexShrink: 0 }}>
             <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.01em' }}>CDaub.</div>
             <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
@@ -499,7 +499,7 @@ function HostScreen({ me, room, onExit }) {
         )}
 
         {/* Number grid */}
-        <div style={{ ...(isMobile ? { height: '70vh', flexShrink: 0 } : { height: '50vh', flexShrink: 0 }), display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 'clamp(14px, 2vw, 24px)', boxShadow: '0 4px 0 #e5e5e5' }}>
+        <div style={{ ...(isMobile ? { height: '70vh', flexShrink: 0, marginBottom: '2vh' } : { height: '50vh', flexShrink: 0 }), display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 'clamp(14px, 2vw, 24px)', boxShadow: '0 4px 0 #e5e5e5' }}>
           {cells.map(({ n, r, c }) => {
             const isCalled = drawnSet.has(n);
             const isLatest = n === latest && !rolling;
