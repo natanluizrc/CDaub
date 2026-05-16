@@ -287,7 +287,30 @@ function GameConfetti() {
 // ---------- HOST Screen ----------
 const TOTAL = 72, COLS = 12, ROWS = 6;
 
+function useIsPortraitMobile() {
+  const check = () => window.innerWidth < 768 && window.innerHeight > window.innerWidth;
+  const [val, setVal] = useState(check);
+  useEffect(() => {
+    const handler = () => setVal(check());
+    window.addEventListener('resize', handler);
+    window.addEventListener('orientationchange', handler);
+    return () => { window.removeEventListener('resize', handler); window.removeEventListener('orientationchange', handler); };
+  }, []);
+  return val;
+}
+
+function RotatePrompt() {
+  return (
+    <div style={{ position: 'fixed', inset: 0, background: '#3c3c3c', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24, fontFamily: '"Nunito", system-ui, sans-serif', padding: 32, textAlign: 'center' }}>
+      <div style={{ fontSize: 72, animation: 'rotateHint 2s ease-in-out infinite' }}>📱</div>
+      <div style={{ fontSize: 22, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.01em' }}>Gire o celular</div>
+      <div style={{ fontSize: 15, fontWeight: 700, color: '#afafaf', lineHeight: 1.5, maxWidth: 260 }}>A tela do host funciona melhor na horizontal. Gire o aparelho para continuar.</div>
+    </div>
+  );
+}
+
 function HostScreen({ me, room, onExit }) {
+  const isPortraitMobile = useIsPortraitMobile();
   const [session, setSession] = useState(null);
   const [fsError, setFsError] = useState(null);
   const [rolling, setRolling] = useState(false);
@@ -400,6 +423,7 @@ function HostScreen({ me, room, onExit }) {
     step();
   }
 
+  if (isPortraitMobile) return <RotatePrompt />;
   if (fsError) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#ff4b4b', textAlign: 'center', padding: 40, fontWeight: 700 }}>Firestore error: {fsError}</div></div>;
   if (!session) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#afafaf', textAlign: 'center', padding: 40, fontWeight: 700 }}>Connecting…</div></div>;
 

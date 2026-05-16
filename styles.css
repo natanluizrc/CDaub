@@ -53,3 +53,10 @@ button { font-family: inherit; }
   60% { transform: translateX(-3px); }
   80% { transform: translateX(3px); }
 }
+
+@keyframes rotateHint {
+  0%, 100% { transform: rotate(0deg); }
+  30%       { transform: rotate(90deg); }
+  60%       { transform: rotate(90deg); }
+  80%       { transform: rotate(0deg); }
+}
