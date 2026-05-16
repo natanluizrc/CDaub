@@ -30,21 +30,21 @@ function makeCard() {
 
 // ---------- Host lines ----------
 const HOST_LINES = [
-  "Anyone got it?", "Eyes on your card!", "Could be your lucky one…",
+  "Anyone got it?", "Eyes on your card!", "Could be your lucky one!",
   "Mark it if you got it!", "Another one for the books.", "Here we go!",
-  "Don't blink — that one's important.", "Hot ball coming through.",
-  "If you missed it, breathe deep.", "Tension's building in the room…",
-  "Hope's still alive!", "Stay focused — every ball counts.",
+  "Don't blink!", "Hot ball coming through.",
+  "Missed it? Breathe deep.", "Tension's building!",
+  "Hope's still alive!", "Every ball counts.",
   "We're cooking now!", "The crowd holds its breath…", "Daub it down!",
-  "Got it? Lucky you.", "Missed it? There's always next round.",
+  "Got it? Lucky you.", "Missed it? Next round!",
   "Could this be the game-winner?", "Steady hands, everyone.",
-  "The room just got tighter.", "Lady Luck's on duty tonight.",
+  "The room just got tighter.", "Lady Luck's on duty!",
   "Halfway through your card?", "Numbers don't lie!", "Did everyone catch that?",
   "Lock it in, players.", "Add it to the collection.", "Hot streak incoming?",
-  "Don't lose your spot!", "Beautiful little number, that one.",
+  "Don't lose your spot!", "Beautiful number, that one.",
   "Whisper it to your card.", "Anyone close to a line?",
-  "Wins are hiding somewhere…", "Keep your eyes peeled!",
-  "One step closer.", "That's the way the ball bounces.", "Could be the one — keep watching.",
+  "Wins are hiding somewhere!", "Keep your eyes peeled!",
+  "One step closer.", "That's how the ball bounces.", "Could be the one!",
 ];
 
 function pickHostLine(exclude) {
@@ -565,7 +565,7 @@ function HostCallout({ n, msg }) {
     <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', zIndex: 50 }}>
       <div style={{ background: '#ffffff', border: '4px solid #58cc02', borderRadius: 32, boxShadow: '0 10px 0 #46a302, 0 20px 60px rgba(0,0,0,0.18)', padding: '4vh 56px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 0, width: '50vw', height: '50vh', animation: 'calloutPop 1.1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
         <div style={{ fontSize: 128, fontWeight: 900, color: '#58cc02', lineHeight: 1, letterSpacing: '-0.04em' }}>{String(n).padStart(2, '0')}</div>
-        {msg && <div style={{ fontSize: 18, fontWeight: 800, color: '#3c3c3c', textAlign: 'center' }}>"{msg}"</div>}
+        {msg && <div style={{ fontSize: 'clamp(13px, 1.4vw, 18px)', fontWeight: 800, color: '#3c3c3c', textAlign: 'center', whiteSpace: 'nowrap' }}>"{msg}"</div>}
       </div>
     </div>
   );
