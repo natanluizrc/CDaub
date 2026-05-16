@@ -1826,7 +1826,7 @@ input {
 .app--caller .players-pill,
 .app--caller .last-called-card {
   flex-direction: row;
-  align-items: center;
+  align-items: baseline;
   gap: 8px;
 }
 
