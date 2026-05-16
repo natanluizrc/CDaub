@@ -141,7 +141,6 @@ input {
   color: var(--ink-dimmer);
   opacity: 0.4;
   white-space: nowrap;
-  padding-bottom: 6px;
 }
 
 .top-bar .brand .dot {
@@ -254,7 +253,7 @@ input {
   margin: 0 0 16px;
   color: #fff;
   display: flex;
-  align-items: flex-end;
+  align-items: baseline;
   justify-content: space-between;
 }
 .welcome h1 .punch {
