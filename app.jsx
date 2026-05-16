@@ -287,6 +287,27 @@ function GameConfetti() {
 // ---------- HOST Screen ----------
 const TOTAL = 72, COLS = 12, ROWS = 6;
 
+function useIsMobile() {
+  const check = () => window.innerHeight < 550;
+  const [val, setVal] = useState(check);
+  useEffect(() => {
+    const handler = () => setVal(check());
+    window.addEventListener('resize', handler);
+    window.addEventListener('orientationchange', handler);
+    return () => { window.removeEventListener('resize', handler); window.removeEventListener('orientationchange', handler); };
+  }, []);
+  return val;
+}
+
+function StatChip({ value, label, accent }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4px 10px', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', minWidth: 44 }}>
+      <span style={{ fontSize: 15, fontWeight: 900, color: accent, lineHeight: 1 }}>{value}</span>
+      <span style={{ fontSize: 8, fontWeight: 900, color: '#afafaf', letterSpacing: '0.12em', marginTop: 2 }}>{label}</span>
+    </div>
+  );
+}
+
 function useIsPortraitMobile() {
   const check = () => window.innerHeight > window.innerWidth;
   const [val, setVal] = useState(check);
@@ -311,6 +332,7 @@ function RotatePrompt() {
 
 function HostScreen({ me, room, onExit }) {
   const isPortraitMobile = useIsPortraitMobile();
+  const isMobile = useIsMobile();
   const [session, setSession] = useState(null);
   const [fsError, setFsError] = useState(null);
   const [rolling, setRolling] = useState(false);
@@ -447,7 +469,11 @@ function HostScreen({ me, room, onExit }) {
             <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.01em' }}>CDaub.</div>
             <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
           </div>
-          <div style={{ display: 'flex', gap: 10 }}>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            {isMobile && <>
+              <StatChip value={String(drawn.length).padStart(2, '0')} label="DRAWN" accent="#58cc02" />
+              <StatChip value={String(left).padStart(2, '0')} label="LEFT" accent="#ff4b4b" />
+            </>}
             <IconButton onClick={() => setShowLeaderboard(true)} title="Room info"><InfoIcon /></IconButton>
             <IconButton onClick={() => setShowExit(true)} title="Exit room"><ExitIcon /></IconButton>
           </div>
@@ -458,14 +484,16 @@ function HostScreen({ me, room, onExit }) {
           <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', borderRadius: 999, transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -3px 0 rgba(0,0,0,0.12)' }} />
         </div>
 
-        {/* Stat tiles — 15vh */}
-        <div style={{ height: '15vh', flexShrink: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          <StatTile label="PAST DRAWN" value={String(drawn.length).padStart(2, '0')} accent="#58cc02" />
-          <StatTile label="LEFT BALLS" value={String(left).padStart(2, '0')} accent="#ff4b4b" />
-        </div>
+        {/* Stat tiles — 15vh (ocultos no mobile) */}
+        {!isMobile && (
+          <div style={{ height: '15vh', flexShrink: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            <StatTile label="PAST DRAWN" value={String(drawn.length).padStart(2, '0')} accent="#58cc02" />
+            <StatTile label="LEFT BALLS" value={String(left).padStart(2, '0')} accent="#ff4b4b" />
+          </div>
+        )}
 
-        {/* Number grid — 50vh */}
-        <div style={{ height: '50vh', flexShrink: 0, display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 'clamp(14px, 2vw, 24px)', boxShadow: '0 4px 0 #e5e5e5' }}>
+        {/* Number grid */}
+        <div style={{ ...(isMobile ? { flex: 1, minHeight: 0 } : { height: '50vh', flexShrink: 0 }), display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 'clamp(14px, 2vw, 24px)', boxShadow: '0 4px 0 #e5e5e5' }}>
           {cells.map(({ n, r, c }) => {
             const isCalled = drawnSet.has(n);
             const isLatest = n === latest && !rolling;
