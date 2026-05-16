@@ -4,7 +4,6 @@
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const APP_VERSION = "202605161745";
 const ME_KEY = "bingo_me";
 const db = () => firebase.firestore();
 const sessionRef = (code) => db().collection("sessions").doc(code);
@@ -148,8 +147,8 @@ function BackLink({ onClick, children }) {
 
 function ChunkyButton({ onClick, variant = 'primary', children }) {
   const [pressed, setPressed] = useState(false);
-  const V = { ghost: { bg: '#ffffff', fg: '#3c3c3c', border: '#e5e5e5', shadow: '#cfcfcf' }, danger: { bg: '#ff4b4b', fg: '#ffffff', border: '#ff4b4b', shadow: '#d63030' }, primary: { bg: '#58cc02', fg: '#ffffff', border: '#58cc02', shadow: '#46a302' } };
-  const v = V[variant];
+  const VARIANTS = { ghost: { bg: '#ffffff', fg: '#3c3c3c', border: '#e5e5e5', shadow: '#cfcfcf' }, danger: { bg: '#ff4b4b', fg: '#ffffff', border: '#ff4b4b', shadow: '#d63030' }, primary: { bg: '#58cc02', fg: '#ffffff', border: '#58cc02', shadow: '#46a302' } };
+  const v = VARIANTS[variant];
   return (
     <button onMouseDown={() => setPressed(true)} onMouseUp={() => setPressed(false)} onMouseLeave={() => setPressed(false)} onClick={onClick}
       style={{ width: '100%', padding: '14px 16px', background: v.bg, color: v.fg, border: `2px solid ${v.border}`, borderRadius: 14, boxShadow: pressed ? `0 1px 0 ${v.shadow}` : `0 4px 0 ${v.shadow}`, transform: pressed ? 'translateY(3px)' : 'translateY(0)', transition: 'transform 60ms ease, box-shadow 60ms ease', fontFamily: 'inherit', fontWeight: 900, fontSize: 15, letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}
@@ -297,9 +296,8 @@ function HostScreen({ me, room, onExit }) {
   const [hostMsg, setHostMsg] = useState(null);
   const [winLines, setWinLines] = useState([]);
   const [confetti, setConfetti] = useState(false);
-  const [showInfo, setShowInfo] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showExit, setShowExit] = useState(false);
-  const [soundOn] = useState(true);
   const createdRef = useRef(false);
   const rollTimeoutRef = useRef(null);
   const audioCtxRef = useRef(null);
@@ -329,7 +327,6 @@ function HostScreen({ me, room, onExit }) {
   }, [room]);
 
   function playSound(type) {
-    if (!soundOn) return;
     try {
       if (!audioCtxRef.current) audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
       const ctx = audioCtxRef.current;
@@ -417,8 +414,8 @@ function HostScreen({ me, room, onExit }) {
   const leaderboard = players.map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), color: '#1cb0f6', isYou: false, bingo: p.bingo })).sort((a, b) => b.hits - a.hits);
 
   return (
-    <div style={{ width: '100%', minHeight: '100vh', background: '#f7fafc', fontFamily: '"Nunito", system-ui, sans-serif', color: '#3c3c3c', display: 'flex', justifyContent: 'center', padding: 'clamp(12px, 2.5vw, 24px) clamp(14px, 3vw, 24px) clamp(20px, 4vw, 32px)', boxSizing: 'border-box' }}>
-      <div style={{ width: '100%', maxWidth: 1400, display: 'flex', flexDirection: 'column', gap: 'clamp(8px, 1.5vw, 14px)', position: 'relative' }}>
+    <div style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#f7fafc', fontFamily: '"Nunito", system-ui, sans-serif', color: '#3c3c3c', display: 'flex', justifyContent: 'center', padding: 'clamp(12px, 2.5vw, 24px) clamp(14px, 3vw, 24px) clamp(20px, 4vw, 32px)', boxSizing: 'border-box' }}>
+      <div style={{ width: '100%', maxWidth: 1400, height: '100%', display: 'flex', flexDirection: 'column', gap: 'clamp(8px, 1.5vw, 14px)', position: 'relative' }}>
 
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '4px 6px' }}>
@@ -427,7 +424,7 @@ function HostScreen({ me, room, onExit }) {
             <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
           </div>
           <div style={{ display: 'flex', gap: 10 }}>
-            <IconButton onClick={() => setShowInfo(true)} title="Room info"><InfoIcon /></IconButton>
+            <IconButton onClick={() => setShowLeaderboard(true)} title="Room info"><InfoIcon /></IconButton>
             <IconButton onClick={() => setShowExit(true)} title="Exit room"><ExitIcon /></IconButton>
           </div>
         </div>
@@ -444,7 +441,7 @@ function HostScreen({ me, room, onExit }) {
         </div>
 
         {/* Number grid */}
-        <div style={{ flex: '1 1 auto', display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 'clamp(14px, 2vw, 24px)', boxShadow: '0 4px 0 #e5e5e5', aspectRatio: `${COLS} / ${ROWS + 0.6}`, maxHeight: '60vh' }}>
+        <div style={{ flex: '1 1 auto', minHeight: 0, display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 'clamp(14px, 2vw, 24px)', boxShadow: '0 4px 0 #e5e5e5' }}>
           {cells.map(({ n, r, c }) => {
             const isCalled = drawnSet.has(n);
             const isLatest = n === latest && !rolling;
@@ -464,12 +461,12 @@ function HostScreen({ me, room, onExit }) {
         </div>
 
         {/* Draw button */}
-        <BigNextButton onClick={drawNext} disabled={left === 0} rolling={rolling} />
+        <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} />
 
         {callout && <HostCallout n={callout} msg={hostMsg} />}
         {confetti && <GameConfetti />}
 
-        {showInfo && <InfoModal players={leaderboard} onClose={() => setShowInfo(false)} totalCalled={drawn.length} room={room} />}
+        {showLeaderboard && <LeaderboardModal players={leaderboard} onClose={() => setShowLeaderboard(false)} totalCalled={drawn.length} room={room} />}
         {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); onExit(); }} room={room} />}
         {session.winner && <WinOverlay winner={session.winner} onClose={() => sessionRef(room).update({ winner: null })} isHost={true} />}
       </div>
@@ -487,7 +484,7 @@ function StatTile({ label, value, accent }) {
   );
 }
 
-function BigNextButton({ onClick, disabled, rolling }) {
+function DrawButton({ onClick, disabled, rolling }) {
   const [pressed, setPressed] = useState(false);
   const label = rolling ? 'Drawing…' : disabled ? 'All drawn!' : 'Draw Next →';
   return (
@@ -509,7 +506,7 @@ function HostCallout({ n, msg }) {
   );
 }
 
-function InfoModal({ players, onClose, totalCalled, room }) {
+function LeaderboardModal({ players, onClose, totalCalled, room }) {
   return (
     <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 70, background: 'rgba(31, 41, 55, 0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
       <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 460, background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 24, boxShadow: '0 12px 0 #d6d6d6, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
@@ -598,16 +595,13 @@ function CastScreen({ me, room, onExit }) {
   }, [playerId, room]);
 
   useEffect(() => {
-    if (!session) return;
-    const ld = session.lastDrawn;
-    if (ld && ld !== prevLastDrawnRef.current) {
-      prevLastDrawnRef.current = ld;
-      const msg = pickHostLine(hostMsgRef.current);
-      hostMsgRef.current = msg;
-      setHostMsg(msg);
-      setCallout(ld);
-    }
-  }, [session && session.lastDrawn]);
+    if (!session?.lastDrawn || session.lastDrawn === prevLastDrawnRef.current) return;
+    prevLastDrawnRef.current = session.lastDrawn;
+    const msg = pickHostLine(hostMsgRef.current);
+    hostMsgRef.current = msg;
+    setHostMsg(msg);
+    setCallout(session.lastDrawn);
+  }, [session?.lastDrawn]);
 
   if (joinError) return (
     <ScreenShell>
@@ -634,14 +628,14 @@ function CastScreen({ me, room, onExit }) {
 
   if (!session || !localCard || !playerId) return null;
 
-  const me_p = (session.players || {})[playerId];
-  if (!me_p) return null;
+  const myPlayer = (session.players || {})[playerId];
+  if (!myPlayer) return null;
 
   const grid = [0,1,2,3,4].map(r => localCard.slice(r*5, r*5+5));
   const drawn = session.drawn || [];
   const drawnSet = new Set(drawn);
   const lastDrawn = session.lastDrawn;
-  const markedArr = me_p.marked || [];
+  const markedArr = myPlayer.marked || [];
   const marked = new Set(markedArr);
 
   const isOn = (r, c) => { const v = grid[r][c]; return v === 'FREE' || marked.has(v); };
@@ -664,7 +658,7 @@ function CastScreen({ me, room, onExit }) {
   };
 
   const callBingo = () => {
-    if (!hasBingo || me_p.bingo) return;
+    if (!hasBingo || myPlayer.bingo) return;
     sessionRef(room).update({ winner: me.name, [`players.${playerId}.bingo`]: true });
     setLocalBingo(true);
   };
@@ -735,13 +729,13 @@ function CastScreen({ me, room, onExit }) {
         <div style={{ fontSize: 12, fontWeight: 800, color: '#afafaf', textAlign: 'center', letterSpacing: '0.02em' }}>Tap a number to daub it — only drawn numbers count.</div>
 
         {/* BINGO button */}
-        <BigCta onClick={callBingo} disabled={!hasBingo || me_p.bingo}>
-          {me_p.bingo ? '✓ BINGO confirmed' : hasBingo ? 'BINGO!' : 'Keep marking…'}
+        <BigCta onClick={callBingo} disabled={!hasBingo || myPlayer.bingo}>
+          {myPlayer.bingo ? '✓ BINGO confirmed' : hasBingo ? 'BINGO!' : 'Keep marking…'}
         </BigCta>
 
         {callout && <CastCallout n={callout} msg={hostMsg} onClose={() => setCallout(null)} />}
         {(localBingo || session.winner) && <WinOverlay winner={session.winner || me.name} onClose={() => setLocalBingo(false)} isHost={false} />}
-        {(me_p.bingo || localBingo) && <GameConfetti />}
+        {(myPlayer.bingo || localBingo) && <GameConfetti />}
         {showCalled && <CalledList called={drawn} latest={lastDrawn} onClose={() => setShowCalled(false)} />}
         {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); onExit(); }} room={room} />}
       </div>

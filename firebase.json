@@ -8,11 +8,8 @@
       "firestore.indexes.json",
       ".gitignore",
       "README.md",
-      "All Screens.html",
-      "design-canvas.jsx",
-      "screens-host.jsx",
-      "screens-player.jsx",
-      "screens-welcome.jsx"
+      "deploy.ps1",
+      "design_handoff_cdaub_bingo/**"
     ],
     "headers": [
       {
