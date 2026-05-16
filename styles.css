@@ -1822,6 +1822,14 @@ input {
   height: auto;
 }
 
+.app--caller .session-code,
+.app--caller .players-pill,
+.app--caller .last-called-card {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
 .app--caller .draw-random--landscape {
   display: none;
 }
