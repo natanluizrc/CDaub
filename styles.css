@@ -35,7 +35,7 @@ html, body {
   padding: 0;
   font-family: var(--font-ui);
   color: var(--ink);
-  background: radial-gradient(ellipse at top, var(--bg-2) 0%, var(--bg-1) 35%, var(--bg-0) 70%);
+  background: #d8d7ea;
   background-attachment: fixed;
   height: 100dvh;
   overflow: hidden;
