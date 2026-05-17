@@ -532,13 +532,13 @@ function HostScreen({ me, room, onExit }) {
             const isLatest = n === latest && !rolling;
             const isPreview = n === previewN && rolling;
             const winCell = isCalled && isWinCell(r, c);
-            let bg = '#fafafa', fg = '#3c3c3c', border = '2px solid #ececec', shadow = '0 2px 0 #ececec', weight = 700, scale = 1;
-            if (isPreview) { bg = '#1cb0f6'; fg = '#ffffff'; border = '2px solid #0d8fcc'; shadow = '0 3px 0 #0d8fcc, 0 0 0 4px rgba(28,176,246,0.22)'; weight = 900; scale = 1.08; }
-            else if (isLatest) { bg = '#58cc02'; fg = '#ffffff'; border = '2px solid #46a302'; shadow = '0 4px 0 #46a302, 0 0 0 4px rgba(88,204,2,0.18)'; weight = 900; scale = 1.06; }
-            else if (winCell) { bg = 'linear-gradient(180deg, #ffd84d 0%, #ffc800 100%)'; fg = '#7a5a00'; border = '2px solid #c79100'; shadow = '0 3px 0 #c79100, 0 0 0 3px rgba(255,200,0,0.3)'; weight = 900; }
-            else if (isCalled) { bg = '#ffc800'; fg = '#7a5a00'; border = '2px solid #e0a800'; shadow = '0 3px 0 #c79100'; weight = 900; }
+            let bg = '#fafafa', fg = '#3c3c3c', border = '2px solid #ececec', shadow = '0 2px 0 #ececec', scale = 1;
+            if (isPreview) { bg = '#1cb0f6'; fg = '#ffffff'; border = '2px solid #0d8fcc'; shadow = '0 3px 0 #0d8fcc, 0 0 0 4px rgba(28,176,246,0.22)'; scale = 1.08; }
+            else if (isLatest) { bg = '#58cc02'; fg = '#ffffff'; border = '2px solid #46a302'; shadow = '0 4px 0 #46a302, 0 0 0 4px rgba(88,204,2,0.18)'; scale = 1.06; }
+            else if (winCell) { bg = 'linear-gradient(180deg, #ffd84d 0%, #ffc800 100%)'; fg = '#7a5a00'; border = '2px solid #c79100'; shadow = '0 3px 0 #c79100, 0 0 0 3px rgba(255,200,0,0.3)'; }
+            else if (isCalled) { bg = '#ffc800'; fg = '#7a5a00'; border = '2px solid #e0a800'; shadow = '0 3px 0 #c79100'; }
             return (
-              <div key={n} style={{ background: bg, color: fg, border, borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: weight, fontSize: 'clamp(10px, 1.4vw + 0.4rem, 17px)', transition: 'all 280ms cubic-bezier(0.34, 1.56, 0.64, 1)', transform: `scale(${scale})`, minWidth: 0, minHeight: 0 }}>
+              <div key={n} style={{ background: bg, color: fg, border, borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', fontWeight: 900, letterSpacing: '0.02em', fontSize: 'clamp(10px, 1.4vw + 0.4rem, 17px)', transition: 'all 200ms cubic-bezier(0.34, 1.56, 0.64, 1)', transform: `scale(${scale})`, minWidth: 0, minHeight: 0 }}>
                 {String(n).padStart(2, '0')}
               </div>
             );
