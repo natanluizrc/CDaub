@@ -480,7 +480,7 @@ function HostScreen({ me, room, onExit }) {
           <div style={{ gridColumn: 'span 4', alignSelf: 'stretch', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
             <div style={{ width: 'fit-content', display: 'flex', flexDirection: 'column', gap: '0.4vh' }}>
               <div style={{ fontSize: '6vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>CDaub.</div>
-              <div style={{ fontSize: '2vh', fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase', lineHeight: 1 }}>ROOM {String(room).padStart(2, '0')} · {me.name}</div>
+              <div style={{ fontSize: '2vh', fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase', lineHeight: 1, paddingLeft: '0.8em' }}>ROOM {String(room).padStart(2, '0')} · {me.name}</div>
             </div>
           </div>
           <div style={{ gridColumn: 'span 4', height: '100%', background: '#ffffff', border: '2px solid #46a302', borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: '0 2px 0 #46a302', overflow: 'hidden' }}>
