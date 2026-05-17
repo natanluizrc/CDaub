@@ -887,7 +887,7 @@ function CastScreen({ me, room, onExit }) {
         </div>
 
         {/* DAUB / BINGO button */}
-        <div style={{ flexShrink: 0, height: '10vh' }}>
+        <div style={{ flexShrink: 0, height: '10vh', padding: '0 clamp(6px, 1vw, 12px)' }}>
           <BigCta onClick={daub} disabled={isWinner || isGameOver || !pendingDaub} pulse={pendingDaub && !isWinner && !isGameOver} variant="blue">
             {daubLabel}
           </BigCta>
