@@ -216,7 +216,7 @@ function JoinScreen({ name, onJoin, onBack }) {
         <input type="text" value={room} onChange={(e) => setRoom(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))} placeholder="00" autoFocus style={{ ...inputStyle, letterSpacing: '0.2em', fontVariantNumeric: 'tabular-nums' }} />
       </Field>
       <div style={{ marginTop: 28 }}>
-        <BigCta disabled={!canGo} onClick={() => canGo && onJoin(room.trim())}>Join →</BigCta>
+        <BigCta disabled={!canGo} onClick={() => canGo && onJoin(room.trim())}>Join</BigCta>
       </div>
     </ScreenShell>
   );
