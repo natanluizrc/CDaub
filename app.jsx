@@ -479,7 +479,7 @@ function HostScreen({ me, room, onExit }) {
         <div style={{ flex: 1, minHeight: 0, display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gridTemplateRows: '1fr', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)', alignItems: 'stretch' }}>
           <div style={{ gridColumn: 'span 4', alignSelf: 'stretch', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: '0.4vh' }}>
             <div style={{ fontSize: '6vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>CDaub.</div>
-            <div style={{ fontSize: '2vh', fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase', lineHeight: 1 }}>ROOM {String(room).padStart(2, '0')}</div>
+            <div style={{ fontSize: '2vh', fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase', lineHeight: 1 }}>ROOM {String(room).padStart(2, '0')} · {me.name}</div>
           </div>
           <div style={{ gridColumn: 'span 4', height: '100%', background: '#ffffff', border: '2px solid #46a302', borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: '0 2px 0 #46a302', overflow: 'hidden' }}>
             <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)', position: 'relative', overflow: 'hidden' }}>
