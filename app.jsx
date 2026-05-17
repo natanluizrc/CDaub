@@ -188,11 +188,11 @@ function WelcomeScreen({ onContinue, initialName }) {
         <span style={{ fontSize: 12, fontWeight: 900, color: '#7a7a7a', letterSpacing: '0.22em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Cards that build moments</span>
         <span style={{ width: 24, height: 2, background: '#e5e5e5', borderRadius: 2 }} />
       </div>
-      <Field label="YOUR NAME">
+      <Field label="NAME">
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Natan" maxLength={20} autoFocus style={inputStyle} />
       </Field>
       <div style={{ marginTop: 28 }}>
-        <BigCta disabled={!canGo} onClick={() => canGo && onContinue({ name: trimmed })}>Continue →</BigCta>
+        <BigCta disabled={!canGo} onClick={() => canGo && onContinue({ name: trimmed })}>Continue</BigCta>
       </div>
     </ScreenShell>
   );
@@ -262,12 +262,12 @@ function ExitModal({ onCancel, onConfirm, room }) {
       <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, background: '#ffffff', border: '3px solid #ff4b4b', borderRadius: 24, boxShadow: '0 12px 0 #d63030, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
         <div style={{ padding: '32px 28px 8px' }}>
           <div style={{ width: 64, height: 64, margin: '0 auto 16px', background: '#ffe9e9', border: '3px solid #ff4b4b', borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 0 #d63030', fontSize: 28 }}>⚠️</div>
-          <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c', marginBottom: 10 }}>Leave the room?</div>
+          <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c', marginBottom: 10 }}>Exit the room?</div>
           <div style={{ fontSize: 15, fontWeight: 700, color: '#7a7a7a', lineHeight: 1.45 }}>You won't be able to come back to <b style={{ color: '#3c3c3c' }}>Room {String(room).padStart(2, '0')}</b>. Your card and progress will be lost.</div>
         </div>
         <div style={{ padding: '18px 20px 22px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           <ChunkyButton onClick={onCancel} variant="ghost">Stay</ChunkyButton>
-          <ChunkyButton onClick={onConfirm} variant="danger">Leave</ChunkyButton>
+          <ChunkyButton onClick={onConfirm} variant="danger">Exit</ChunkyButton>
         </div>
       </div>
     </div>
