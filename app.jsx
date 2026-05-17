@@ -699,15 +699,10 @@ function CastScreen({ me, room, onExit }) {
   if (!hasBingo && [0,1,2,3,4].every(i => isOn(i,i))) hasBingo = true;
   if (!hasBingo && [0,1,2,3,4].every(i => isOn(i,4-i))) hasBingo = true;
 
-  const toggleMark = (val) => {
-    if (val === 'FREE' || !drawnSet.has(val)) {
-      if (val !== 'FREE') {
-        const el = document.querySelector(`[data-cell="${val}"]`);
-        if (el) { el.style.animation = 'cellShake 360ms'; setTimeout(() => { el.style.animation = ''; }, 400); }
-      }
-      return;
-    }
-    const newMarked = markedArr.includes(val) ? markedArr.filter(x => x !== val) : [...markedArr, val];
+  const pendingDaub = drawn.length > 0 && localCard.some(v => v !== 'FREE' && drawnSet.has(v) && !marked.has(v));
+
+  const daub = () => {
+    const newMarked = localCard.filter(v => v !== 'FREE' && drawnSet.has(v));
     sessionRef(room).update({ [`players.${playerId}.marked`]: newMarked });
   };
 
@@ -754,18 +749,20 @@ function CastScreen({ me, room, onExit }) {
             else if (isLatest) { bg = '#e7f8d4'; fg = '#46a302'; border = '2px solid #58cc02'; shadow = '0 3px 0 #58cc02, 0 0 0 3px rgba(88,204,2,0.2)'; }
             else if (isCalled) { bg = '#ffffff'; fg = '#3c3c3c'; border = '2px dashed #58cc02'; shadow = '0 2px 0 #e5e5e5'; }
             return (
-              <button key={`${r}-${c}`} data-cell={val} onClick={() => !isFree && toggleMark(val)} disabled={isFree}
-                style={{ background: bg, color: fg, border, borderRadius: 'clamp(8px, 2vw, 12px)', boxShadow: shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', fontSize: isFree ? 'clamp(16px, 4vw, 24px)' : 'clamp(12px, 3.5vw, 18px)', fontWeight: 900, letterSpacing: '0.02em', cursor: isFree ? 'default' : 'pointer', transition: 'all 200ms cubic-bezier(0.34, 1.56, 0.64, 1)', padding: 0, minWidth: 0, minHeight: 0 }}>
+              <button key={`${r}-${c}`} data-cell={val} disabled
+                style={{ background: bg, color: fg, border, borderRadius: 'clamp(8px, 2vw, 12px)', boxShadow: shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', fontSize: isFree ? 'clamp(16px, 4vw, 24px)' : 'clamp(12px, 3.5vw, 18px)', fontWeight: 900, letterSpacing: '0.02em', cursor: 'default', opacity: 1, transition: 'all 200ms cubic-bezier(0.34, 1.56, 0.64, 1)', padding: 0, minWidth: 0, minHeight: 0 }}>
                 {isFree ? <span style={{ fontSize: 'clamp(20px, 5vw, 28px)', filter: 'drop-shadow(0 1px 0 rgba(0,0,0,0.18))' }}>{mascotFor(me.name)}</span> : String(val).padStart(2, '0')}
               </button>
             );
           }))}
         </div>
 
-        {/* BINGO button */}
+        {/* DAUB / BINGO button */}
         <div style={{ flexShrink: 0, height: '10vh' }}>
-          <BigCta onClick={callBingo} disabled={!hasBingo || myPlayer.bingo}>
-            {myPlayer.bingo ? '✓ BINGO confirmed' : hasBingo ? 'BINGO!' : 'Keep marking…'}
+          <BigCta
+            onClick={myPlayer.bingo ? undefined : hasBingo ? callBingo : daub}
+            disabled={myPlayer.bingo || (!hasBingo && !pendingDaub)}>
+            {myPlayer.bingo ? '✓ BINGO confirmed' : hasBingo ? 'BINGO!' : 'DAUB!'}
           </BigCta>
         </div>
 
