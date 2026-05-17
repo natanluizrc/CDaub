@@ -71,3 +71,9 @@ button { font-family: inherit; }
   70%  { box-shadow: 0 0 0 16px rgba(88,204,2,0);   }
   100% { box-shadow: 0 0 0 0   rgba(88,204,2,0);    }
 }
+
+@keyframes chipPulse {
+  0%   { box-shadow: 0 0 0 0   rgba(107,107,107,0.5); }
+  70%  { box-shadow: 0 0 0 14px rgba(107,107,107,0);  }
+  100% { box-shadow: 0 0 0 0   rgba(107,107,107,0);   }
+}

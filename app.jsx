@@ -307,9 +307,10 @@ function GameConfetti() {
 const TOTAL = 72, COLS = 12, ROWS = 6;
 
 
-function StatChip({ value, accent, textColor, style = {} }) {
+function StatChip({ value, accent, textColor, style = {}, pulse = false }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', ...style }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', position: 'relative', ...style }}>
+      {pulse && <div style={{ position: 'absolute', inset: 0, borderRadius: 'inherit', animation: 'chipPulse 1.8s ease-out infinite', pointerEvents: 'none' }} />}
       <span style={{ fontSize: 15, fontWeight: 900, color: textColor || accent, lineHeight: 1 }}>{value}</span>
     </div>
   );
@@ -487,7 +488,7 @@ function HostScreen({ me, room, onExit }) {
           </div>
           <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" textColor="#ffffff" style={{ width: '100%', height: '100%', background: '#58cc02', border: '2px solid #46a302', boxShadow: '0 2px 0 #46a302', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
           <StatChip value={String(left).padStart(2, '0')} accent="#ff4b4b" textColor="#ffffff" style={{ width: '100%', height: '100%', background: '#ff4b4b', border: '2px solid #d63030', boxShadow: '0 2px 0 #d63030', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
-          <StatChip value={String(room).padStart(2, '0')} accent="#6b6b6b" textColor="#ffffff" style={{ width: '100%', height: '100%', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
+          <StatChip value={String(room).padStart(2, '0')} accent="#6b6b6b" textColor="#ffffff" pulse style={{ width: '100%', height: '100%', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
           <IconButton onClick={() => setShowLeaderboard(true)} title="Room info" style={{ width: '100%', height: '100%', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)' }}><InfoIcon /></IconButton>
           <IconButton onClick={() => setShowExit(true)} title="Exit room" style={{ width: '100%', height: '100%', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)' }}><ExitIcon /></IconButton>
         </div>
