@@ -478,15 +478,13 @@ function HostScreen({ me, room, onExit }) {
             <IconButton onClick={() => setShowExit(true)} title="Exit room" style={{ width: '100%', height: 40, background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff' }}><ExitIcon /></IconButton>
           </div>
         ) : (
-          <div style={{ height: '10vh', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 calc(clamp(6px, 1vw, 12px) + 2px)' }}>
-            <div>
+          <div style={{ height: '10vh', flexShrink: 0, display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 calc(clamp(6px, 1vw, 12px) + 2px)', alignItems: 'center' }}>
+            <div style={{ gridColumn: 'span 10' }}>
               <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.01em' }}>CDaub.</div>
               <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
             </div>
-            <div style={{ display: 'flex', gap: 10 }}>
-              <IconButton onClick={() => setShowLeaderboard(true)} title="Room info"><InfoIcon /></IconButton>
-              <IconButton onClick={() => setShowExit(true)} title="Exit room"><ExitIcon /></IconButton>
-            </div>
+            <IconButton onClick={() => setShowLeaderboard(true)} title="Room info" style={{ width: '100%', height: 40, background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff' }}><InfoIcon /></IconButton>
+            <IconButton onClick={() => setShowExit(true)} title="Exit room" style={{ width: '100%', height: 40, background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff' }}><ExitIcon /></IconButton>
           </div>
         )}
 
