@@ -450,23 +450,23 @@ function HostScreen({ me, room, onExit }) {
     <div style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#f7fafc', fontFamily: '"Nunito", system-ui, sans-serif', color: '#3c3c3c', display: 'flex', justifyContent: 'center', padding: '3vh clamp(14px, 3vw, 24px)', boxSizing: 'border-box' }}>
       <div style={{ width: '100%', maxWidth: 1400, height: '100%', display: 'flex', flexDirection: 'column', gap: '5vh', position: 'relative' }}>
 
-        {/* Header — 10vh */}
-        <div style={{ height: '10vh', flexShrink: 0, display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)', alignItems: 'center' }}>
+        {/* Header */}
+        <div style={{ flex: 1, minHeight: 0, display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)', alignItems: 'center' }}>
           <div style={{ gridColumn: 'span 4' }}>
             <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.01em' }}>CDaub.</div>
             <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
           </div>
-          <div style={{ gridColumn: 'span 4', height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', overflow: 'hidden' }}>
+          <div style={{ gridColumn: 'span 4', height: '100%', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: '0 2px 0 #e5e5e5', overflow: 'hidden' }}>
             <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', borderRadius: 10, transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)' }} />
           </div>
-          <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" textColor="#ffffff" style={{ width: '100%', height: 40, background: '#58cc02', border: '2px solid #46a302', boxShadow: '0 2px 0 #46a302' }} />
-          <StatChip value={String(left).padStart(2, '0')} accent="#ff4b4b" textColor="#ffffff" style={{ width: '100%', height: 40, background: '#ff4b4b', border: '2px solid #d63030', boxShadow: '0 2px 0 #d63030' }} />
-          <IconButton onClick={() => setShowLeaderboard(true)} title="Room info" style={{ width: '100%', height: 40, background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff' }}><InfoIcon /></IconButton>
-          <IconButton onClick={() => setShowExit(true)} title="Exit room" style={{ width: '100%', height: 40, background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff' }}><ExitIcon /></IconButton>
+          <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" textColor="#ffffff" style={{ width: '100%', height: '100%', background: '#58cc02', border: '2px solid #46a302', boxShadow: '0 2px 0 #46a302', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
+          <StatChip value={String(left).padStart(2, '0')} accent="#ff4b4b" textColor="#ffffff" style={{ width: '100%', height: '100%', background: '#ff4b4b', border: '2px solid #d63030', boxShadow: '0 2px 0 #d63030', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
+          <IconButton onClick={() => setShowLeaderboard(true)} title="Room info" style={{ width: '100%', height: '100%', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)' }}><InfoIcon /></IconButton>
+          <IconButton onClick={() => setShowExit(true)} title="Exit room" style={{ width: '100%', height: '100%', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)' }}><ExitIcon /></IconButton>
         </div>
 
         {/* Number grid */}
-        <div style={{ flex: 1, minHeight: 0, display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)' }}>
+        <div style={{ flex: 6, minHeight: 0, display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)' }}>
           {cells.map(({ n, r, c }) => {
             const isCalled = drawnSet.has(n);
             const isLatest = n === latest && !rolling;
