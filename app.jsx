@@ -112,8 +112,8 @@ function Field({ label, children }) {
 
 function BigCta({ children, onClick, disabled, pulse, variant = 'green' }) {
   const [pressed, setPressed] = useState(false);
-  const bg    = variant === 'blue' ? '#1cb0f6' : '#58cc02';
-  const shade = variant === 'blue' ? '#0d8fcc' : '#46a302';
+  const bg    = variant === 'blue' ? '#1cb0f6' : variant === 'orange' ? '#ff9600' : '#58cc02';
+  const shade = variant === 'blue' ? '#0d8fcc' : variant === 'orange' ? '#cc7700' : '#46a302';
   return (
     <button
       onMouseDown={() => setPressed(true)}
@@ -216,12 +216,12 @@ function JoinScreen({ name, onJoin, onBack }) {
     <ScreenShell>
       <BackLink onClick={onBack}>← Back</BackLink>
       <div style={{ fontSize: 28, fontWeight: 900, color: '#3c3c3c', textAlign: 'center', marginBottom: 28, marginTop: 28 }}>Enter the room code.</div>
-      <div style={{ padding: '18px 20px', background: '#ffffff', border: '2px solid #1cb0f6', borderRadius: 20, boxShadow: '0 5px 0 #0d8fcc', display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div style={{ padding: '18px 20px', background: '#ffffff', border: '2px solid #ff9600', borderRadius: 20, boxShadow: '0 5px 0 #cc7700', display: 'flex', flexDirection: 'column', gap: 8 }}>
         <span style={{ fontSize: 11, fontWeight: 900, color: '#afafaf', letterSpacing: '0.2em' }}>ROOM</span>
         <input type="text" value={room} onChange={(e) => setRoom(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))} placeholder="00" autoFocus style={{ ...inputStyle, letterSpacing: '0.2em', fontVariantNumeric: 'tabular-nums', fontSize: 32, textAlign: 'center', padding: '10px 16px' }} onKeyDown={(e) => e.key === 'Enter' && canGo && onJoin(room.trim())} />
       </div>
       <div style={{ marginTop: 14 }}>
-        <BigCta variant="blue" disabled={!canGo} onClick={() => canGo && onJoin(room.trim())}>Join</BigCta>
+        <BigCta variant="orange" disabled={!canGo} onClick={() => canGo && onJoin(room.trim())}>Join</BigCta>
       </div>
     </ScreenShell>
   );
@@ -839,7 +839,7 @@ function CastScreen({ me, room, onExit }) {
         </div>
 
         {/* Card grid */}
-        <div style={{ flex: 6, minHeight: 0, background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 'clamp(14px, 2vw, 24px)', padding: 'clamp(6px, 1vw, 12px)', boxShadow: '0 4px 0 #e5e5e5', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(5, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)' }}>
+        <div style={{ flex: 6, minHeight: 0, background: '#ffffff', border: 'none', borderRadius: 'clamp(14px, 2vw, 24px)', padding: 'clamp(6px, 1vw, 12px)', boxShadow: 'none', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(5, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)' }}>
           {grid.flatMap((row, r) => row.map((val, c) => {
             const isFree = val === 'FREE';
             const isDaubed = !isFree && marked.has(val);
