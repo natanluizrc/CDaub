@@ -693,24 +693,18 @@ function CastScreen({ me, room, onExit }) {
   const markedArr = myPlayer.marked || [];
   const marked = new Set(markedArr);
 
-  const isOn = (r, c) => { const v = grid[r][c]; return v === 'FREE' || marked.has(v); };
-  let hasBingo = false;
-  for (let r = 0; r < 5 && !hasBingo; r++) if ([0,1,2,3,4].every(c => isOn(r,c))) hasBingo = true;
-  for (let c = 0; c < 5 && !hasBingo; c++) if ([0,1,2,3,4].every(r => isOn(r,c))) hasBingo = true;
-  if (!hasBingo && [0,1,2,3,4].every(i => isOn(i,i))) hasBingo = true;
-  if (!hasBingo && [0,1,2,3,4].every(i => isOn(i,4-i))) hasBingo = true;
-
   const pendingDaub = drawn.length > 0 && localCard.some(v => v !== 'FREE' && drawnSet.has(v) && !marked.has(v));
 
   const daub = () => {
     const newMarked = localCard.filter(v => v !== 'FREE' && drawnSet.has(v));
-    sessionRef(room).update({ [`players.${playerId}.marked`]: newMarked });
-  };
-
-  const callBingo = () => {
-    if (!hasBingo || myPlayer.bingo) return;
-    sessionRef(room).update({ winner: me.name, [`players.${playerId}.bingo`]: true });
-    setLocalBingo(true);
+    const isFullCard = localCard.filter(v => v !== 'FREE').every(v => new Set(newMarked).has(v));
+    const update = { [`players.${playerId}.marked`]: newMarked };
+    if (isFullCard && !myPlayer.bingo) {
+      update.winner = me.name;
+      update[`players.${playerId}.bingo`] = true;
+      setLocalBingo(true);
+    }
+    sessionRef(room).update(update);
   };
 
   const daubedCount = markedArr.length;
@@ -759,10 +753,8 @@ function CastScreen({ me, room, onExit }) {
 
         {/* DAUB / BINGO button */}
         <div style={{ flexShrink: 0, height: '10vh' }}>
-          <BigCta
-            onClick={myPlayer.bingo ? undefined : hasBingo ? callBingo : daub}
-            disabled={myPlayer.bingo || (!hasBingo && !pendingDaub)}>
-            {myPlayer.bingo ? '✓ BINGO confirmed' : hasBingo ? 'BINGO!' : 'DAUB!'}
+          <BigCta onClick={daub} disabled={myPlayer.bingo || !pendingDaub}>
+            DAUB
           </BigCta>
         </div>
 
