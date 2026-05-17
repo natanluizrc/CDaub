@@ -1175,12 +1175,11 @@ function CastScreen({ me, room, onExit }) {
   const daubLabel = isWinner ? t.wins : isGameOver ? t.lost : t.daub;
   const daubProgress = daubedCount / 24;
   const tempStages = [
-    { word: 'FREE',  anim: 'freePulse 5.0s ease-in-out infinite' },
     { word: t.cold,  anim: 'freePulse 2.4s ease-in-out infinite' },
     { word: t.warm,  anim: 'freePulse 1.1s ease-in-out infinite' },
     { word: t.fire,  anim: 'freePulse 0.38s ease-in-out infinite' },
   ];
-  const tempStage = tempStages[daubProgress < 0.5 ? 0 : daubProgress < 0.7 ? 1 : daubProgress < 0.9 ? 2 : 3];
+  const tempStage = tempStages[daubProgress < 0.5 ? 0 : daubProgress < 0.7 ? 1 : 2];
   const allPlayers = Object.values(session.players || {});
   const leaderboard = allPlayers.map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), color: '#1cb0f6', bingo: p.bingo })).sort((a, b) => b.hits - a.hits);
 
