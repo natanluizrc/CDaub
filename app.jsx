@@ -175,11 +175,10 @@ function HistoryIcon() {
 }
 
 // ---------- Welcome Screen ----------
-function WelcomeScreen({ onContinue, initialName, initialRoom }) {
+function WelcomeScreen({ onContinue, initialName }) {
   const [name, setName] = useState(initialName || '');
-  const [room, setRoom] = useState(initialRoom || '');
   const trimmed = name.trim();
-  const canGo = trimmed.length >= 2 && room.trim().length >= 1;
+  const canGo = trimmed.length >= 2;
 
   return (
     <ScreenShell>
@@ -190,29 +189,50 @@ function WelcomeScreen({ onContinue, initialName, initialRoom }) {
         <span style={{ width: 24, height: 2, background: '#e5e5e5', borderRadius: 2 }} />
       </div>
       <Field label="YOUR NAME">
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Marina" maxLength={20} autoFocus style={inputStyle} />
-      </Field>
-      <Field label="ROOM CODE">
-        <input type="text" value={room} onChange={(e) => setRoom(e.target.value.replace(/[^0-9]/g, '').slice(0, 4))} placeholder="0000" style={{ ...inputStyle, letterSpacing: '0.2em', fontVariantNumeric: 'tabular-nums' }} />
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Natan" maxLength={20} autoFocus style={inputStyle} />
       </Field>
       <div style={{ marginTop: 28 }}>
-        <BigCta disabled={!canGo} onClick={() => canGo && onContinue({ name: trimmed, room: room.trim() })}>Continue →</BigCta>
+        <BigCta disabled={!canGo} onClick={() => canGo && onContinue({ name: trimmed })}>Continue →</BigCta>
+      </div>
+    </ScreenShell>
+  );
+}
+
+// ---------- Join Screen (cast enters room code) ----------
+function JoinScreen({ name, onJoin, onBack }) {
+  const [room, setRoom] = useState('');
+  const canGo = room.trim().length >= 1;
+
+  return (
+    <ScreenShell>
+      <BackLink onClick={onBack}>← Back</BackLink>
+      <Logo />
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 30 }}>
+        <span style={{ width: 24, height: 2, background: '#e5e5e5', borderRadius: 2 }} />
+        <span style={{ fontSize: 12, fontWeight: 900, color: '#7a7a7a', letterSpacing: '0.22em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Enter the room code from the host</span>
+        <span style={{ width: 24, height: 2, background: '#e5e5e5', borderRadius: 2 }} />
+      </div>
+      <Field label="ROOM CODE">
+        <input type="text" value={room} onChange={(e) => setRoom(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))} placeholder="00" autoFocus style={{ ...inputStyle, letterSpacing: '0.2em', fontVariantNumeric: 'tabular-nums' }} />
+      </Field>
+      <div style={{ marginTop: 28 }}>
+        <BigCta disabled={!canGo} onClick={() => canGo && onJoin(room.trim())}>Join →</BigCta>
       </div>
     </ScreenShell>
   );
 }
 
 // ---------- Role Screen ----------
-function RoleScreen({ name, room, onPick, onBack }) {
+function RoleScreen({ name, onPick, onBack, generating, genError }) {
   return (
     <ScreenShell>
       <BackLink onClick={onBack}>← Back</BackLink>
-      <div style={{ fontSize: 12, fontWeight: 900, color: '#afafaf', letterSpacing: '0.2em', textAlign: 'center', marginBottom: 6 }}>ROOM {String(room).padStart(2, '0')}</div>
       <div style={{ fontSize: 28, fontWeight: 900, color: '#3c3c3c', textAlign: 'center', marginBottom: 6 }}>How will you join, {name}?</div>
       <div style={{ fontSize: 15, fontWeight: 700, color: '#afafaf', textAlign: 'center', marginBottom: 28 }}>Pick a role to enter the game.</div>
+      {genError && <div style={{ color: '#ff4b4b', fontWeight: 700, fontSize: 14, textAlign: 'center', marginBottom: 16 }}>{genError}</div>}
       <div style={{ display: 'grid', gap: 14 }}>
-        <RoleCard color="#58cc02" emoji="🎙️" title="HOST" tagline="You'll call the balls" desc="Run the room. Draw numbers, watch the leaderboard, keep the party going." onClick={() => onPick('host')} />
-        <RoleCard color="#1cb0f6" emoji="🎯" title="CAST" tagline="You'll play with a card" desc="Mark your card as numbers are drawn. Be the first to complete a line and shout it out." onClick={() => onPick('cast')} />
+        <RoleCard color="#58cc02" emoji="🎙️" title="HOST" tagline={generating ? 'Generating room…' : "You'll call the balls"} desc="Run the room. Draw numbers, watch the leaderboard, keep the party going." onClick={() => !generating && onPick('host')} />
+        <RoleCard color="#1cb0f6" emoji="🎯" title="CAST" tagline="You'll play with a card" desc="Mark your card as numbers are drawn. Be the first to complete a line and shout it out." onClick={() => !generating && onPick('cast')} />
       </div>
     </ScreenShell>
   );
@@ -803,17 +823,47 @@ function CalledList({ called, latest, onClose }) {
   );
 }
 
+// ---------- Room generation ----------
+async function generateUniqueRoom() {
+  const snap = await db().collection("sessions").get();
+  const taken = new Set(
+    snap.docs.map(d => parseInt(d.id, 10)).filter(n => n >= 1 && n <= 99)
+  );
+  const available = [];
+  for (let i = 1; i <= 99; i++) if (!taken.has(i)) available.push(i);
+  if (!available.length) throw new Error("All rooms (01–99) are currently in use. Try again later.");
+  return String(available[Math.floor(Math.random() * available.length)]);
+}
+
 // ---------- Root App ----------
 function App() {
   const [stage, setStage] = useState('welcome');
   const [name, setName] = useState(() => { try { return JSON.parse(localStorage.getItem(ME_KEY) || '{}').name || ''; } catch { return ''; } });
-  const [room, setRoom] = useState(() => { try { return JSON.parse(localStorage.getItem(ME_KEY) || '{}').session || ''; } catch { return ''; } });
+  const [room, setRoom] = useState('');
+  const [generating, setGenerating] = useState(false);
+  const [genError, setGenError] = useState(null);
 
-  function handleWelcome({ name: n, room: r }) { setName(n); setRoom(r); setStage('role'); }
+  async function handlePickHost() {
+    setGenerating(true);
+    setGenError(null);
+    try {
+      const r = await generateUniqueRoom();
+      setRoom(r);
+      setStage('host');
+    } catch (err) {
+      setGenError(err.message);
+    } finally {
+      setGenerating(false);
+    }
+  }
+
+  function handleWelcome({ name: n }) { setName(n); setStage('role'); }
+  function handleJoin(r) { setRoom(r); setStage('cast'); }
   function handleExit() { localStorage.removeItem(ME_KEY); setName(''); setRoom(''); setStage('welcome'); }
 
-  if (stage === 'welcome') return <WelcomeScreen onContinue={handleWelcome} initialName={name} initialRoom={room} />;
-  if (stage === 'role') return <RoleScreen name={name} room={room} onPick={(r) => setStage(r)} onBack={() => setStage('welcome')} />;
+  if (stage === 'welcome') return <WelcomeScreen onContinue={handleWelcome} initialName={name} />;
+  if (stage === 'role') return <RoleScreen name={name} onPick={(r) => r === 'host' ? handlePickHost() : setStage('join')} onBack={() => setStage('welcome')} generating={generating} genError={genError} />;
+  if (stage === 'join') return <JoinScreen name={name} onJoin={handleJoin} onBack={() => setStage('role')} />;
   if (stage === 'host') return <HostScreen me={{ name }} room={room} onExit={handleExit} />;
   if (stage === 'cast') return <CastScreen me={{ name }} room={room} onExit={handleExit} />;
   return null;
