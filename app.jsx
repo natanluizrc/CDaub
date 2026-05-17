@@ -544,7 +544,7 @@ function HostScreen({ me, room, onExit }) {
               </div>
             </div>
             <div style={{ position: 'absolute', top: '50%', left: `${progress * 100}%`, transform: `translateY(-50%) translateX(${progress >= 0.7 ? 'calc(-100% - 8px)' : '6px'})`, color: progress >= 0.7 ? '#ffffff' : '#46a302', fontSize: 'clamp(12px, 1.4vw, 16px)', fontWeight: 900, whiteSpace: 'nowrap', pointerEvents: 'none', transition: 'left 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', letterSpacing: '0.04em', zIndex: 1 }}>
-              {Math.round(progress * 100)}%
+              {String(Math.round(progress * 100)).padStart(2, '0')}%
             </div>
           </div>
           <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" textColor="#ffffff" style={{ width: '100%', height: '100%', background: '#58cc02', border: '2px solid #46a302', boxShadow: '0 2px 0 #46a302', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
@@ -906,7 +906,7 @@ function CastScreen({ me, room, onExit }) {
               </div>
             </div>
             <div style={{ position: 'absolute', top: '50%', left: `${daubProgress * 100}%`, transform: `translateY(-50%) translateX(${daubProgress >= 0.7 ? 'calc(-100% - 8px)' : '6px'})`, color: daubProgress >= 0.7 ? '#ffffff' : '#0d8fcc', fontSize: 'clamp(12px, 1.4vw, 16px)', fontWeight: 900, whiteSpace: 'nowrap', pointerEvents: 'none', transition: 'left 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', letterSpacing: '0.04em', zIndex: 1 }}>
-              {Math.round(daubProgress * 100)}%
+              {String(Math.round(daubProgress * 100)).padStart(2, '0')}%
             </div>
           </div>
           <div style={{ display: 'flex', gap: 'clamp(3px, 0.7vw, 8px)' }}>
