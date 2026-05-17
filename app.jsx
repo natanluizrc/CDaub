@@ -562,18 +562,32 @@ function ExitModal({ onCancel, onConfirm, room }) {
   );
 }
 
-function WinNotif({ name, isBingo, onClose }) {
+function LineNotif({ name, onClose }) {
   const { t } = useLang();
-  const color = isBingo ? '#58cc02' : '#1cb0f6';
-  const shadow = isBingo ? '#46a302' : '#0d8fcc';
+  useEffect(() => {
+    const timer = setTimeout(onClose, 3000);
+    return () => clearTimeout(timer);
+  }, [name]);
+  return (
+    <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', zIndex: 70 }}>
+      <div style={{ background: '#ffffff', border: '4px solid #1cb0f6', borderRadius: 32, boxShadow: '0 10px 0 #0d8fcc, 0 20px 60px rgba(0,0,0,0.18)', padding: '4vh 56px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1vh', width: '50vw', height: '50vh', animation: 'calloutPop 1.1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
+        <div style={{ fontSize: 'clamp(48px, 10vw, 112px)', fontWeight: 900, color: '#1cb0f6', letterSpacing: '-0.04em', lineHeight: 1 }}>LINE!</div>
+        <div style={{ fontSize: 'clamp(18px, 2.8vw, 32px)', fontWeight: 900, color: '#3c3c3c' }}>{t.gotItPre}{name}{t.gotItPost}</div>
+      </div>
+    </div>
+  );
+}
+
+function WinNotif({ name, onClose }) {
+  const { t } = useLang();
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 80, background: 'rgba(31, 41, 55, 0.6)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 200ms ease forwards' }}>
-      <div style={{ background: '#ffffff', border: `4px solid ${color}`, borderRadius: 32, boxShadow: `0 12px 0 ${shadow}, 0 24px 64px rgba(0,0,0,0.22)`, padding: '40px 32px 28px', textAlign: 'center', maxWidth: 360, width: '100%', animation: 'modalPop 320ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards', position: 'relative' }}>
+      <div style={{ background: '#ffffff', border: '4px solid #58cc02', borderRadius: 32, boxShadow: '0 12px 0 #46a302, 0 24px 64px rgba(0,0,0,0.22)', padding: '40px 32px 28px', textAlign: 'center', maxWidth: 360, width: '100%', animation: 'modalPop 320ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards', position: 'relative' }}>
         <button onClick={onClose} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#afafaf', fontWeight: 900, lineHeight: 1, padding: 4 }}>✕</button>
-        <div style={{ fontSize: 64, marginBottom: 8 }}>{isBingo ? '🏆' : '🎉'}</div>
-        <div style={{ fontSize: 36, fontWeight: 900, color, letterSpacing: '-0.02em', lineHeight: 1 }}>{isBingo ? 'BINGO!' : 'LINE!'}</div>
+        <div style={{ fontSize: 64, marginBottom: 8 }}>🏆</div>
+        <div style={{ fontSize: 36, fontWeight: 900, color: '#58cc02', letterSpacing: '-0.02em', lineHeight: 1 }}>BINGO!</div>
         <div style={{ fontSize: 18, fontWeight: 800, color: '#3c3c3c', marginTop: 10, marginBottom: 22 }}>{t.gotItPre}{name}{t.gotItPost}</div>
-        <BigCta onClick={onClose}>{isBingo ? t.seeResults : t.continueBtn}</BigCta>
+        <BigCta onClick={onClose}>{t.seeResults}</BigCta>
       </div>
     </div>
   );
@@ -638,7 +652,7 @@ function HostScreen({ me, room, onExit }) {
   const [callout, setCallout] = useState(null);
   const [hostMsg, setHostMsg] = useState(null);
   const [confetti, setConfetti] = useState(false);
-  const [winnerPopup, setWinnerPopup] = useState(null);
+  const [winnerQueue, setWinnerQueue] = useState([]);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showPending, setShowPending] = useState(false);
   const [showExit, setShowExit] = useState(false);
@@ -711,7 +725,7 @@ function HostScreen({ me, room, onExit }) {
       if (next[p.id] > (prev[p.id] ?? 0)) {
         setConfetti(true);
         setTimeout(() => setConfetti(false), 2200);
-        setWinnerPopup({ name: p.name, isBingo: !!p.bingo });
+        setWinnerQueue(q => [...q, { name: p.name, isBingo: !!p.bingo }]);
       }
     }
     prevPlayerWinsRef.current = next;
@@ -860,7 +874,8 @@ function HostScreen({ me, room, onExit }) {
         {callout && <HostCallout n={callout} msg={hostMsg} onClose={() => setCallout(null)} />}
         {confetti && <GameConfetti />}
 
-        {winnerPopup && <WinNotif name={winnerPopup.name} isBingo={winnerPopup.isBingo} onClose={() => { const wasBingo = winnerPopup.isBingo; setWinnerPopup(null); if (wasBingo) setShowLeaderboard(true); }} />}
+        {winnerQueue[0] && !winnerQueue[0].isBingo && <LineNotif name={winnerQueue[0].name} onClose={() => setWinnerQueue(q => q.slice(1))} />}
+        {winnerQueue[0] && winnerQueue[0].isBingo && <WinNotif name={winnerQueue[0].name} onClose={() => { setWinnerQueue(q => q.slice(1)); setShowLeaderboard(true); }} />}
         {showLeaderboard && <LeaderboardModal players={leaderboard} onClose={() => setShowLeaderboard(false)} totalCalled={drawn.length} room={room} />}
         {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); sessionRef(room).delete(); onExit(); }} room={room} />}
       </div>
