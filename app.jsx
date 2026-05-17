@@ -673,9 +673,11 @@ function CastScreen({ me, room, onExit }) {
   const [hostMsg, setHostMsg] = useState("Waiting for the host…");
   const [localBingo, setLocalBingo] = useState(false);
   const [castConfetti, setCastConfetti] = useState(false);
+  const [rejected, setRejected] = useState(false);
   const prevLastDrawnRef = useRef(null);
   const hostMsgRef = useRef("Waiting for the host…");
   const castWinLinesRef = useRef([]);
+  const wasInPendingRef = useRef(false);
 
   useEffect(() => {
     try {
@@ -748,6 +750,14 @@ function CastScreen({ me, room, onExit }) {
     castWinLinesRef.current = wins;
   }, [session, localCard, playerId]);
 
+  useEffect(() => {
+    if (!session || !playerId) return;
+    const inPending = !!(session.pending || {})[playerId];
+    const inPlayers = !!(session.players || {})[playerId];
+    if (inPending) wasInPendingRef.current = true;
+    if (wasInPendingRef.current && !inPending && !inPlayers) setRejected(true);
+  }, [session, playerId]);
+
   if (joinError) return (
     <ScreenShell>
       <div style={{ textAlign: 'center', padding: '20px 0' }}>
@@ -789,7 +799,16 @@ function CastScreen({ me, room, onExit }) {
     </ScreenShell>
   );
 
-  if (!myPlayer) return null;
+  if (rejected || (!myPlayer && !isPending)) return (
+    <ScreenShell>
+      <div style={{ textAlign: 'center', padding: '20px 0' }}>
+        <div style={{ fontSize: 48, marginBottom: 12 }}>🚫</div>
+        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>Request denied</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>The host didn't let you in.</div>
+        <BigCta onClick={onExit}>Back to start</BigCta>
+      </div>
+    </ScreenShell>
+  );
 
   const grid = [0,1,2,3,4].map(r => localCard.slice(r*5, r*5+5));
   const drawn = session.drawn || [];
