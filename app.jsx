@@ -721,47 +721,29 @@ function CastScreen({ me, room, onExit }) {
   const lastBalls = drawn.slice(-5).reverse();
 
   return (
-    <div style={{ width: '100%', minHeight: '100vh', background: '#f7fafc', fontFamily: '"Nunito", system-ui, sans-serif', color: '#3c3c3c', display: 'flex', justifyContent: 'center', padding: 'clamp(12px, 3vw, 20px) clamp(12px, 3vw, 18px) clamp(20px, 5vw, 28px)', boxSizing: 'border-box' }}>
-      <div style={{ width: '100%', maxWidth: 480, display: 'flex', flexDirection: 'column', gap: 'clamp(10px, 2vw, 14px)' }}>
+    <div style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#f7fafc', fontFamily: '"Nunito", system-ui, sans-serif', color: '#3c3c3c', display: 'flex', justifyContent: 'center', padding: '3vh clamp(14px, 4vw, 24px)', boxSizing: 'border-box' }}>
+      <div style={{ width: '100%', maxWidth: 480, height: '100%', display: 'flex', flexDirection: 'column', gap: '3vh', position: 'relative' }}>
 
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 900, color: '#afafaf', letterSpacing: '0.2em' }}>ROOM {String(room).padStart(2, '0')} · CAST</div>
-            <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c', marginTop: 2 }}>{me.name}</div>
+        <div style={{ flex: 1, minHeight: 0, display: 'flex', alignItems: 'stretch', gap: 'clamp(4px, 1.5vw, 8px)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0, paddingRight: 2 }}>
+            <div style={{ fontSize: 'clamp(14px, 5vw, 22px)', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>CDaub.</div>
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <IconButton onClick={() => setShowCalled(true)} title="Drawn balls"><HistoryIcon /></IconButton>
-            <IconButton onClick={() => setShowExit(true)} title="Exit"><ExitIcon /></IconButton>
+          <div style={{ flex: 1, background: '#ffffff', border: `2px solid ${lastDrawn ? '#46a302' : '#e5e5e5'}`, borderRadius: 'clamp(8px, 2vw, 14px)', boxShadow: `0 2px 0 ${lastDrawn ? '#46a302' : '#e5e5e5'}`, display: 'flex', alignItems: 'center', gap: 8, padding: '0 clamp(8px, 2vw, 14px)', overflow: 'hidden', transition: 'border-color 300ms, box-shadow 300ms' }}>
+            <div style={{ fontSize: 'clamp(18px, 5vh, 32px)', fontWeight: 900, color: lastDrawn ? '#58cc02' : '#cfcfcf', lineHeight: 1, flexShrink: 0, letterSpacing: '-0.02em' }}>{lastDrawn ? String(lastDrawn).padStart(2, '0') : '··'}</div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 'clamp(7px, 1.2vh, 10px)', fontWeight: 900, color: '#afafaf', letterSpacing: '0.16em' }}>LAST DRAWN</div>
+              <div style={{ fontSize: 'clamp(9px, 1.4vh, 13px)', fontWeight: 800, color: '#3c3c3c', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{hostMsg}</div>
+            </div>
           </div>
-        </div>
-
-        {/* Last drawn banner */}
-        <div style={{ background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 20, padding: '14px 16px', boxShadow: '0 3px 0 #e5e5e5', display: 'flex', alignItems: 'center', gap: 14 }}>
-          <div style={{ width: 64, height: 64, background: lastDrawn ? '#58cc02' : '#fafafa', border: `2px solid ${lastDrawn ? '#46a302' : '#e5e5e5'}`, borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, fontWeight: 900, color: lastDrawn ? '#ffffff' : '#cfcfcf', boxShadow: lastDrawn ? '0 3px 0 #46a302' : '0 2px 0 #e5e5e5', flexShrink: 0, transition: 'all 280ms cubic-bezier(0.34, 1.56, 0.64, 1)' }}>
-            {lastDrawn ? String(lastDrawn).padStart(2, '0') : '··'}
-          </div>
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
-            <div style={{ fontSize: 11, fontWeight: 900, color: '#afafaf', letterSpacing: '0.18em' }}>LAST DRAWN</div>
-            <div style={{ fontSize: 14, fontWeight: 800, color: '#3c3c3c', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{hostMsg}</div>
-          </div>
-        </div>
-
-        {/* Recent balls + daub count */}
-        <div style={{ display: 'flex', gap: 6, alignItems: 'center', padding: '4px 2px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 10, fontWeight: 900, color: '#afafaf', letterSpacing: '0.18em', marginRight: 4 }}>RECENT</span>
-          {lastBalls.length === 0 && <span style={{ fontSize: 12, fontWeight: 700, color: '#cfcfcf' }}>—</span>}
-          {lastBalls.map((n, i) => (
-            <div key={n} style={{ padding: '4px 10px', background: i === 0 ? '#58cc02' : '#ffc800', color: i === 0 ? '#ffffff' : '#7a5a00', border: `1.5px solid ${i === 0 ? '#46a302' : '#e0a800'}`, borderRadius: 10, fontSize: 12, fontWeight: 900, boxShadow: `0 2px 0 ${i === 0 ? '#46a302' : '#c79100'}` }}>{String(n).padStart(2, '0')}</div>
-          ))}
-          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, padding: '4px 10px', background: '#ffffff', border: '1.5px solid #1cb0f6', borderRadius: 10, boxShadow: '0 2px 0 #1cb0f6' }}>
-            <span style={{ fontSize: 10, fontWeight: 900, color: '#1cb0f6', letterSpacing: '0.14em' }}>DAUBED</span>
-            <span style={{ fontSize: 13, fontWeight: 900, color: '#3c3c3c' }}>{String(daubedCount).padStart(2, '0')}/24</span>
-          </div>
+          <StatChip value={String(daubedCount).padStart(2, '0')} accent="#1cb0f6" textColor="#ffffff" style={{ height: '100%', width: 'auto', aspectRatio: '1', background: '#1cb0f6', border: '2px solid #0d8fcc', boxShadow: '0 2px 0 #0d8fcc', borderRadius: 'clamp(8px, 2vw, 14px)' }} />
+          <StatChip value={String(room).padStart(2, '0')} accent="#ff9600" textColor="#ffffff" style={{ height: '100%', width: 'auto', aspectRatio: '1', background: '#ff9600', border: '2px solid #cc7700', boxShadow: '0 2px 0 #cc7700', borderRadius: 'clamp(8px, 2vw, 14px)' }} />
+          <IconButton onClick={() => setShowCalled(true)} title="Drawn balls" style={{ height: '100%', width: 'auto', aspectRatio: '1', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 2vw, 14px)' }}><HistoryIcon /></IconButton>
+          <IconButton onClick={() => setShowExit(true)} title="Exit" style={{ height: '100%', width: 'auto', aspectRatio: '1', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 2vw, 14px)' }}><ExitIcon /></IconButton>
         </div>
 
         {/* Card grid */}
-        <div style={{ background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 24, padding: 'clamp(8px, 2vw, 12px)', boxShadow: '0 4px 0 #e5e5e5', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(5, 1fr)', gap: 'clamp(5px, 1.2vw, 8px)', aspectRatio: '1 / 1', maxWidth: 'min(100%, 70vh)', alignSelf: 'center', width: '100%' }}>
+        <div style={{ flex: 6, minHeight: 0, background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 24, padding: 'clamp(6px, 1.5vw, 10px)', boxShadow: '0 4px 0 #e5e5e5', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(5, 1fr)', gap: 'clamp(4px, 1vw, 7px)' }}>
           {grid.flatMap((row, r) => row.map((val, c) => {
             const isFree = val === 'FREE';
             const isDaubed = !isFree && marked.has(val);
@@ -773,19 +755,19 @@ function CastScreen({ me, room, onExit }) {
             else if (isCalled) { bg = '#ffffff'; fg = '#3c3c3c'; border = '2px dashed #58cc02'; shadow = '0 2px 0 #e5e5e5'; }
             return (
               <button key={`${r}-${c}`} data-cell={val} onClick={() => !isFree && toggleMark(val)} disabled={isFree}
-                style={{ background: bg, color: fg, border, borderRadius: 'clamp(10px, 2vw, 14px)', boxShadow: shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', fontSize: isFree ? 'clamp(18px, 3.5vw, 26px)' : 'clamp(14px, 3vw, 20px)', fontWeight: 900, letterSpacing: '0.02em', cursor: isFree ? 'default' : 'pointer', transition: 'all 200ms cubic-bezier(0.34, 1.56, 0.64, 1)', padding: 0, minWidth: 0, minHeight: 0 }}>
-                {isFree ? <span style={{ fontSize: 'clamp(22px, 4.5vw, 32px)', filter: 'drop-shadow(0 1px 0 rgba(0,0,0,0.18))' }}>{mascotFor(me.name)}</span> : String(val).padStart(2, '00')}
+                style={{ background: bg, color: fg, border, borderRadius: 'clamp(8px, 2vw, 12px)', boxShadow: shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', fontSize: isFree ? 'clamp(16px, 4vw, 24px)' : 'clamp(12px, 3.5vw, 18px)', fontWeight: 900, letterSpacing: '0.02em', cursor: isFree ? 'default' : 'pointer', transition: 'all 200ms cubic-bezier(0.34, 1.56, 0.64, 1)', padding: 0, minWidth: 0, minHeight: 0 }}>
+                {isFree ? <span style={{ fontSize: 'clamp(20px, 5vw, 28px)', filter: 'drop-shadow(0 1px 0 rgba(0,0,0,0.18))' }}>{mascotFor(me.name)}</span> : String(val).padStart(2, '0')}
               </button>
             );
           }))}
         </div>
 
-        <div style={{ fontSize: 12, fontWeight: 800, color: '#afafaf', textAlign: 'center', letterSpacing: '0.02em' }}>Tap a number to daub it — only drawn numbers count.</div>
-
         {/* BINGO button */}
-        <BigCta onClick={callBingo} disabled={!hasBingo || myPlayer.bingo}>
-          {myPlayer.bingo ? '✓ BINGO confirmed' : hasBingo ? 'BINGO!' : 'Keep marking…'}
-        </BigCta>
+        <div style={{ flexShrink: 0, height: '10vh' }}>
+          <BigCta onClick={callBingo} disabled={!hasBingo || myPlayer.bingo}>
+            {myPlayer.bingo ? '✓ BINGO confirmed' : hasBingo ? 'BINGO!' : 'Keep marking…'}
+          </BigCta>
+        </div>
 
         {callout && <CastCallout n={callout} msg={hostMsg} onClose={() => setCallout(null)} />}
         {(localBingo || session.winner) && <WinOverlay winner={session.winner || me.name} onClose={() => setLocalBingo(false)} isHost={false} />}
