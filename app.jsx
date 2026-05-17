@@ -793,10 +793,9 @@ function CastCallout({ n, msg, onClose }) {
   }, [n]);
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
-      <div onClick={onClose} style={{ pointerEvents: 'auto', background: '#ffffff', border: '4px solid #58cc02', borderRadius: 28, boxShadow: '0 10px 0 #46a302, 0 20px 60px rgba(0,0,0,0.18)', padding: '22px 44px 26px', display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: 'min(86vw, 380px)', animation: 'calloutPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards', cursor: 'pointer' }}>
-        <div style={{ fontSize: 11, fontWeight: 900, color: '#58cc02', letterSpacing: '0.22em' }}>DRAWN</div>
-        <div style={{ fontSize: 90, fontWeight: 900, color: '#3c3c3c', lineHeight: 1, letterSpacing: '-0.04em', marginTop: 4 }}>{String(n).padStart(2, '0')}</div>
-        <div style={{ fontSize: 14, fontWeight: 800, color: '#58cc02', textAlign: 'center', marginTop: 10 }}>"{msg}"</div>
+      <div onClick={onClose} style={{ pointerEvents: 'auto', cursor: 'pointer', background: '#ffffff', border: '4px solid #58cc02', borderRadius: 32, boxShadow: '0 10px 0 #46a302, 0 20px 60px rgba(0,0,0,0.18)', padding: '4vh 56px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 0, width: '50vw', height: '50vh', animation: 'calloutPop 1.1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
+        <div style={{ fontSize: 128, fontWeight: 900, color: '#58cc02', lineHeight: 1, letterSpacing: '-0.04em' }}>{String(n).padStart(2, '0')}</div>
+        {msg && <div style={{ fontSize: 'clamp(13px, 1.4vw, 18px)', fontWeight: 800, color: '#3c3c3c', textAlign: 'center', whiteSpace: 'nowrap' }}>"{msg}"</div>}
       </div>
     </div>
   );
