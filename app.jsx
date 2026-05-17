@@ -377,6 +377,7 @@ function HostScreen({ me, room, onExit }) {
     if (!session) return;
     const count = Object.values(session.pending || {}).length;
     if (count > prevPendingCountRef.current) setShowPending(true);
+    if (count === 0) setShowPending(false);
     prevPendingCountRef.current = count;
   }, [session]);
 
@@ -497,6 +498,8 @@ function HostScreen({ me, room, onExit }) {
     sessionRef(room).update({ [`pending.${p.id}`]: firebase.firestore.FieldValue.delete() });
   };
 
+  if (showPending) return <PendingScreen players={pendingPlayers} onApprove={approvePending} onReject={rejectPending} onClose={() => setShowPending(false)} />;
+
   return (
     <div style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#f7fafc', fontFamily: '"Nunito", system-ui, sans-serif', color: '#3c3c3c', display: 'flex', justifyContent: 'center', padding: '3vh clamp(14px, 3vw, 24px)', boxSizing: 'border-box' }}>
       <div style={{ width: '100%', maxWidth: 1400, height: '100%', display: 'flex', flexDirection: 'column', gap: '5vh', position: 'relative' }}>
@@ -545,8 +548,7 @@ function HostScreen({ me, room, onExit }) {
         {confetti && <GameConfetti />}
 
         {showLeaderboard && <LeaderboardModal players={leaderboard} onClose={() => setShowLeaderboard(false)} totalCalled={drawn.length} room={room} />}
-        {showPending && <PendingModal players={pendingPlayers} onApprove={approvePending} onReject={rejectPending} onClose={() => setShowPending(false)} />}
-        {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); sessionRef(room).delete(); onExit(); }} room={room} />}
+{showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); sessionRef(room).delete(); onExit(); }} room={room} />}
         {session.winner && <WinOverlay winner={session.winner} onClose={() => sessionRef(room).update({ winner: null })} isHost={true} />}
       </div>
     </div>
@@ -632,27 +634,27 @@ function LeaderboardModal({ players, onClose, totalCalled, room }) {
   );
 }
 
-function PendingModal({ players, onApprove, onReject, onClose }) {
+function PendingScreen({ players, onApprove, onReject, onClose }) {
   return (
-    <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 70, background: 'rgba(31, 41, 55, 0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
-      <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 460, background: '#ffffff', border: '3px solid #ff9600', borderRadius: 24, boxShadow: '0 12px 0 #cc7700, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
-        <div style={{ padding: '20px 24px 16px', borderBottom: '2px solid #f3f3f3', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c' }}>Waiting to join</div>
-          <button onClick={onClose} style={{ width: 36, height: 36, background: '#f3f3f3', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 900, color: '#afafaf', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
-        </div>
-        <div style={{ padding: '12px 16px 20px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {players.length === 0 && <div style={{ textAlign: 'center', padding: '20px 0', fontSize: 14, fontWeight: 700, color: '#afafaf' }}>No one waiting.</div>}
-          {players.map((p) => (
-            <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', background: '#ffffff', border: '2px solid #ececec', borderRadius: 16, boxShadow: '0 2px 0 #ececec' }}>
-              <div style={{ width: 40, height: 40, background: '#ff960022', border: '2px solid #ff9600', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>{mascotFor(p.name)}</div>
-              <div style={{ flex: 1, fontSize: 16, fontWeight: 900, color: '#3c3c3c' }}>{p.name}</div>
-              <button onClick={() => onReject(p)} style={{ padding: '8px 16px', background: '#fff0f0', border: '2px solid #ff4b4b', borderRadius: 10, boxShadow: '0 2px 0 #d63030', color: '#ff4b4b', fontFamily: 'inherit', fontWeight: 900, fontSize: 13, letterSpacing: '0.06em', cursor: 'pointer' }}>REJECT</button>
-              <button onClick={() => onApprove(p)} style={{ padding: '8px 16px', background: '#58cc02', border: '2px solid #46a302', borderRadius: 10, boxShadow: '0 2px 0 #46a302', color: '#ffffff', fontFamily: 'inherit', fontWeight: 900, fontSize: 13, letterSpacing: '0.06em', cursor: 'pointer' }}>APPROVE</button>
-            </div>
-          ))}
-        </div>
+    <ScreenShell>
+      <div style={{ textAlign: 'center', padding: '20px 0 16px' }}>
+        <div style={{ fontSize: 48, marginBottom: 12 }}>⏳</div>
+        <div style={{ fontSize: 24, fontWeight: 900, color: '#3c3c3c', marginBottom: 6 }}>Waiting to join</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 20 }}>Approve or reject each player.</div>
       </div>
-    </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20 }}>
+        {players.length === 0 && <div style={{ textAlign: 'center', padding: '20px 0', fontSize: 14, fontWeight: 700, color: '#afafaf' }}>No one waiting.</div>}
+        {players.map((p) => (
+          <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', background: '#ffffff', border: '2px solid #ececec', borderRadius: 16, boxShadow: '0 2px 0 #ececec' }}>
+            <div style={{ width: 40, height: 40, background: '#ff960022', border: '2px solid #ff9600', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>{mascotFor(p.name)}</div>
+            <div style={{ flex: 1, fontSize: 16, fontWeight: 900, color: '#3c3c3c' }}>{p.name}</div>
+            <button onClick={() => onReject(p)} style={{ padding: '8px 16px', background: '#fff0f0', border: '2px solid #ff4b4b', borderRadius: 10, boxShadow: '0 2px 0 #d63030', color: '#ff4b4b', fontFamily: 'inherit', fontWeight: 900, fontSize: 13, letterSpacing: '0.06em', cursor: 'pointer' }}>REJECT</button>
+            <button onClick={() => onApprove(p)} style={{ padding: '8px 16px', background: '#58cc02', border: '2px solid #46a302', borderRadius: 10, boxShadow: '0 2px 0 #46a302', color: '#ffffff', fontFamily: 'inherit', fontWeight: 900, fontSize: 13, letterSpacing: '0.06em', cursor: 'pointer' }}>APPROVE</button>
+          </div>
+        ))}
+      </div>
+      <ChunkyButton onClick={onClose} variant="ghost">Back to game</ChunkyButton>
+    </ScreenShell>
   );
 }
 
