@@ -317,7 +317,7 @@ const inputStyle = {
 function ScreenShell({ children }) {
   return (
     <div style={{
-      minHeight: '100vh', background: '#f7fafc',
+      height: '100vh', overflowY: 'auto', background: '#f7fafc',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       padding: 'clamp(16px, 4vw, 32px)',
       fontFamily: '"Nunito", system-ui, sans-serif', boxSizing: 'border-box',
