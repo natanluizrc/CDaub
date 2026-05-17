@@ -279,15 +279,17 @@ function ExitModal({ onCancel, onConfirm, room }) {
   );
 }
 
-function WinOverlay({ winner, onClose, isHost }) {
+function WinNotif({ name, isBingo, onClose }) {
+  const color = isBingo ? '#58cc02' : '#1cb0f6';
+  const shadow = isBingo ? '#46a302' : '#0d8fcc';
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 80, background: 'rgba(31, 41, 55, 0.6)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 200ms ease forwards' }}>
-      <div style={{ background: '#ffffff', border: '4px solid #58cc02', borderRadius: 32, boxShadow: '0 12px 0 #46a302, 0 24px 64px rgba(0,0,0,0.22)', padding: '32px 28px 24px', textAlign: 'center', maxWidth: 420, width: '100%', animation: 'modalPop 320ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
-        <div style={{ fontSize: 64, marginBottom: 8 }}>🏆</div>
-        <div style={{ fontSize: 44, fontWeight: 900, color: '#58cc02', letterSpacing: '-0.02em', lineHeight: 1 }}>BINGO!</div>
-        <div style={{ fontSize: 17, fontWeight: 800, color: '#3c3c3c', marginTop: 12 }}>{isHost ? `${winner} won the game!` : `Way to go, ${winner}!`}</div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginTop: 6, marginBottom: 22 }}>{isHost ? 'Congratulations! Keep drawing or start a new game.' : 'You completed a line. Wait for the host to confirm.'}</div>
-        <BigCta onClick={onClose}>{isHost ? 'Continue' : 'Keep playing'}</BigCta>
+      <div style={{ background: '#ffffff', border: `4px solid ${color}`, borderRadius: 32, boxShadow: `0 12px 0 ${shadow}, 0 24px 64px rgba(0,0,0,0.22)`, padding: '40px 32px 28px', textAlign: 'center', maxWidth: 360, width: '100%', animation: 'modalPop 320ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards', position: 'relative' }}>
+        <button onClick={onClose} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#afafaf', fontWeight: 900, lineHeight: 1, padding: 4 }}>✕</button>
+        <div style={{ fontSize: 64, marginBottom: 8 }}>{isBingo ? '🏆' : '🎉'}</div>
+        <div style={{ fontSize: 36, fontWeight: 900, color, letterSpacing: '-0.02em', lineHeight: 1 }}>{isBingo ? 'BINGO!' : 'LINE!'}</div>
+        <div style={{ fontSize: 18, fontWeight: 800, color: '#3c3c3c', marginTop: 10, marginBottom: 22 }}>{name} got it!</div>
+        <BigCta onClick={onClose}>{isBingo ? 'See results' : 'Continue'}</BigCta>
       </div>
     </div>
   );
@@ -351,8 +353,8 @@ function HostScreen({ me, room, onExit }) {
   const [previewN, setPreviewN] = useState(null);
   const [callout, setCallout] = useState(null);
   const [hostMsg, setHostMsg] = useState(null);
-  const [winLines, setWinLines] = useState([]);
   const [confetti, setConfetti] = useState(false);
+  const [winnerPopup, setWinnerPopup] = useState(null);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showPending, setShowPending] = useState(false);
   const [showExit, setShowExit] = useState(false);
@@ -362,6 +364,7 @@ function HostScreen({ me, room, onExit }) {
   const hostMsgRef = useRef(null);
   const drawnRef = useRef([]);
   const prevPendingCountRef = useRef(0);
+  const prevPlayerWinsRef = useRef(null);
 
   useEffect(() => {
     localStorage.setItem(ME_KEY, JSON.stringify({ name: me.name, session: room }));
@@ -400,8 +403,35 @@ function HostScreen({ me, room, onExit }) {
   }, [room]);
 
   useEffect(() => {
-    if (session?.winner) setShowLeaderboard(true);
-  }, [session?.winner]);
+    if (!session?.players) return;
+    const players = Object.values(session.players);
+    const computeWins = (p) => {
+      const card = p.card || [];
+      const ms = new Set(p.marked || []);
+      const g = [0,1,2,3,4].map(r => card.slice(r*5, r*5+5));
+      let count = 0;
+      for (let r = 0; r < 5; r++) if (g[r].every(v => v === 'FREE' || ms.has(v))) count++;
+      for (let c = 0; c < 5; c++) if ([0,1,2,3,4].every(r => g[r][c] === 'FREE' || ms.has(g[r][c]))) count++;
+      return count;
+    };
+    if (prevPlayerWinsRef.current === null) {
+      const init = {};
+      for (const p of players) init[p.id] = computeWins(p);
+      prevPlayerWinsRef.current = init;
+      return;
+    }
+    const prev = prevPlayerWinsRef.current;
+    const next = {};
+    for (const p of players) {
+      next[p.id] = computeWins(p);
+      if (next[p.id] > (prev[p.id] ?? 0)) {
+        setConfetti(true);
+        setTimeout(() => setConfetti(false), 2200);
+        setWinnerPopup({ name: p.name, isBingo: !!p.bingo });
+      }
+    }
+    prevPlayerWinsRef.current = next;
+  }, [session]);
 
   function playSound(type) {
     try {
@@ -419,16 +449,6 @@ function HostScreen({ me, room, onExit }) {
         o.start(); o.stop(ctx.currentTime + 0.2);
       }
     } catch (e) {}
-  }
-
-  function checkWins(newDrawn) {
-    const set = new Set(newDrawn);
-    const newWins = [];
-    for (let r = 0; r < ROWS; r++) { let full = true; for (let c = 0; c < COLS; c++) { if (!set.has(r * COLS + c + 1)) { full = false; break; } } if (full) newWins.push(`row-${r}`); }
-    for (let c = 0; c < COLS; c++) { let full = true; for (let r = 0; r < ROWS; r++) { if (!set.has(r * COLS + c + 1)) { full = false; break; } } if (full) newWins.push(`col-${c}`); }
-    const fresh = newWins.filter(w => !winLines.includes(w));
-    if (fresh.length) { setConfetti(true); setTimeout(() => setConfetti(false), 2200); }
-    setWinLines(newWins);
   }
 
   function drawNext() {
@@ -467,7 +487,6 @@ function HostScreen({ me, room, onExit }) {
           setHostMsg(msg);
           setCallout(pick);
           sessionRef(room).update({ drawn: newDrawn, lastDrawn: pick, lastDrawnAt: Date.now() });
-          checkWins(newDrawn);
           playSound('pop');
         }, 200);
         return;
@@ -487,7 +506,6 @@ function HostScreen({ me, room, onExit }) {
   const left = TOTAL - drawn.length;
   const progress = drawn.length / TOTAL;
   const cells = Array.from({ length: TOTAL }, (_, i) => ({ n: i + 1, r: Math.floor(i / COLS), c: i % COLS }));
-  const isWinCell = (r, c) => winLines.includes(`row-${r}`) || winLines.includes(`col-${c}`);
   const players = Object.values(session.players || {});
   const leaderboard = players.map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), color: '#1cb0f6', isYou: false, bingo: p.bingo })).sort((a, b) => b.hits - a.hits);
   const pendingPlayers = Object.values(session.pending || {});
@@ -535,11 +553,9 @@ function HostScreen({ me, room, onExit }) {
             const isCalled = drawnSet.has(n);
             const isLatest = n === latest && !rolling;
             const isPreview = n === previewN && rolling;
-            const winCell = isCalled && isWinCell(r, c);
             let bg = '#fafafa', fg = '#3c3c3c', border = '2px solid #ececec', shadow = '0 2px 0 #ececec', scale = 1;
             if (isPreview) { bg = '#1cb0f6'; fg = '#ffffff'; border = '2px solid #0d8fcc'; shadow = '0 3px 0 #0d8fcc, 0 0 0 4px rgba(28,176,246,0.22)'; scale = 1.08; }
             else if (isLatest) { bg = '#58cc02'; fg = '#ffffff'; border = '2px solid #46a302'; shadow = '0 4px 0 #46a302, 0 0 0 4px rgba(88,204,2,0.18)'; scale = 1.06; }
-            else if (winCell) { bg = 'linear-gradient(180deg, #ffd84d 0%, #ffc800 100%)'; fg = '#7a5a00'; border = '2px solid #c79100'; shadow = '0 3px 0 #c79100, 0 0 0 3px rgba(255,200,0,0.3)'; }
             else if (isCalled) { bg = '#ffc800'; fg = '#7a5a00'; border = '2px solid #e0a800'; shadow = '0 3px 0 #c79100'; }
             return (
               <div key={n} style={{ background: bg, color: fg, border, borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', fontWeight: 900, letterSpacing: '0.02em', fontSize: 'clamp(10px, 1.5vw, 17px)', transition: 'all 200ms cubic-bezier(0.34, 1.56, 0.64, 1)', transform: `scale(${scale})`, minWidth: 0, minHeight: 0 }}>
@@ -555,9 +571,9 @@ function HostScreen({ me, room, onExit }) {
         {callout && <HostCallout n={callout} msg={hostMsg} onClose={() => setCallout(null)} />}
         {confetti && <GameConfetti />}
 
+        {winnerPopup && <WinNotif name={winnerPopup.name} isBingo={winnerPopup.isBingo} onClose={() => { const wasBingo = winnerPopup.isBingo; setWinnerPopup(null); if (wasBingo) setShowLeaderboard(true); }} />}
         {showLeaderboard && <LeaderboardModal players={leaderboard} onClose={() => setShowLeaderboard(false)} totalCalled={drawn.length} room={room} />}
-{showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); sessionRef(room).delete(); onExit(); }} room={room} />}
-        {session.winner && <WinOverlay winner={session.winner} onClose={() => sessionRef(room).update({ winner: null })} isHost={true} />}
+        {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); sessionRef(room).delete(); onExit(); }} room={room} />}
       </div>
     </div>
   );
@@ -775,9 +791,6 @@ function CastScreen({ me, room, onExit }) {
     if (wasInPendingRef.current && !inPending && !inPlayers) setRejected(true);
   }, [session, playerId]);
 
-  useEffect(() => {
-    if (session?.winner) setShowInfo(true);
-  }, [session?.winner]);
 
   if (joinError) return (
     <ScreenShell>
@@ -923,7 +936,6 @@ function CastScreen({ me, room, onExit }) {
         </div>
 
         {callout && <CastCallout n={callout} msg={hostMsg} onClose={() => setCallout(null)} />}
-        {(localBingo || session.winner) && <WinOverlay winner={session.winner || me.name} onClose={() => setLocalBingo(false)} isHost={false} />}
         {(castConfetti || localBingo) && <GameConfetti />}
         {showInfo && <LeaderboardModal players={leaderboard} onClose={() => setShowInfo(false)} totalCalled={drawn.length} room={room} />}
         {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => {
