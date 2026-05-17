@@ -197,7 +197,7 @@ function WelcomeScreen({ onContinue, initialName }) {
       </div>
       <div style={{ textAlign: 'center' }}>
         <Field label="NAME">
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Natan" maxLength={20} autoFocus style={{ ...inputStyle, textAlign: 'center' }} />
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Natan" maxLength={10} autoFocus style={{ ...inputStyle, textAlign: 'center' }} />
         </Field>
       </div>
       <div style={{ marginTop: 28 }}>
@@ -513,8 +513,8 @@ function HostScreen({ me, room, onExit }) {
           <div style={{ gridColumn: 'span 2', alignSelf: 'stretch', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: 3 }}>
             <div style={{ fontSize: '6vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>CDaub.</div>
             <div style={{ fontSize: 'clamp(9px, 1.1vw, 11px)', fontWeight: 800, color: '#afafaf', letterSpacing: '0.14em', lineHeight: 1.5 }}>
-              <div>ROOM {String(room).padStart(2, '0')}</div>
-              <div>HOST · {me.name}</div>
+              <div>HOST</div>
+              <div>{me.name}</div>
             </div>
           </div>
           <div style={{ gridColumn: 'span 5', height: '100%', background: '#ffffff', border: '2px solid #46a302', borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: '0 2px 0 #46a302', overflow: 'hidden' }}>
@@ -875,8 +875,8 @@ function CastScreen({ me, room, onExit }) {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: 3 }}>
             <div style={{ fontSize: '6vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>CDaub.</div>
             <div style={{ fontSize: 'clamp(9px, 1.1vw, 11px)', fontWeight: 800, color: '#afafaf', letterSpacing: '0.14em', lineHeight: 1.5 }}>
-              <div>ROOM {String(room).padStart(2, '0')}</div>
-              <div>CAST · {me.name}</div>
+              <div>CAST</div>
+              <div>{me.name}</div>
             </div>
           </div>
           <div style={{ gridColumn: 'span 2', background: '#ffffff', border: '2px solid #0d8fcc', borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: '0 2px 0 #0d8fcc', overflow: 'hidden' }}>
