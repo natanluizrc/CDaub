@@ -853,6 +853,12 @@ function CastScreen({ me, room, onExit }) {
   const isGameOver = !isWinner && !!session.winner;
   const daubLabel = isWinner ? 'WINS' : isGameOver ? 'LOST' : 'DAUB';
   const daubProgress = daubedCount / 24;
+  const fireMin = Math.round(16 + daubProgress * 14);
+  const fireMax = Math.round(24 + daubProgress * 20);
+  const fireVw  = (4 + daubProgress * 3).toFixed(1);
+  const fireBlur = (daubProgress * 10).toFixed(1);
+  const fireGreen = Math.round(150 - daubProgress * 100);
+  const fireAlpha = (0.15 + daubProgress * 0.8).toFixed(2);
   const allPlayers = Object.values(session.players || {});
   const leaderboard = allPlayers.map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), color: '#1cb0f6', bingo: p.bingo })).sort((a, b) => b.hits - a.hits);
 
@@ -894,7 +900,7 @@ function CastScreen({ me, room, onExit }) {
             return (
               <button key={`${r}-${c}`} data-cell={val} disabled
                 style={{ background: bg, color: fg, border, borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', fontSize: isFree ? 'clamp(16px, 4vw, 24px)' : 'clamp(12px, 3.5vw, 18px)', fontWeight: 900, letterSpacing: '0.02em', cursor: 'default', opacity: 1, transition: 'all 200ms cubic-bezier(0.34, 1.56, 0.64, 1)', padding: 0, minWidth: 0, minHeight: 0 }}>
-                {isFree ? <span style={{ fontSize: 'clamp(20px, 5vw, 28px)', filter: 'drop-shadow(0 1px 0 rgba(0,0,0,0.18))' }}>{mascotFor(me.name)}</span> : String(val).padStart(2, '0')}
+                {isFree ? <span style={{ fontSize: `clamp(${fireMin}px, ${fireVw}vw, ${fireMax}px)`, filter: `drop-shadow(0 0 ${fireBlur}px rgba(255, ${fireGreen}, 0, ${fireAlpha}))`, transition: 'font-size 600ms ease, filter 600ms ease', lineHeight: 1 }}>🔥</span> : String(val).padStart(2, '0')}
               </button>
             );
           }))}
