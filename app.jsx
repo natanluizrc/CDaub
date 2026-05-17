@@ -688,14 +688,15 @@ function CastScreen({ me, room, onExit }) {
       if (saved.session === room && saved.playerId && saved.card) {
         setPlayerId(saved.playerId);
         setLocalCard(saved.card);
-        // Re-add to pending if not in players or pending (e.g. disconnected)
+        // Always route through pending on reconnect — require host re-approval
         sessionRef(room).get().then(snap => {
           if (!snap.exists) return;
           const data = snap.data();
-          const inPlayers = !!(data.players || {})[saved.playerId];
           const inPending = !!(data.pending || {})[saved.playerId];
-          if (!inPlayers && !inPending) {
-            sessionRef(room).update({ [`pending.${saved.playerId}`]: { id: saved.playerId, name: me.name, joinedAt: Date.now(), card: saved.card } });
+          if (!inPending) {
+            const updates = { [`pending.${saved.playerId}`]: { id: saved.playerId, name: me.name, joinedAt: Date.now(), card: saved.card } };
+            if ((data.players || {})[saved.playerId]) updates[`players.${saved.playerId}`] = firebase.firestore.FieldValue.delete();
+            sessionRef(room).update(updates);
           }
         }).catch(() => {});
         return;
@@ -728,6 +729,16 @@ function CastScreen({ me, room, onExit }) {
     if (!playerId) return;
     const unsub = sessionRef(room).onSnapshot((snap) => { setSession(snap.exists ? snap.data() : null); setLoaded(true); });
     return () => unsub();
+  }, [playerId, room]);
+
+  useEffect(() => {
+    if (!playerId) return;
+    const cleanup = () => sessionRef(room).update({
+      [`players.${playerId}`]: firebase.firestore.FieldValue.delete(),
+      [`pending.${playerId}`]: firebase.firestore.FieldValue.delete(),
+    });
+    window.addEventListener('beforeunload', cleanup);
+    return () => window.removeEventListener('beforeunload', cleanup);
   }, [playerId, room]);
 
   useEffect(() => {
@@ -901,7 +912,10 @@ function CastScreen({ me, room, onExit }) {
         {(localBingo || session.winner) && <WinOverlay winner={session.winner || me.name} onClose={() => setLocalBingo(false)} isHost={false} />}
         {(castConfetti || localBingo) && <GameConfetti />}
         {showInfo && <LeaderboardModal players={leaderboard} onClose={() => setShowInfo(false)} totalCalled={drawn.length} room={room} />}
-        {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); onExit(); }} room={room} />}
+        {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => {
+          if (playerId) sessionRef(room).update({ [`players.${playerId}`]: firebase.firestore.FieldValue.delete(), [`pending.${playerId}`]: firebase.firestore.FieldValue.delete() });
+          setShowExit(false); onExit();
+        }} room={room} />}
       </div>
     </div>
   );
