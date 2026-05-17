@@ -271,8 +271,7 @@ function ExitModal({ onCancel, onConfirm, room }) {
           <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c', marginBottom: 10 }}>Exit the room?</div>
           <div style={{ fontSize: 15, fontWeight: 700, color: '#7a7a7a', lineHeight: 1.45 }}>You won't be able to come back to <b style={{ color: '#3c3c3c' }}>Room {String(room).padStart(2, '0')}</b>. Your card and progress will be lost.</div>
         </div>
-        <div style={{ padding: '18px 20px 22px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          <ChunkyButton onClick={onCancel} variant="ghost">Stay</ChunkyButton>
+        <div style={{ padding: '18px 20px 22px' }}>
           <ChunkyButton onClick={onConfirm} variant="danger">Exit</ChunkyButton>
         </div>
       </div>
