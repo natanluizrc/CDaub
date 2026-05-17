@@ -287,17 +287,6 @@ function GameConfetti() {
 // ---------- HOST Screen ----------
 const TOTAL = 72, COLS = 12, ROWS = 6;
 
-function useIsMobile() {
-  const check = () => window.innerHeight < 550;
-  const [val, setVal] = useState(check);
-  useEffect(() => {
-    const handler = () => setVal(check());
-    window.addEventListener('resize', handler);
-    window.addEventListener('orientationchange', handler);
-    return () => { window.removeEventListener('resize', handler); window.removeEventListener('orientationchange', handler); };
-  }, []);
-  return val;
-}
 
 function StatChip({ value, accent, textColor, style = {} }) {
   return (
@@ -331,7 +320,6 @@ function RotatePrompt() {
 
 function HostScreen({ me, room, onExit }) {
   const isPortraitMobile = useIsPortraitMobile();
-  const isMobile = useIsMobile();
   const [session, setSession] = useState(null);
   const [fsError, setFsError] = useState(null);
   const [rolling, setRolling] = useState(false);
@@ -459,42 +447,26 @@ function HostScreen({ me, room, onExit }) {
   const leaderboard = players.map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), color: '#1cb0f6', isYou: false, bingo: p.bingo })).sort((a, b) => b.hits - a.hits);
 
   return (
-    <div style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#f7fafc', fontFamily: '"Nunito", system-ui, sans-serif', color: '#3c3c3c', display: 'flex', justifyContent: 'center', padding: isMobile ? '3vh clamp(14px, 3vw, 24px)' : '0.5vh clamp(14px, 3vw, 24px)', boxSizing: 'border-box' }}>
-      <div style={{ width: '100%', maxWidth: 1400, height: '100%', display: 'flex', flexDirection: 'column', gap: isMobile ? 0 : '1vh', position: 'relative' }}>
+    <div style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#f7fafc', fontFamily: '"Nunito", system-ui, sans-serif', color: '#3c3c3c', display: 'flex', justifyContent: 'center', padding: '0.5vh clamp(14px, 3vw, 24px)', boxSizing: 'border-box' }}>
+      <div style={{ width: '100%', maxWidth: 1400, height: '100%', display: 'flex', flexDirection: 'column', gap: '1vh', position: 'relative' }}>
 
         {/* Header — 10vh */}
-        {isMobile ? (
-          <div style={{ height: '10vh', flexShrink: 0, marginBottom: '3vh', display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 calc(clamp(6px, 1vw, 12px) + 2px)', alignItems: 'center' }}>
-            <div style={{ gridColumn: 'span 4' }}>
-              <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.01em' }}>CDaub.</div>
-              <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
-            </div>
-            <div style={{ gridColumn: 'span 4', height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', overflow: 'hidden' }}>
-              <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', borderRadius: 10, transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)' }} />
-            </div>
-            <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" textColor="#ffffff" style={{ width: '100%', height: 40, background: '#58cc02', border: '2px solid #46a302', boxShadow: '0 2px 0 #46a302' }} />
-            <StatChip value={String(left).padStart(2, '0')} accent="#ff4b4b" textColor="#ffffff" style={{ width: '100%', height: 40, background: '#ff4b4b', border: '2px solid #d63030', boxShadow: '0 2px 0 #d63030' }} />
-            <IconButton onClick={() => setShowLeaderboard(true)} title="Room info" style={{ width: '100%', height: 40, background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff' }}><InfoIcon /></IconButton>
-            <IconButton onClick={() => setShowExit(true)} title="Exit room" style={{ width: '100%', height: 40, background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff' }}><ExitIcon /></IconButton>
+        <div style={{ height: '10vh', flexShrink: 0, display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 calc(clamp(6px, 1vw, 12px) + 2px)', alignItems: 'center' }}>
+          <div style={{ gridColumn: 'span 4' }}>
+            <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.01em' }}>CDaub.</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
           </div>
-        ) : (
-          <div style={{ height: '10vh', flexShrink: 0, display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 calc(clamp(6px, 1vw, 12px) + 2px)', alignItems: 'center' }}>
-            <div style={{ gridColumn: 'span 4' }}>
-              <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.01em' }}>CDaub.</div>
-              <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
-            </div>
-            <div style={{ gridColumn: 'span 4', height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', overflow: 'hidden' }}>
-              <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', borderRadius: 10, transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)' }} />
-            </div>
-            <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" textColor="#ffffff" style={{ width: '100%', height: 40, background: '#58cc02', border: '2px solid #46a302', boxShadow: '0 2px 0 #46a302' }} />
-            <StatChip value={String(left).padStart(2, '0')} accent="#ff4b4b" textColor="#ffffff" style={{ width: '100%', height: 40, background: '#ff4b4b', border: '2px solid #d63030', boxShadow: '0 2px 0 #d63030' }} />
-            <IconButton onClick={() => setShowLeaderboard(true)} title="Room info" style={{ width: '100%', height: 40, background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff' }}><InfoIcon /></IconButton>
-            <IconButton onClick={() => setShowExit(true)} title="Exit room" style={{ width: '100%', height: 40, background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff' }}><ExitIcon /></IconButton>
+          <div style={{ gridColumn: 'span 4', height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', overflow: 'hidden' }}>
+            <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', borderRadius: 10, transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)' }} />
           </div>
-        )}
+          <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" textColor="#ffffff" style={{ width: '100%', height: 40, background: '#58cc02', border: '2px solid #46a302', boxShadow: '0 2px 0 #46a302' }} />
+          <StatChip value={String(left).padStart(2, '0')} accent="#ff4b4b" textColor="#ffffff" style={{ width: '100%', height: 40, background: '#ff4b4b', border: '2px solid #d63030', boxShadow: '0 2px 0 #d63030' }} />
+          <IconButton onClick={() => setShowLeaderboard(true)} title="Room info" style={{ width: '100%', height: 40, background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff' }}><InfoIcon /></IconButton>
+          <IconButton onClick={() => setShowExit(true)} title="Exit room" style={{ width: '100%', height: 40, background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff' }}><ExitIcon /></IconButton>
+        </div>
 
         {/* Number grid */}
-        <div style={{ ...(isMobile ? { height: '68vh', flexShrink: 0, marginBottom: '3vh' } : { flex: 1, minHeight: 0 }), display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 'clamp(14px, 2vw, 24px)', boxShadow: '0 4px 0 #e5e5e5' }}>
+        <div style={{ ...{ flex: 1, minHeight: 0 }, display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 'clamp(14px, 2vw, 24px)', boxShadow: '0 4px 0 #e5e5e5' }}>
           {cells.map(({ n, r, c }) => {
             const isCalled = drawnSet.has(n);
             const isLatest = n === latest && !rolling;
@@ -514,7 +486,7 @@ function HostScreen({ me, room, onExit }) {
         </div>
 
         {/* Draw button */}
-        <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} height={isMobile ? '10vh' : '15vh'} margin='calc(clamp(6px, 1vw, 12px) + 2px)' />
+        <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} height='15vh' margin='calc(clamp(6px, 1vw, 12px) + 2px)' />
 
         {callout && <HostCallout n={callout} msg={hostMsg} />}
         {confetti && <GameConfetti />}
