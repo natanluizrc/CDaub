@@ -41,6 +41,7 @@ const TRANSLATIONS = {
     exitRoomQuestion: 'Exit the room?',
     exitRoomBodyPre: "You won't be able to come back to",
     exitRoomBodyPost: '. Your card and progress will be lost.',
+    exitRoomBody: 'Your card and progress will be lost.',
     exit: 'Exit',
     gotItPre: '',
     gotItPost: ' got it!',
@@ -107,6 +108,7 @@ const TRANSLATIONS = {
     exitRoomQuestion: 'Sair da sala?',
     exitRoomBodyPre: 'Você não poderá voltar para a',
     exitRoomBodyPost: '. Sua cartela e progresso serão perdidos.',
+    exitRoomBody: 'Sua cartela e progresso serão perdidos.',
     exit: 'Sair',
     gotItPre: '',
     gotItPost: ' conseguiu!',
@@ -173,6 +175,7 @@ const TRANSLATIONS = {
     exitRoomQuestion: '¿Salir de la sala?',
     exitRoomBodyPre: 'No podrás volver a la',
     exitRoomBodyPost: '. Tu tarjeta y progreso se perderán.',
+    exitRoomBody: 'Tu tarjeta y progreso se perderán.',
     exit: 'Salir',
     gotItPre: '¡',
     gotItPost: ' lo logró!',
@@ -547,13 +550,14 @@ function ExitModal({ onCancel, onConfirm, room }) {
   const { t } = useLang();
   return (
     <div onClick={onCancel} style={{ position: 'fixed', inset: 0, zIndex: 80, background: 'rgba(31, 41, 55, 0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
-      <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, background: '#ffffff', border: '3px solid #ff4b4b', borderRadius: 24, boxShadow: '0 12px 0 #d63030, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', position: 'relative', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, maxHeight: 'min(80vh, 560px)', background: '#ffffff', border: '3px solid #ff4b4b', borderRadius: 24, boxShadow: '0 12px 0 #d63030, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', position: 'relative', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards', display: 'flex', flexDirection: 'column' }}>
         <button onClick={onCancel} style={{ position: 'absolute', top: 14, right: 14, width: 36, height: 36, background: '#ffe9e9', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 900, color: '#ff4b4b', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>✕</button>
-        <div style={{ padding: '32px 28px 8px' }}>
-          <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c', marginBottom: 10 }}>{t.exitRoomQuestion}</div>
-          <div style={{ fontSize: 15, fontWeight: 700, color: '#7a7a7a', lineHeight: 1.45 }}>{t.exitRoomBodyPre} <b style={{ color: '#3c3c3c' }}>{t.roomWord} {String(room).padStart(2, '0')}</b>{t.exitRoomBodyPost}</div>
+        <div style={{ padding: '32px 28px 8px', flexShrink: 0 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: '#afafaf', letterSpacing: '0.18em', marginBottom: 4 }}>{t.roomLabel} {String(room).padStart(2, '0')}</div>
+          <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c' }}>{t.exitRoomQuestion}</div>
         </div>
-        <div style={{ padding: '18px 20px 22px' }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px 22px', display: 'flex', flexDirection: 'column', gap: 16, borderTop: '2px solid #f3f3f3' }}>
+          <div style={{ fontSize: 15, fontWeight: 700, color: '#7a7a7a', lineHeight: 1.45 }}>{t.exitRoomBody}</div>
           <ChunkyButton onClick={onConfirm} variant="danger">{t.exit}</ChunkyButton>
         </div>
       </div>
