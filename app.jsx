@@ -399,6 +399,10 @@ function HostScreen({ me, room, onExit }) {
     return () => { unsub(); clearTimeout(rollTimeoutRef.current); };
   }, [room]);
 
+  useEffect(() => {
+    if (session?.winner) setShowLeaderboard(true);
+  }, [session?.winner]);
+
   function playSound(type) {
     try {
       if (!audioCtxRef.current) audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
@@ -542,7 +546,7 @@ function HostScreen({ me, room, onExit }) {
         </div>
 
         {/* Draw button */}
-        <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} height='10vh' margin='clamp(6px, 1vw, 12px)' />
+        <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} done={!!session.winner} height='10vh' margin='clamp(6px, 1vw, 12px)' />
 
         {callout && <HostCallout n={callout} msg={hostMsg} onClose={() => setCallout(null)} />}
         {confetti && <GameConfetti />}
@@ -565,9 +569,10 @@ function StatTile({ label, value, accent }) {
   );
 }
 
-function DrawButton({ onClick, disabled, rolling, height = '15vh', margin }) {
+function DrawButton({ onClick, disabled, rolling, done, height = '15vh', margin }) {
   const [pressed, setPressed] = useState(false);
-  const label = rolling ? 'Drawing...' : disabled ? 'All drawn!' : 'Draw';
+  const label = rolling ? 'Drawing...' : done ? 'Done!' : disabled ? 'All drawn!' : 'Draw';
+  disabled = disabled || done;
   return (
     <button onMouseDown={() => setPressed(true)} onMouseUp={() => setPressed(false)} onMouseLeave={() => setPressed(false)} onClick={onClick} disabled={disabled}
       style={{ width: '100%', height, flexShrink: 0, padding: 0, ...(margin ? { marginLeft: margin, marginRight: margin, width: `calc(100% - 2 * ${margin})` } : {}), background: rolling ? '#1cb0f6' : disabled ? '#cfd2d6' : '#58cc02', color: '#ffffff', border: 'none', borderRadius: 'clamp(14px, 2vw, 20px)', boxShadow: rolling ? '0 5px 0 #0d8fcc' : disabled ? '0 2px 0 #b3b6ba' : pressed ? '0 1px 0 #46a302' : '0 5px 0 #46a302', transform: pressed && !disabled && !rolling ? 'translateY(4px)' : 'translateY(0)', transition: 'transform 60ms ease, box-shadow 60ms ease, background 200ms ease', fontFamily: 'inherit', fontWeight: 900, fontSize: 'clamp(15px, 2vw, 20px)', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: disabled && !rolling ? 'not-allowed' : rolling ? 'progress' : 'pointer', position: 'relative' }}>
@@ -758,6 +763,10 @@ function CastScreen({ me, room, onExit }) {
     if (wasInPendingRef.current && !inPending && !inPlayers) setRejected(true);
   }, [session, playerId]);
 
+  useEffect(() => {
+    if (session?.winner) setShowInfo(true);
+  }, [session?.winner]);
+
   if (joinError) return (
     <ScreenShell>
       <div style={{ textAlign: 'center', padding: '20px 0' }}>
@@ -834,7 +843,7 @@ function CastScreen({ me, room, onExit }) {
   const daubedCount = markedArr.length;
   const isWinner = myPlayer.bingo || localBingo;
   const isGameOver = !isWinner && !!session.winner;
-  const daubLabel = isWinner ? 'DONE' : isGameOver ? 'OVER' : 'DAUB';
+  const daubLabel = isWinner ? 'WINS' : isGameOver ? 'LOST' : 'DAUB';
   const daubProgress = daubedCount / 24;
   const allPlayers = Object.values(session.players || {});
   const leaderboard = allPlayers.map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), color: '#1cb0f6', bingo: p.bingo })).sort((a, b) => b.hits - a.hits);
