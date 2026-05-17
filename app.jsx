@@ -670,8 +670,10 @@ function CastScreen({ me, room, onExit }) {
   const [showInfo, setShowInfo] = useState(false);
   const [hostMsg, setHostMsg] = useState("Waiting for the host…");
   const [localBingo, setLocalBingo] = useState(false);
+  const [castConfetti, setCastConfetti] = useState(false);
   const prevLastDrawnRef = useRef(null);
   const hostMsgRef = useRef("Waiting for the host…");
+  const castWinLinesRef = useRef([]);
 
   useEffect(() => {
     try {
@@ -729,6 +731,20 @@ function CastScreen({ me, room, onExit }) {
     setHostMsg(msg);
     setCallout(session.lastDrawn);
   }, [session?.lastDrawn]);
+
+  useEffect(() => {
+    if (!session || !localCard || !playerId) return;
+    const player = (session.players || {})[playerId];
+    if (!player) return;
+    const ms = new Set(player.marked || []);
+    const g = [0,1,2,3,4].map(r => localCard.slice(r*5, r*5+5));
+    const wins = [];
+    for (let r = 0; r < 5; r++) if (g[r].every(v => v === 'FREE' || ms.has(v))) wins.push(`row-${r}`);
+    for (let c = 0; c < 5; c++) if ([0,1,2,3,4].every(r => g[r][c] === 'FREE' || ms.has(g[r][c]))) wins.push(`col-${c}`);
+    const fresh = wins.filter(w => !castWinLinesRef.current.includes(w));
+    if (fresh.length) { setCastConfetti(true); setTimeout(() => setCastConfetti(false), 2200); }
+    castWinLinesRef.current = wins;
+  }, [session, localCard, playerId]);
 
   if (joinError) return (
     <ScreenShell>
@@ -851,7 +867,7 @@ function CastScreen({ me, room, onExit }) {
 
         {callout && <CastCallout n={callout} msg={hostMsg} onClose={() => setCallout(null)} />}
         {(localBingo || session.winner) && <WinOverlay winner={session.winner || me.name} onClose={() => setLocalBingo(false)} isHost={false} />}
-        {(myPlayer.bingo || localBingo) && <GameConfetti />}
+        {(castConfetti || localBingo) && <GameConfetti />}
         {showInfo && <LeaderboardModal players={leaderboard} onClose={() => setShowInfo(false)} totalCalled={drawn.length} room={room} />}
         {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); onExit(); }} room={room} />}
       </div>
