@@ -221,7 +221,7 @@ function JoinScreen({ name, onJoin, onBack }) {
         <span style={{ fontSize: 12, fontWeight: 900, color: '#7a7a7a', letterSpacing: '0.22em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Enter the room code from the host</span>
         <span style={{ width: 24, height: 2, background: '#e5e5e5', borderRadius: 2 }} />
       </div>
-      <Field label="ROOM CODE">
+      <Field label="ROOM">
         <input type="text" value={room} onChange={(e) => setRoom(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))} placeholder="00" autoFocus style={{ ...inputStyle, letterSpacing: '0.2em', fontVariantNumeric: 'tabular-nums' }} />
       </Field>
       <div style={{ marginTop: 28 }}>
