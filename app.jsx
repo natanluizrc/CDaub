@@ -365,6 +365,7 @@ function HostScreen({ me, room, onExit }) {
   const audioCtxRef = useRef(null);
   const hostMsgRef = useRef(null);
   const drawnRef = useRef([]);
+  const prevPendingCountRef = useRef(0);
 
   useEffect(() => {
     localStorage.setItem(ME_KEY, JSON.stringify({ name: me.name, session: room }));
@@ -375,6 +376,13 @@ function HostScreen({ me, room, onExit }) {
     window.addEventListener('beforeunload', handleUnload);
     return () => window.removeEventListener('beforeunload', handleUnload);
   }, [room]);
+
+  useEffect(() => {
+    if (!session) return;
+    const count = Object.values(session.pending || {}).length;
+    if (count > prevPendingCountRef.current) setShowPending(true);
+    prevPendingCountRef.current = count;
+  }, [session]);
 
   useEffect(() => {
     const ref = sessionRef(room);
@@ -662,7 +670,7 @@ function CastScreen({ me, room, onExit }) {
   const [localCard, setLocalCard] = useState(null);
   const [callout, setCallout] = useState(null);
   const [showExit, setShowExit] = useState(false);
-  const [showCalled, setShowCalled] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
   const [hostMsg, setHostMsg] = useState("Waiting for the host…");
   const [localBingo, setLocalBingo] = useState(false);
   const prevLastDrawnRef = useRef(null);
@@ -788,6 +796,12 @@ function CastScreen({ me, room, onExit }) {
   };
 
   const daubedCount = markedArr.length;
+  const isWinner = myPlayer.bingo || localBingo;
+  const isGameOver = !isWinner && !!session.winner;
+  const daubLabel = isWinner ? 'DONE' : isGameOver ? 'OVER' : 'DAUB';
+  const daubProgress = daubedCount / 24;
+  const allPlayers = Object.values(session.players || {});
+  const leaderboard = allPlayers.map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), color: '#1cb0f6', bingo: p.bingo })).sort((a, b) => b.hits - a.hits);
 
   return (
     <div style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#f7fafc', fontFamily: '"Nunito", system-ui, sans-serif', color: '#3c3c3c', display: 'flex', justifyContent: 'center', padding: '3vh clamp(14px, 3vw, 24px)', boxSizing: 'border-box' }}>
@@ -798,16 +812,14 @@ function CastScreen({ me, room, onExit }) {
           <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0, paddingRight: 2 }}>
             <div style={{ fontSize: 'clamp(14px, 5vw, 22px)', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>CDaub.</div>
           </div>
-          <div style={{ flex: 1, background: '#ffffff', border: `2px solid ${lastDrawn ? '#46a302' : '#e5e5e5'}`, borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: `0 2px 0 ${lastDrawn ? '#46a302' : '#e5e5e5'}`, display: 'flex', alignItems: 'center', gap: 8, padding: '0 clamp(8px, 1.2vw, 14px)', overflow: 'hidden', transition: 'border-color 300ms, box-shadow 300ms' }}>
-            <div style={{ fontSize: 'clamp(18px, 5vh, 32px)', fontWeight: 900, color: lastDrawn ? '#58cc02' : '#cfcfcf', lineHeight: 1, flexShrink: 0, letterSpacing: '-0.02em' }}>{lastDrawn ? String(lastDrawn).padStart(2, '0') : '··'}</div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 'clamp(7px, 1.2vh, 10px)', fontWeight: 900, color: '#afafaf', letterSpacing: '0.16em' }}>LAST DRAWN</div>
-              <div style={{ fontSize: 'clamp(9px, 1.4vh, 13px)', fontWeight: 800, color: '#3c3c3c', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{hostMsg}</div>
+          <div style={{ flex: 1, background: '#ffffff', border: '2px solid #0d8fcc', borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: '0 2px 0 #0d8fcc', overflow: 'hidden' }}>
+            <div style={{ width: `${daubProgress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #1cb0f6 0%, #5bc8ff 100%)', transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.45) 50%, transparent 100%)', animation: 'shimmer 2s ease-in-out infinite', pointerEvents: 'none' }} />
             </div>
           </div>
           <StatChip value={String(daubedCount).padStart(2, '0')} accent="#1cb0f6" textColor="#ffffff" style={{ height: '100%', width: 'auto', aspectRatio: '1', background: '#1cb0f6', border: '2px solid #0d8fcc', boxShadow: '0 2px 0 #0d8fcc', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
           <StatChip value={String(room).padStart(2, '0')} accent="#ff9600" textColor="#ffffff" style={{ height: '100%', width: 'auto', aspectRatio: '1', background: '#ff9600', border: '2px solid #cc7700', boxShadow: '0 2px 0 #cc7700', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
-          <IconButton onClick={() => setShowCalled(true)} title="Drawn balls" style={{ height: '100%', width: 'auto', aspectRatio: '1', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)' }}><HistoryIcon /></IconButton>
+          <IconButton onClick={() => setShowInfo(true)} title="Room info" style={{ height: '100%', width: 'auto', aspectRatio: '1', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)' }}><InfoIcon /></IconButton>
           <IconButton onClick={() => setShowExit(true)} title="Exit" style={{ height: '100%', width: 'auto', aspectRatio: '1', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)' }}><ExitIcon /></IconButton>
         </div>
 
@@ -833,15 +845,15 @@ function CastScreen({ me, room, onExit }) {
 
         {/* DAUB / BINGO button */}
         <div style={{ flexShrink: 0, height: '10vh' }}>
-          <BigCta onClick={daub} disabled={myPlayer.bingo || !pendingDaub} pulse={pendingDaub && !myPlayer.bingo} variant="blue">
-            DAUB
+          <BigCta onClick={daub} disabled={isWinner || isGameOver || !pendingDaub} pulse={pendingDaub && !isWinner && !isGameOver} variant="blue">
+            {daubLabel}
           </BigCta>
         </div>
 
         {callout && <CastCallout n={callout} msg={hostMsg} onClose={() => setCallout(null)} />}
         {(localBingo || session.winner) && <WinOverlay winner={session.winner || me.name} onClose={() => setLocalBingo(false)} isHost={false} />}
         {(myPlayer.bingo || localBingo) && <GameConfetti />}
-        {showCalled && <CalledList called={drawn} latest={lastDrawn} onClose={() => setShowCalled(false)} />}
+        {showInfo && <LeaderboardModal players={leaderboard} onClose={() => setShowInfo(false)} totalCalled={drawn.length} room={room} />}
         {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); onExit(); }} room={room} />}
       </div>
     </div>
