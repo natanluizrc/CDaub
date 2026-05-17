@@ -2,11 +2,279 @@
 // CDaub — Playful Bingo  |  Firebase Firestore real-time
 // ===========================================================
 
-const { useState, useEffect, useRef, useCallback, useMemo } = React;
+const { useState, useEffect, useRef, useCallback, useMemo, createContext, useContext } = React;
 
 const ME_KEY = "bingo_me";
+const LANG_KEY = "bingo_lang";
 const db = () => firebase.firestore();
 const sessionRef = (code) => db().collection("sessions").doc(code);
+
+// ---------- Translations ----------
+const TRANSLATIONS = {
+  en: {
+    tagline: 'Cards that build moments',
+    nameLabel: 'NAME',
+    namePlaceholder: 'e.g. Natan',
+    nameTooLong: 'Name must be 10 characters or less.',
+    continue: 'Continue',
+    back: '← Back',
+    enterRoomCode: 'Enter the room code.',
+    roomLabel: 'ROOM',
+    roomWord: 'Room',
+    join: 'Join',
+    pickRole: 'Pick a role to enter the game.',
+    generatingRoom: 'Generating room…',
+    hostTagline: "You'll call the balls",
+    hostDesc: 'Run the room. Draw numbers, watch the leaderboard, keep the party going.',
+    castTagline: "You'll play with a card",
+    castDesc: 'Mark your card as numbers are drawn. Be the first to complete a line and shout it out.',
+    rotating: 'Rotate your phone',
+    hostLandscape: 'The host screen works best in landscape.',
+    castLandscape: 'The player screen works best in landscape.',
+    connecting: 'Connecting…',
+    waiting: 'waiting',
+    roomInfo: 'Room info',
+    exitRoom: 'Exit room',
+    draw: 'Draw',
+    drawing: 'Drawing...',
+    done: 'Done!',
+    exitRoomQuestion: 'Exit the room?',
+    exitRoomBodyPre: "You won't be able to come back to",
+    exitRoomBodyPost: '. Your card and progress will be lost.',
+    exit: 'Exit',
+    gotItPre: '',
+    gotItPost: ' got it!',
+    seeResults: 'See results',
+    continueBtn: 'Continue',
+    leaderboard: 'Leaderboard',
+    noPlayersPre: 'No players yet. Share Room',
+    noPlayersPost: 'to get started!',
+    hits: 'HITS',
+    waitingToJoin: 'Waiting to join',
+    approveOrReject: 'Approve or reject each player.',
+    reject: 'REJECT',
+    approve: 'APPROVE',
+    roomNotFoundTitle: 'Room not found',
+    waitingForApprovalTitle: 'Waiting for approval',
+    hostWillLetYouIn: 'The host will let you in shortly.',
+    cancel: 'Cancel',
+    requestDeniedTitle: 'Request denied',
+    hostDidntLetIn: "The host didn't let you in.",
+    backToStart: 'Back to start',
+    roomEndedTitle: 'Room ended',
+    hostLeft: 'The host has left the room.',
+    waitingForHost: 'Waiting for the host…',
+    daub: 'DAUB',
+    wins: 'WINS',
+    lost: 'LOST',
+    drawnBalls: 'Drawn balls',
+    noBallsDrawn: 'No balls drawn yet.',
+    allRoomsInUse: 'All rooms (01–99) are currently in use. Try again later.',
+    joinRoomNotFound: 'Room not found. Check the code with the host.',
+    joinNameTaken: 'Name already taken in this room. Go back and choose a different name.',
+    joinConnectionError: 'Connection error. Please try again.',
+    cold: 'COLD',
+    warm: 'WARM',
+    fire: 'FIRE',
+  },
+  pt: {
+    tagline: 'Cartelas que criam momentos',
+    nameLabel: 'NOME',
+    namePlaceholder: 'ex: Natan',
+    nameTooLong: 'O nome deve ter no máximo 10 caracteres.',
+    continue: 'Continuar',
+    back: '← Voltar',
+    enterRoomCode: 'Digite o código da sala.',
+    roomLabel: 'SALA',
+    roomWord: 'Sala',
+    join: 'Entrar',
+    pickRole: 'Escolha um papel para entrar no jogo.',
+    generatingRoom: 'Criando sala…',
+    hostTagline: 'Você vai sortear as bolas',
+    hostDesc: 'Conduza a sala. Sorteie números, acompanhe o ranking e anime a galera.',
+    castTagline: 'Você vai jogar com uma cartela',
+    castDesc: 'Marque sua cartela conforme os números são sorteados. Seja o primeiro a completar uma linha!',
+    rotating: 'Vire o celular',
+    hostLandscape: 'A tela do host funciona melhor na horizontal.',
+    castLandscape: 'A tela do jogador funciona melhor na horizontal.',
+    connecting: 'Conectando…',
+    waiting: 'aguardando',
+    roomInfo: 'Info da sala',
+    exitRoom: 'Sair da sala',
+    draw: 'Sortear',
+    drawing: 'Sorteando...',
+    done: 'Concluído!',
+    exitRoomQuestion: 'Sair da sala?',
+    exitRoomBodyPre: 'Você não poderá voltar para a',
+    exitRoomBodyPost: '. Sua cartela e progresso serão perdidos.',
+    exit: 'Sair',
+    gotItPre: '',
+    gotItPost: ' conseguiu!',
+    seeResults: 'Ver resultados',
+    continueBtn: 'Continuar',
+    leaderboard: 'Ranking',
+    noPlayersPre: 'Nenhum jogador ainda. Compartilhe a Sala',
+    noPlayersPost: 'para começar!',
+    hits: 'ACERTOS',
+    waitingToJoin: 'Aguardando entrar',
+    approveOrReject: 'Aprove ou rejeite cada jogador.',
+    reject: 'REJEITAR',
+    approve: 'APROVAR',
+    roomNotFoundTitle: 'Sala não encontrada',
+    waitingForApprovalTitle: 'Aguardando aprovação',
+    hostWillLetYouIn: 'O host vai liberar sua entrada em breve.',
+    cancel: 'Cancelar',
+    requestDeniedTitle: 'Solicitação negada',
+    hostDidntLetIn: 'O host não te deixou entrar.',
+    backToStart: 'Voltar ao início',
+    roomEndedTitle: 'Sala encerrada',
+    hostLeft: 'O host saiu da sala.',
+    waitingForHost: 'Aguardando o host…',
+    daub: 'MARCAR',
+    wins: 'GANHOU',
+    lost: 'PERDEU',
+    drawnBalls: 'Bolas sorteadas',
+    noBallsDrawn: 'Nenhuma bola sorteada ainda.',
+    allRoomsInUse: 'Todas as salas (01–99) estão ocupadas. Tente novamente em breve.',
+    joinRoomNotFound: 'Sala não encontrada. Confirme o código com o host.',
+    joinNameTaken: 'Nome já usado nessa sala. Volte e escolha outro nome.',
+    joinConnectionError: 'Erro de conexão. Tente novamente.',
+    cold: 'FRIO',
+    warm: 'QUENTE',
+    fire: 'FOGO',
+  },
+  es: {
+    tagline: 'Tarjetas que crean momentos',
+    nameLabel: 'NOMBRE',
+    namePlaceholder: 'ej: Natan',
+    nameTooLong: 'El nombre debe tener 10 caracteres o menos.',
+    continue: 'Continuar',
+    back: '← Atrás',
+    enterRoomCode: 'Ingresa el código de sala.',
+    roomLabel: 'SALA',
+    roomWord: 'Sala',
+    join: 'Unirse',
+    pickRole: 'Elige un rol para entrar al juego.',
+    generatingRoom: 'Creando sala…',
+    hostTagline: 'Tú cantarás los números',
+    hostDesc: 'Conduce la sala. Sortea números, mira el ranking y anima a los jugadores.',
+    castTagline: 'Jugarás con un cartón',
+    castDesc: 'Marca tu cartón mientras se sortean los números. ¡Sé el primero en completar una línea!',
+    rotating: 'Gira tu teléfono',
+    hostLandscape: 'La pantalla del host funciona mejor en horizontal.',
+    castLandscape: 'La pantalla del jugador funciona mejor en horizontal.',
+    connecting: 'Conectando…',
+    waiting: 'esperando',
+    roomInfo: 'Info de sala',
+    exitRoom: 'Salir de la sala',
+    draw: 'Sortear',
+    drawing: 'Sorteando...',
+    done: '¡Listo!',
+    exitRoomQuestion: '¿Salir de la sala?',
+    exitRoomBodyPre: 'No podrás volver a la',
+    exitRoomBodyPost: '. Tu tarjeta y progreso se perderán.',
+    exit: 'Salir',
+    gotItPre: '¡',
+    gotItPost: ' lo logró!',
+    seeResults: 'Ver resultados',
+    continueBtn: 'Continuar',
+    leaderboard: 'Clasificación',
+    noPlayersPre: 'Sin jugadores aún. ¡Comparte la Sala',
+    noPlayersPost: 'para empezar!',
+    hits: 'ACIERTOS',
+    waitingToJoin: 'Esperando entrar',
+    approveOrReject: 'Aprueba o rechaza a cada jugador.',
+    reject: 'RECHAZAR',
+    approve: 'APROBAR',
+    roomNotFoundTitle: 'Sala no encontrada',
+    waitingForApprovalTitle: 'Esperando aprobación',
+    hostWillLetYouIn: 'El host te dejará entrar pronto.',
+    cancel: 'Cancelar',
+    requestDeniedTitle: 'Solicitud denegada',
+    hostDidntLetIn: 'El host no te dejó entrar.',
+    backToStart: 'Volver al inicio',
+    roomEndedTitle: 'Sala terminada',
+    hostLeft: 'El host ha salido de la sala.',
+    waitingForHost: 'Esperando al host…',
+    daub: 'MARCAR',
+    wins: 'GANÓ',
+    lost: 'PERDIÓ',
+    drawnBalls: 'Bolas sorteadas',
+    noBallsDrawn: 'Aún no se han sorteado bolas.',
+    allRoomsInUse: 'Todas las salas (01–99) están en uso. Inténtalo más tarde.',
+    joinRoomNotFound: 'Sala no encontrada. Confirma el código con el host.',
+    joinNameTaken: 'Nombre ya usado en esta sala. Vuelve y elige otro nombre.',
+    joinConnectionError: 'Error de conexión. Inténtalo de nuevo.',
+    cold: 'FRÍO',
+    warm: 'CÁLIDO',
+    fire: 'FUEGO',
+  },
+};
+
+// ---------- Host lines per language ----------
+const HOST_LINES_MAP = {
+  en: [
+    "Anyone got it?", "Eyes on your card!", "Could be your lucky one!",
+    "Mark it if you got it!", "Another one for the books.", "Here we go!",
+    "Don't blink!", "Hot ball coming through.",
+    "Missed it? Breathe deep.", "Tension's building!",
+    "Hope's still alive!", "Every ball counts.",
+    "We're cooking now!", "The crowd holds its breath…", "Daub it down!",
+    "Got it? Lucky you.", "Missed it? Next round!",
+    "Could this be the game-winner?", "Steady hands, everyone.",
+    "The room just got tighter.", "Lady Luck's on duty!",
+    "Halfway through your card?", "Numbers don't lie!", "Did everyone catch that?",
+    "Lock it in, players.", "Add it to the collection.", "Hot streak incoming?",
+    "Don't lose your spot!", "Beautiful number, that one.",
+    "Whisper it to your card.", "Anyone close to a line?",
+    "Wins are hiding somewhere!", "Keep your eyes peeled!",
+    "One step closer.", "That's how the ball bounces.", "Could be the one!",
+  ],
+  pt: [
+    "Alguém tem?", "Olhos na cartela!", "Pode ser o seu!",
+    "Marque se tiver!", "Mais um para a história.", "Lá vai!",
+    "Não pisque!", "Bola quente chegando.",
+    "Perdeu? Respira fundo.", "A tensão aumenta!",
+    "A esperança continua!", "Cada bola conta.",
+    "Tá esquentando!", "A sala prende a respiração…", "Marque aí!",
+    "Teve sorte?", "Perdeu? Próxima rodada!",
+    "Será o decisivo?", "Mãos firmes, galera.",
+    "A sala ficou mais tensa.", "A sorte está no ar!",
+    "Já tá na metade?", "Os números não mentem!", "Todo mundo viu?",
+    "Confirma aí, jogadores.", "Mais um na coleção.", "Sequência boa chegando?",
+    "Não perde o lugar!", "Que número bonito.",
+    "Fala baixinho pra cartela.", "Alguém perto de uma linha?",
+    "As vitórias estão escondidas!", "Fique ligado!",
+    "Um passo mais perto.", "É assim que a bola rola.", "Pode ser esse!",
+  ],
+  es: [
+    "¿Alguien lo tiene?", "¡Ojo a tu tarjeta!", "¡Puede ser el tuyo!",
+    "¡Márcalo si lo tienes!", "Otro para la historia.", "¡Allá vamos!",
+    "¡No parpadees!", "Bola caliente en camino.",
+    "¿La perdiste? Respira.", "¡La tensión crece!",
+    "¡La esperanza sigue viva!", "Cada bola cuenta.",
+    "¡Esto se calienta!", "La sala contiene la respiración…", "¡Márcalo!",
+    "¿Tuviste suerte?", "¿La perdiste? ¡Próxima ronda!",
+    "¿Será la decisiva?", "Manos firmes, jugadores.",
+    "La sala se tensó más.", "¡La suerte está en el aire!",
+    "¿Ya vas por la mitad?", "¡Los números no mienten!", "¿Todos lo vieron?",
+    "Confírmenlo, jugadores.", "Otra a la colección.", "¿Racha caliente?",
+    "¡No pierdas tu lugar!", "Qué número tan bonito.",
+    "Susúrraselo a tu tarjeta.", "¿Alguien cerca de una línea?",
+    "¡Las victorias están escondidas!", "¡Mantén los ojos abiertos!",
+    "Un paso más cerca.", "Así ruedan las bolas.", "¡Podría ser este!",
+  ],
+};
+
+function pickHostLine(exclude, lang) {
+  const lines = HOST_LINES_MAP[lang] || HOST_LINES_MAP.en;
+  const pool = lines.filter(x => x !== exclude);
+  return pool[Math.floor(Math.random() * pool.length)] || lines[0];
+}
+
+// ---------- Lang Context ----------
+const LangContext = createContext({ lang: 'en', setLang: () => {}, t: TRANSLATIONS.en });
+function useLang() { return useContext(LangContext); }
 
 // ---------- Card generation ----------
 function makeCard() {
@@ -26,30 +294,6 @@ function makeCard() {
     }
   }
   return flat;
-}
-
-// ---------- Host lines ----------
-const HOST_LINES = [
-  "Anyone got it?", "Eyes on your card!", "Could be your lucky one!",
-  "Mark it if you got it!", "Another one for the books.", "Here we go!",
-  "Don't blink!", "Hot ball coming through.",
-  "Missed it? Breathe deep.", "Tension's building!",
-  "Hope's still alive!", "Every ball counts.",
-  "We're cooking now!", "The crowd holds its breath…", "Daub it down!",
-  "Got it? Lucky you.", "Missed it? Next round!",
-  "Could this be the game-winner?", "Steady hands, everyone.",
-  "The room just got tighter.", "Lady Luck's on duty!",
-  "Halfway through your card?", "Numbers don't lie!", "Did everyone catch that?",
-  "Lock it in, players.", "Add it to the collection.", "Hot streak incoming?",
-  "Don't lose your spot!", "Beautiful number, that one.",
-  "Whisper it to your card.", "Anyone close to a line?",
-  "Wins are hiding somewhere!", "Keep your eyes peeled!",
-  "One step closer.", "That's how the ball bounces.", "Could be the one!",
-];
-
-function pickHostLine(exclude) {
-  const pool = HOST_LINES.filter(x => x !== exclude);
-  return pool[Math.floor(Math.random() * pool.length)] || HOST_LINES[0];
 }
 
 const MASCOT_POOL = ['🦊','🐱','🦋','🐸','🦉','🦄','🐧','🐯','🐼','🦝','🐨','🦁','🐙','🦕','🐢','🦔'];
@@ -181,8 +425,41 @@ function HistoryIcon() {
   return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7" stroke="#3c3c3c" strokeWidth="2.2" strokeLinecap="round" /><path d="M3 3v5h5" stroke="#3c3c3c" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 7v5l3 2" stroke="#3c3c3c" strokeWidth="2.2" strokeLinecap="round" /></svg>;
 }
 
+// ---------- Lang Picker ----------
+function LangPicker() {
+  const { lang, setLang } = useLang();
+  const options = [
+    { code: 'pt', flag: '🇧🇷', label: 'PT' },
+    { code: 'en', flag: '🇺🇸', label: 'EN' },
+    { code: 'es', flag: '🇪🇸', label: 'ES' },
+  ];
+  return (
+    <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginBottom: 24 }}>
+      {options.map(({ code, flag, label }) => {
+        const active = lang === code;
+        return (
+          <button key={code} onClick={() => setLang(code)} style={{
+            display: 'flex', alignItems: 'center', gap: 6,
+            padding: '7px 14px', borderRadius: 99,
+            background: active ? '#3c3c3c' : '#ffffff',
+            color: active ? '#ffffff' : '#7a7a7a',
+            border: `2px solid ${active ? '#3c3c3c' : '#e5e5e5'}`,
+            boxShadow: active ? '0 2px 0 #1a1a1a' : '0 2px 0 #e5e5e5',
+            fontFamily: 'inherit', fontWeight: 900, fontSize: 13, letterSpacing: '0.08em',
+            cursor: 'pointer', transition: 'all 120ms ease',
+          }}>
+            <span style={{ fontSize: 16, lineHeight: 1 }}>{flag}</span>
+            <span>{label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 // ---------- Welcome Screen ----------
 function WelcomeScreen({ onContinue, initialName }) {
+  const { t } = useLang();
   const [name, setName] = useState(initialName || '');
   const trimmed = name.trim();
   const canGo = trimmed.length >= 2;
@@ -191,39 +468,41 @@ function WelcomeScreen({ onContinue, initialName }) {
   return (
     <ScreenShell>
       <Logo />
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 30 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 22 }}>
         <span style={{ width: 24, height: 2, background: '#e5e5e5', borderRadius: 2 }} />
-        <span style={{ fontSize: 12, fontWeight: 900, color: '#7a7a7a', letterSpacing: '0.22em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Cards that build moments</span>
+        <span style={{ fontSize: 12, fontWeight: 900, color: '#7a7a7a', letterSpacing: '0.22em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{t.tagline}</span>
         <span style={{ width: 24, height: 2, background: '#e5e5e5', borderRadius: 2 }} />
       </div>
+      <LangPicker />
       <div style={{ textAlign: 'center' }}>
-        <Field label="NAME">
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Natan" autoFocus style={{ ...inputStyle, textAlign: 'center', borderColor: tooLong ? '#ff4b4b' : undefined }} />
+        <Field label={t.nameLabel}>
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder={t.namePlaceholder} autoFocus style={{ ...inputStyle, textAlign: 'center', borderColor: tooLong ? '#ff4b4b' : undefined }} />
         </Field>
-        {tooLong && <div style={{ marginTop: 8, fontSize: 12, fontWeight: 800, color: '#ff4b4b' }}>Name must be 10 characters or less.</div>}
+        {tooLong && <div style={{ marginTop: 8, fontSize: 12, fontWeight: 800, color: '#ff4b4b' }}>{t.nameTooLong}</div>}
       </div>
       <div style={{ marginTop: 28 }}>
-        <BigCta disabled={!canGo || tooLong} onClick={() => canGo && !tooLong && onContinue({ name: trimmed })}>Continue</BigCta>
+        <BigCta disabled={!canGo || tooLong} onClick={() => canGo && !tooLong && onContinue({ name: trimmed })}>{t.continue}</BigCta>
       </div>
     </ScreenShell>
   );
 }
 
-// ---------- Join Screen (cast enters room code) ----------
+// ---------- Join Screen ----------
 function JoinScreen({ name, onJoin, onBack }) {
+  const { t } = useLang();
   const [room, setRoom] = useState('');
   const canGo = room.trim().length >= 1;
 
   return (
     <ScreenShell>
-      <BackLink onClick={onBack}>← Back</BackLink>
-      <div style={{ fontSize: 28, fontWeight: 900, color: '#3c3c3c', textAlign: 'center', marginBottom: 28, marginTop: 28 }}>Enter the room code.</div>
+      <BackLink onClick={onBack}>{t.back}</BackLink>
+      <div style={{ fontSize: 28, fontWeight: 900, color: '#3c3c3c', textAlign: 'center', marginBottom: 28, marginTop: 28 }}>{t.enterRoomCode}</div>
       <div style={{ padding: '18px 20px', background: '#ffffff', border: '2px solid #ff9600', borderRadius: 20, boxShadow: '0 5px 0 #cc7700', display: 'flex', flexDirection: 'column', gap: 8 }}>
-        <span style={{ fontSize: 11, fontWeight: 900, color: '#afafaf', letterSpacing: '0.2em' }}>ROOM</span>
+        <span style={{ fontSize: 11, fontWeight: 900, color: '#afafaf', letterSpacing: '0.2em' }}>{t.roomLabel}</span>
         <input type="text" value={room} onChange={(e) => setRoom(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))} placeholder="00" autoFocus style={{ ...inputStyle, letterSpacing: '0.2em', fontVariantNumeric: 'tabular-nums', fontSize: 32, textAlign: 'center', padding: '10px 16px' }} onKeyDown={(e) => e.key === 'Enter' && canGo && onJoin(room.trim())} />
       </div>
       <div style={{ marginTop: 14 }}>
-        <BigCta variant="orange" disabled={!canGo} onClick={() => canGo && onJoin(room.trim())}>Join</BigCta>
+        <BigCta variant="orange" disabled={!canGo} onClick={() => canGo && onJoin(room.trim())}>{t.join}</BigCta>
       </div>
     </ScreenShell>
   );
@@ -231,14 +510,15 @@ function JoinScreen({ name, onJoin, onBack }) {
 
 // ---------- Role Screen ----------
 function RoleScreen({ name, onPick, onBack, generating, genError }) {
+  const { t } = useLang();
   return (
     <ScreenShell>
-      <BackLink onClick={onBack}>← Back</BackLink>
-      <div style={{ fontSize: 28, fontWeight: 900, color: '#3c3c3c', textAlign: 'center', marginBottom: 28, marginTop: 28 }}>Pick a role to enter the game.</div>
+      <BackLink onClick={onBack}>{t.back}</BackLink>
+      <div style={{ fontSize: 28, fontWeight: 900, color: '#3c3c3c', textAlign: 'center', marginBottom: 28, marginTop: 28 }}>{t.pickRole}</div>
       {genError && <div style={{ color: '#ff4b4b', fontWeight: 700, fontSize: 14, textAlign: 'center', marginBottom: 16 }}>{genError}</div>}
       <div style={{ display: 'grid', gap: 14 }}>
-        <RoleCard color="#58cc02" emoji="🎙️" title="HOST" tagline={generating ? 'Generating room…' : "You'll call the balls"} desc="Run the room. Draw numbers, watch the leaderboard, keep the party going." onClick={() => !generating && onPick('host')} />
-        <RoleCard color="#1cb0f6" emoji="🎯" title="CAST" tagline="You'll play with a card" desc="Mark your card as numbers are drawn. Be the first to complete a line and shout it out." onClick={() => !generating && onPick('cast')} />
+        <RoleCard color="#58cc02" emoji="🎙️" title="HOST" tagline={generating ? t.generatingRoom : t.hostTagline} desc={t.hostDesc} onClick={() => !generating && onPick('host')} />
+        <RoleCard color="#1cb0f6" emoji="🎯" title="CAST" tagline={t.castTagline} desc={t.castDesc} onClick={() => !generating && onPick('cast')} />
       </div>
     </ScreenShell>
   );
@@ -264,17 +544,18 @@ function RoleCard({ color, emoji, title, tagline, desc, onClick }) {
 // ---------- Shared overlays ----------
 
 function ExitModal({ onCancel, onConfirm, room }) {
+  const { t } = useLang();
   return (
     <div onClick={onCancel} style={{ position: 'fixed', inset: 0, zIndex: 80, background: 'rgba(31, 41, 55, 0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
       <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, background: '#ffffff', border: '3px solid #ff4b4b', borderRadius: 24, boxShadow: '0 12px 0 #d63030, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', position: 'relative', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
         <button onClick={onCancel} style={{ position: 'absolute', top: 14, right: 14, width: 36, height: 36, background: '#ffe9e9', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 900, color: '#ff4b4b', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>✕</button>
         <div style={{ padding: '32px 28px 8px' }}>
           <div style={{ width: 64, height: 64, margin: '0 auto 16px', background: '#ffe9e9', border: '3px solid #ff4b4b', borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 0 #d63030', fontSize: 28 }}>⚠️</div>
-          <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c', marginBottom: 10 }}>Exit the room?</div>
-          <div style={{ fontSize: 15, fontWeight: 700, color: '#7a7a7a', lineHeight: 1.45 }}>You won't be able to come back to <b style={{ color: '#3c3c3c' }}>Room {String(room).padStart(2, '0')}</b>. Your card and progress will be lost.</div>
+          <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c', marginBottom: 10 }}>{t.exitRoomQuestion}</div>
+          <div style={{ fontSize: 15, fontWeight: 700, color: '#7a7a7a', lineHeight: 1.45 }}>{t.exitRoomBodyPre} <b style={{ color: '#3c3c3c' }}>{t.roomWord} {String(room).padStart(2, '0')}</b>{t.exitRoomBodyPost}</div>
         </div>
         <div style={{ padding: '18px 20px 22px' }}>
-          <ChunkyButton onClick={onConfirm} variant="danger">Exit</ChunkyButton>
+          <ChunkyButton onClick={onConfirm} variant="danger">{t.exit}</ChunkyButton>
         </div>
       </div>
     </div>
@@ -282,6 +563,7 @@ function ExitModal({ onCancel, onConfirm, room }) {
 }
 
 function WinNotif({ name, isBingo, onClose }) {
+  const { t } = useLang();
   const color = isBingo ? '#58cc02' : '#1cb0f6';
   const shadow = isBingo ? '#46a302' : '#0d8fcc';
   return (
@@ -290,8 +572,8 @@ function WinNotif({ name, isBingo, onClose }) {
         <button onClick={onClose} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#afafaf', fontWeight: 900, lineHeight: 1, padding: 4 }}>✕</button>
         <div style={{ fontSize: 64, marginBottom: 8 }}>{isBingo ? '🏆' : '🎉'}</div>
         <div style={{ fontSize: 36, fontWeight: 900, color, letterSpacing: '-0.02em', lineHeight: 1 }}>{isBingo ? 'BINGO!' : 'LINE!'}</div>
-        <div style={{ fontSize: 18, fontWeight: 800, color: '#3c3c3c', marginTop: 10, marginBottom: 22 }}>{name} got it!</div>
-        <BigCta onClick={onClose}>{isBingo ? 'See results' : 'Continue'}</BigCta>
+        <div style={{ fontSize: 18, fontWeight: 800, color: '#3c3c3c', marginTop: 10, marginBottom: 22 }}>{t.gotItPre}{name}{t.gotItPost}</div>
+        <BigCta onClick={onClose}>{isBingo ? t.seeResults : t.continueBtn}</BigCta>
       </div>
     </div>
   );
@@ -315,7 +597,6 @@ function GameConfetti() {
 // ---------- HOST Screen ----------
 const TOTAL = 72, COLS = 12, ROWS = 6;
 
-
 function StatChip({ value, accent, textColor, style = {}, pulse = false }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', position: 'relative', ...style }}>
@@ -337,17 +618,18 @@ function useIsPortraitMobile() {
   return val;
 }
 
-function RotatePrompt({ message = 'The host screen works best in landscape.' }) {
+function RotatePrompt({ title, message }) {
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#3c3c3c', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24, fontFamily: '"Nunito", system-ui, sans-serif', padding: 32, textAlign: 'center' }}>
       <div style={{ fontSize: 72, animation: 'rotateHint 2s ease-in-out infinite' }}>📱</div>
-      <div style={{ fontSize: 22, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.01em' }}>Rotate your phone</div>
+      <div style={{ fontSize: 22, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.01em' }}>{title}</div>
       <div style={{ fontSize: 15, fontWeight: 700, color: '#afafaf', lineHeight: 1.5, maxWidth: 260 }}>{message}</div>
     </div>
   );
 }
 
 function HostScreen({ me, room, onExit }) {
+  const { t, lang } = useLang();
   const isPortraitMobile = useIsPortraitMobile();
   const [session, setSession] = useState(null);
   const [fsError, setFsError] = useState(null);
@@ -484,7 +766,7 @@ function HostScreen({ me, room, onExit }) {
           setPreviewN(null);
           setRolling(false);
           const newDrawn = [...currentDrawn, pick];
-          const msg = pickHostLine(hostMsgRef.current);
+          const msg = pickHostLine(hostMsgRef.current, lang);
           hostMsgRef.current = msg;
           setHostMsg(msg);
           setCallout(pick);
@@ -498,9 +780,9 @@ function HostScreen({ me, room, onExit }) {
     step();
   }
 
-  if (isPortraitMobile) return <RotatePrompt />;
+  if (isPortraitMobile) return <RotatePrompt title={t.rotating} message={t.hostLandscape} />;
   if (fsError) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#ff4b4b', textAlign: 'center', padding: 40, fontWeight: 700 }}>Firestore error: {fsError}</div></div>;
-  if (!session) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#afafaf', textAlign: 'center', padding: 40, fontWeight: 700 }}>Connecting…</div></div>;
+  if (!session) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#afafaf', textAlign: 'center', padding: 40, fontWeight: 700 }}>{t.connecting}</div></div>;
 
   const drawn = session.drawn || [];
   const drawnSet = new Set(drawn);
@@ -550,8 +832,8 @@ function HostScreen({ me, room, onExit }) {
           <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" textColor="#ffffff" style={{ width: '100%', height: '100%', background: '#58cc02', border: '2px solid #46a302', boxShadow: '0 2px 0 #46a302', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
           <StatChip value={String(left).padStart(2, '0')} accent="#ff4b4b" textColor="#ffffff" style={{ width: '100%', height: '100%', background: '#ff4b4b', border: '2px solid #d63030', boxShadow: '0 2px 0 #d63030', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
           <StatChip value={String(room).padStart(2, '0')} accent="#ff9600" textColor="#ffffff" style={{ width: '100%', height: '100%', background: '#ff9600', border: '2px solid #cc7700', boxShadow: '0 2px 0 #cc7700', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
-          <IconButton onClick={() => pendingPlayers.length > 0 ? setShowPending(true) : setShowLeaderboard(true)} title={pendingPlayers.length > 0 ? `${pendingPlayers.length} waiting` : 'Room info'} style={{ width: '100%', height: '100%', background: pendingPlayers.length > 0 ? '#ff9600' : '#6b6b6b', border: `2px solid ${pendingPlayers.length > 0 ? '#cc7700' : '#555555'}`, boxShadow: `0 2px 0 ${pendingPlayers.length > 0 ? '#cc7700' : '#555555'}`, color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)', fontSize: pendingPlayers.length > 0 ? 'clamp(12px, 1.4vw, 16px)' : undefined, fontWeight: 900 }}>{pendingPlayers.length > 0 ? pendingPlayers.length : <InfoIcon />}</IconButton>
-          <IconButton onClick={() => setShowExit(true)} title="Exit room" style={{ width: '100%', height: '100%', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)' }}><ExitIcon /></IconButton>
+          <IconButton onClick={() => pendingPlayers.length > 0 ? setShowPending(true) : setShowLeaderboard(true)} title={pendingPlayers.length > 0 ? `${pendingPlayers.length} ${t.waiting}` : t.roomInfo} style={{ width: '100%', height: '100%', background: pendingPlayers.length > 0 ? '#ff9600' : '#6b6b6b', border: `2px solid ${pendingPlayers.length > 0 ? '#cc7700' : '#555555'}`, boxShadow: `0 2px 0 ${pendingPlayers.length > 0 ? '#cc7700' : '#555555'}`, color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)', fontSize: pendingPlayers.length > 0 ? 'clamp(12px, 1.4vw, 16px)' : undefined, fontWeight: 900 }}>{pendingPlayers.length > 0 ? pendingPlayers.length : <InfoIcon />}</IconButton>
+          <IconButton onClick={() => setShowExit(true)} title={t.exitRoom} style={{ width: '100%', height: '100%', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)' }}><ExitIcon /></IconButton>
         </div>
 
         {/* Number grid */}
@@ -597,8 +879,9 @@ function StatTile({ label, value, accent }) {
 }
 
 function DrawButton({ onClick, disabled, rolling, done, height = '15vh', margin }) {
+  const { t } = useLang();
   const [pressed, setPressed] = useState(false);
-  const label = rolling ? 'Drawing...' : done ? 'Done!' : disabled ? 'Done!' : 'Draw';
+  const label = rolling ? t.drawing : done ? t.done : disabled ? t.done : t.draw;
   disabled = disabled || done;
   return (
     <button onMouseDown={() => setPressed(true)} onMouseUp={() => setPressed(false)} onMouseLeave={() => setPressed(false)} onClick={onClick} disabled={disabled}
@@ -625,17 +908,18 @@ function HostCallout({ n, msg, onClose }) {
 }
 
 function LeaderboardModal({ players, onClose, totalCalled, room }) {
+  const { t } = useLang();
   return (
     <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 70, background: 'rgba(31, 41, 55, 0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
       <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 24, boxShadow: '0 12px 0 #d6d6d6, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', position: 'relative', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
         <button onClick={onClose} style={{ position: 'absolute', top: 14, right: 14, width: 36, height: 36, background: '#f3f3f3', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 900, color: '#afafaf', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>✕</button>
         <div style={{ padding: '28px 24px 8px' }}>
           <div style={{ width: 64, height: 64, margin: '0 auto 14px', background: '#f3f3f3', border: '3px solid #e5e5e5', borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 0 #d6d6d6', fontSize: 28 }}>🏆</div>
-          <div style={{ fontSize: 11, fontWeight: 800, color: '#afafaf', letterSpacing: '0.18em', marginBottom: 4 }}>ROOM {String(room).padStart(2, '0')}</div>
-          <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c' }}>Leaderboard</div>
+          <div style={{ fontSize: 11, fontWeight: 800, color: '#afafaf', letterSpacing: '0.18em', marginBottom: 4 }}>{t.roomLabel} {String(room).padStart(2, '0')}</div>
+          <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c' }}>{t.leaderboard}</div>
         </div>
         <div style={{ padding: '12px 16px 20px', display: 'flex', flexDirection: 'column', gap: 8, borderTop: '2px solid #f3f3f3' }}>
-          {players.length === 0 && <div style={{ textAlign: 'center', padding: '20px 0', fontSize: 14, fontWeight: 700, color: '#afafaf' }}>No players yet. Share Room {String(room).padStart(2, '0')} to get started!</div>}
+          {players.length === 0 && <div style={{ textAlign: 'center', padding: '20px 0', fontSize: 14, fontWeight: 700, color: '#afafaf' }}>{t.noPlayersPre} {String(room).padStart(2, '0')} {t.noPlayersPost}</div>}
           {players.map((p, i) => {
             const pct = totalCalled > 0 ? p.hits / totalCalled : 0;
             return (
@@ -654,7 +938,7 @@ function LeaderboardModal({ players, onClose, totalCalled, room }) {
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', minWidth: 52 }}>
                   <span style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', lineHeight: 1 }}>{p.hits}</span>
-                  <span style={{ fontSize: 10, fontWeight: 800, color: '#afafaf', letterSpacing: '0.1em', marginTop: 2 }}>HITS</span>
+                  <span style={{ fontSize: 10, fontWeight: 800, color: '#afafaf', letterSpacing: '0.1em', marginTop: 2 }}>{t.hits}</span>
                 </div>
               </div>
             );
@@ -666,20 +950,21 @@ function LeaderboardModal({ players, onClose, totalCalled, room }) {
 }
 
 function PendingScreen({ players, onApprove, onReject }) {
+  const { t } = useLang();
   return (
     <ScreenShell>
       <div style={{ textAlign: 'center', padding: '20px 0 16px' }}>
         <div style={{ fontSize: 48, marginBottom: 12 }}>⏳</div>
-        <div style={{ fontSize: 24, fontWeight: 900, color: '#3c3c3c', marginBottom: 6 }}>Waiting to join</div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 20 }}>Approve or reject each player.</div>
+        <div style={{ fontSize: 24, fontWeight: 900, color: '#3c3c3c', marginBottom: 6 }}>{t.waitingToJoin}</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 20 }}>{t.approveOrReject}</div>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {players.map((p) => (
           <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', background: '#ffffff', border: '2px solid #ececec', borderRadius: 16, boxShadow: '0 2px 0 #ececec' }}>
             <div style={{ width: 40, height: 40, background: '#ff960022', border: '2px solid #ff9600', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>{mascotFor(p.name)}</div>
             <div style={{ flex: 1, fontSize: 16, fontWeight: 900, color: '#3c3c3c' }}>{p.name}</div>
-            <button onClick={() => onReject(p)} style={{ padding: '8px 16px', background: '#fff0f0', border: '2px solid #ff4b4b', borderRadius: 10, boxShadow: '0 2px 0 #d63030', color: '#ff4b4b', fontFamily: 'inherit', fontWeight: 900, fontSize: 13, letterSpacing: '0.06em', cursor: 'pointer' }}>REJECT</button>
-            <button onClick={() => onApprove(p)} style={{ padding: '8px 16px', background: '#58cc02', border: '2px solid #46a302', borderRadius: 10, boxShadow: '0 2px 0 #46a302', color: '#ffffff', fontFamily: 'inherit', fontWeight: 900, fontSize: 13, letterSpacing: '0.06em', cursor: 'pointer' }}>APPROVE</button>
+            <button onClick={() => onReject(p)} style={{ padding: '8px 16px', background: '#fff0f0', border: '2px solid #ff4b4b', borderRadius: 10, boxShadow: '0 2px 0 #d63030', color: '#ff4b4b', fontFamily: 'inherit', fontWeight: 900, fontSize: 13, letterSpacing: '0.06em', cursor: 'pointer' }}>{t.reject}</button>
+            <button onClick={() => onApprove(p)} style={{ padding: '8px 16px', background: '#58cc02', border: '2px solid #46a302', borderRadius: 10, boxShadow: '0 2px 0 #46a302', color: '#ffffff', fontFamily: 'inherit', fontWeight: 900, fontSize: 13, letterSpacing: '0.06em', cursor: 'pointer' }}>{t.approve}</button>
           </div>
         ))}
       </div>
@@ -689,6 +974,7 @@ function PendingScreen({ players, onApprove, onReject }) {
 
 // ---------- CAST Screen ----------
 function CastScreen({ me, room, onExit }) {
+  const { t, lang } = useLang();
   const isPortraitMobile = useIsPortraitMobile();
   const [session, setSession] = useState(null);
   const [loaded, setLoaded] = useState(false);
@@ -699,12 +985,12 @@ function CastScreen({ me, room, onExit }) {
   const [callout, setCallout] = useState(null);
   const [showExit, setShowExit] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  const [hostMsg, setHostMsg] = useState("Waiting for the host…");
+  const [hostMsg, setHostMsg] = useState(t.waitingForHost);
   const [localBingo, setLocalBingo] = useState(false);
   const [castConfetti, setCastConfetti] = useState(false);
   const [rejected, setRejected] = useState(false);
   const prevLastDrawnRef = useRef(null);
-  const hostMsgRef = useRef("Waiting for the host…");
+  const hostMsgRef = useRef(t.waitingForHost);
   const castWinLinesRef = useRef([]);
   const wasInPendingRef = useRef(false);
 
@@ -714,7 +1000,6 @@ function CastScreen({ me, room, onExit }) {
       if (saved.session === room && saved.playerId && saved.card) {
         setPlayerId(saved.playerId);
         setLocalCard(saved.card);
-        // Always route through pending on reconnect — require host re-approval
         sessionRef(room).get().then(snap => {
           if (!snap.exists) return;
           const data = snap.data();
@@ -731,14 +1016,14 @@ function CastScreen({ me, room, onExit }) {
 
     setJoining(true);
     sessionRef(room).get().then((snap) => {
-      if (!snap.exists) { setJoinError("Room not found. Check the code with the host."); setJoining(false); return; }
+      if (!snap.exists) { setJoinError(t.joinRoomNotFound); setJoining(false); return; }
       const data = snap.data();
       const takenNames = [
         ...Object.values(data.players || {}),
         ...Object.values(data.pending || {}),
       ].map(p => p.name.toLowerCase());
       if (takenNames.includes(me.name.toLowerCase())) {
-        setJoinError("Name already taken in this room. Go back and choose a different name."); setJoining(false); return;
+        setJoinError(t.joinNameTaken); setJoining(false); return;
       }
       const pid = `p_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
       const card = makeCard();
@@ -748,7 +1033,7 @@ function CastScreen({ me, room, onExit }) {
           setLocalCard(card);
           localStorage.setItem(ME_KEY, JSON.stringify({ name: me.name, session: room, playerId: pid, card }));
         });
-    }).catch(() => setJoinError("Connection error. Please try again.")).finally(() => setJoining(false));
+    }).catch(() => setJoinError(t.joinConnectionError)).finally(() => setJoining(false));
   }, [room]);
 
   useEffect(() => {
@@ -770,7 +1055,7 @@ function CastScreen({ me, room, onExit }) {
   useEffect(() => {
     if (!session?.lastDrawn || session.lastDrawn === prevLastDrawnRef.current) return;
     prevLastDrawnRef.current = session.lastDrawn;
-    const msg = pickHostLine(hostMsgRef.current);
+    const msg = pickHostLine(hostMsgRef.current, lang);
     hostMsgRef.current = msg;
     setHostMsg(msg);
     setCallout(session.lastDrawn);
@@ -798,28 +1083,27 @@ function CastScreen({ me, room, onExit }) {
     if (wasInPendingRef.current && !inPending && !inPlayers) setRejected(true);
   }, [session, playerId]);
 
-
   if (joinError) return (
     <ScreenShell>
       <div style={{ textAlign: 'center', padding: '20px 0' }}>
         <div style={{ fontSize: 48, marginBottom: 12 }}>😕</div>
-        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>Room not found</div>
+        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>{t.roomNotFoundTitle}</div>
         <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>{joinError}</div>
-        <BigCta onClick={onExit}>Back to start</BigCta>
+        <BigCta onClick={onExit}>{t.backToStart}</BigCta>
       </div>
     </ScreenShell>
   );
 
-  if (isPortraitMobile) return <RotatePrompt message="The player screen works best in landscape." />;
+  if (isPortraitMobile) return <RotatePrompt title={t.rotating} message={t.castLandscape} />;
 
-  if (joining || (!loaded && playerId)) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#afafaf', textAlign: 'center', padding: 40, fontWeight: 700 }}>Connecting…</div></div>;
+  if (joining || (!loaded && playerId)) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#afafaf', textAlign: 'center', padding: 40, fontWeight: 700 }}>{t.connecting}</div></div>;
 
   if (loaded && !session) return (
     <ScreenShell>
       <div style={{ textAlign: 'center', padding: '20px 0' }}>
-        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>Room ended</div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>The host has left the room.</div>
-        <BigCta onClick={onExit}>Back to start</BigCta>
+        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>{t.roomEndedTitle}</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>{t.hostLeft}</div>
+        <BigCta onClick={onExit}>{t.backToStart}</BigCta>
       </div>
     </ScreenShell>
   );
@@ -833,9 +1117,9 @@ function CastScreen({ me, room, onExit }) {
     <ScreenShell>
       <div style={{ textAlign: 'center', padding: '20px 0' }}>
         <div style={{ fontSize: 48, marginBottom: 12 }}>⏳</div>
-        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>Waiting for approval</div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>The host will let you in shortly.</div>
-        <BigCta onClick={onExit}>Cancel</BigCta>
+        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>{t.waitingForApprovalTitle}</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>{t.hostWillLetYouIn}</div>
+        <BigCta onClick={onExit}>{t.cancel}</BigCta>
       </div>
     </ScreenShell>
   );
@@ -844,9 +1128,9 @@ function CastScreen({ me, room, onExit }) {
     <ScreenShell>
       <div style={{ textAlign: 'center', padding: '20px 0' }}>
         <div style={{ fontSize: 48, marginBottom: 12 }}>🚫</div>
-        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>Request denied</div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>The host didn't let you in.</div>
-        <BigCta onClick={onExit}>Back to start</BigCta>
+        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>{t.requestDeniedTitle}</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>{t.hostDidntLetIn}</div>
+        <BigCta onClick={onExit}>{t.backToStart}</BigCta>
       </div>
     </ScreenShell>
   );
@@ -875,12 +1159,12 @@ function CastScreen({ me, room, onExit }) {
   const daubedCount = markedArr.length;
   const isWinner = myPlayer.bingo || localBingo;
   const isGameOver = !isWinner && !!session.winner;
-  const daubLabel = isWinner ? 'WINS' : isGameOver ? 'LOST' : 'DAUB';
+  const daubLabel = isWinner ? t.wins : isGameOver ? t.lost : t.daub;
   const daubProgress = daubedCount / 24;
   const tempStages = [
-    { word: 'COLD', color: '#1cb0f6', bg: '#eaf6ff', borderColor: '#1cb0f6', shadowColor: '#0d8fcc', anim: 'coldGlow 2.5s ease-in-out infinite' },
-    { word: 'WARM', color: '#cc7700', bg: '#fff8ec', borderColor: '#ffc866', shadowColor: '#e6a820', anim: 'warmBreath 1.4s ease-in-out infinite' },
-    { word: 'FIRE', color: '#ff4b4b', bg: '#fff0f0', borderColor: '#ff4b4b', shadowColor: '#cc0000', anim: 'fireFlicker 0.55s ease-in-out infinite' },
+    { word: t.cold, color: '#1cb0f6', bg: '#eaf6ff', borderColor: '#1cb0f6', shadowColor: '#0d8fcc', anim: 'coldGlow 2.5s ease-in-out infinite' },
+    { word: t.warm, color: '#cc7700', bg: '#fff8ec', borderColor: '#ffc866', shadowColor: '#e6a820', anim: 'warmBreath 1.4s ease-in-out infinite' },
+    { word: t.fire, color: '#ff4b4b', bg: '#fff0f0', borderColor: '#ff4b4b', shadowColor: '#cc0000', anim: 'fireFlicker 0.55s ease-in-out infinite' },
   ];
   const tempStage = tempStages[daubProgress < 0.3 ? 0 : daubProgress < 0.6 ? 1 : 2];
   const allPlayers = Object.values(session.players || {});
@@ -914,8 +1198,8 @@ function CastScreen({ me, room, onExit }) {
             <StatChip value={String(room).padStart(2, '0')} accent="#ff9600" textColor="#ffffff" style={{ flex: 1, width: 'auto', height: '100%', background: '#ff9600', border: '2px solid #cc7700', boxShadow: '0 2px 0 #cc7700', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
           </div>
           <div style={{ display: 'flex', gap: 'clamp(3px, 0.7vw, 8px)' }}>
-            <IconButton onClick={() => setShowInfo(true)} title="Room info" style={{ flex: 1, width: 'auto', height: '100%', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)' }}><InfoIcon /></IconButton>
-            <IconButton onClick={() => setShowExit(true)} title="Exit" style={{ flex: 1, width: 'auto', height: '100%', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)' }}><ExitIcon /></IconButton>
+            <IconButton onClick={() => setShowInfo(true)} title={t.roomInfo} style={{ flex: 1, width: 'auto', height: '100%', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)' }}><InfoIcon /></IconButton>
+            <IconButton onClick={() => setShowExit(true)} title={t.exitRoom} style={{ flex: 1, width: 'auto', height: '100%', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)' }}><ExitIcon /></IconButton>
           </div>
         </div>
 
@@ -975,15 +1259,16 @@ function CastCallout({ n, msg, onClose }) {
 }
 
 function CalledList({ called, latest, onClose }) {
+  const { t } = useLang();
   return (
     <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 70, background: 'rgba(31, 41, 55, 0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', padding: 16, animation: 'fadeIn 180ms ease forwards' }}>
       <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 460, background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 24, boxShadow: '0 12px 0 #d6d6d6, 0 24px 64px rgba(0,0,0,0.18)', padding: '20px 20px 24px', animation: 'modalPop 240ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <div style={{ fontSize: 20, fontWeight: 900 }}>Drawn balls ({called.length})</div>
+          <div style={{ fontSize: 20, fontWeight: 900 }}>{t.drawnBalls} ({called.length})</div>
           <button onClick={onClose} style={{ width: 32, height: 32, border: 'none', background: '#f3f3f3', borderRadius: 10, fontSize: 16, fontWeight: 900, color: '#afafaf', cursor: 'pointer' }}>✕</button>
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {called.length === 0 && <div style={{ fontSize: 13, color: '#afafaf', fontWeight: 700 }}>No balls drawn yet.</div>}
+          {called.length === 0 && <div style={{ fontSize: 13, color: '#afafaf', fontWeight: 700 }}>{t.noBallsDrawn}</div>}
           {called.map((n) => (
             <div key={n} style={{ padding: '6px 10px', background: n === latest ? '#58cc02' : '#ffc800', color: n === latest ? '#ffffff' : '#7a5a00', border: `1.5px solid ${n === latest ? '#46a302' : '#e0a800'}`, borderRadius: 10, fontSize: 13, fontWeight: 900, boxShadow: `0 2px 0 ${n === latest ? '#46a302' : '#c79100'}` }}>{String(n).padStart(2, '0')}</div>
           ))}
@@ -1001,12 +1286,20 @@ async function generateUniqueRoom() {
   );
   const available = [];
   for (let i = 1; i <= 99; i++) if (!taken.has(i)) available.push(i);
-  if (!available.length) throw new Error("All rooms (01–99) are currently in use. Try again later.");
+  if (!available.length) throw new Error('ALL_ROOMS_IN_USE');
   return String(available[Math.floor(Math.random() * available.length)]);
 }
 
 // ---------- Root App ----------
 function App() {
+  const [lang, setLangState] = useState(() => localStorage.getItem(LANG_KEY) || 'en');
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+
+  const setLang = useCallback((l) => {
+    setLangState(l);
+    localStorage.setItem(LANG_KEY, l);
+  }, []);
+
   const [stage, setStage] = useState('welcome');
   const [name, setName] = useState(() => { try { return JSON.parse(localStorage.getItem(ME_KEY) || '{}').name || ''; } catch { return ''; } });
   const [room, setRoom] = useState('');
@@ -1021,7 +1314,7 @@ function App() {
       setRoom(r);
       setStage('host');
     } catch (err) {
-      setGenError(err.message);
+      setGenError(err.message === 'ALL_ROOMS_IN_USE' ? t.allRoomsInUse : err.message);
     } finally {
       setGenerating(false);
     }
@@ -1031,12 +1324,15 @@ function App() {
   function handleJoin(r) { setRoom(r); setStage('cast'); }
   function handleExit() { localStorage.removeItem(ME_KEY); setName(''); setRoom(''); setStage('welcome'); }
 
-  if (stage === 'welcome') return <WelcomeScreen onContinue={handleWelcome} initialName={name} />;
-  if (stage === 'role') return <RoleScreen name={name} onPick={(r) => r === 'host' ? handlePickHost() : setStage('join')} onBack={() => setStage('welcome')} generating={generating} genError={genError} />;
-  if (stage === 'join') return <JoinScreen name={name} onJoin={handleJoin} onBack={() => setStage('role')} />;
-  if (stage === 'host') return <HostScreen me={{ name }} room={room} onExit={handleExit} />;
-  if (stage === 'cast') return <CastScreen me={{ name }} room={room} onExit={handleExit} />;
-  return null;
+  return (
+    <LangContext.Provider value={{ lang, setLang, t }}>
+      {stage === 'welcome' && <WelcomeScreen onContinue={handleWelcome} initialName={name} />}
+      {stage === 'role' && <RoleScreen name={name} onPick={(r) => r === 'host' ? handlePickHost() : setStage('join')} onBack={() => setStage('welcome')} generating={generating} genError={genError} />}
+      {stage === 'join' && <JoinScreen name={name} onJoin={handleJoin} onBack={() => setStage('role')} />}
+      {stage === 'host' && <HostScreen me={{ name }} room={room} onExit={handleExit} />}
+      {stage === 'cast' && <CastScreen me={{ name }} room={room} onExit={handleExit} />}
+    </LangContext.Provider>
+  );
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
