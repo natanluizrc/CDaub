@@ -1162,11 +1162,12 @@ function CastScreen({ me, room, onExit }) {
   const daubLabel = isWinner ? t.wins : isGameOver ? t.lost : t.daub;
   const daubProgress = daubedCount / 24;
   const tempStages = [
-    { word: t.cold, color: '#1cb0f6', bg: '#eaf6ff', borderColor: '#1cb0f6', shadowColor: '#0d8fcc', anim: 'coldGlow 2.5s ease-in-out infinite' },
-    { word: t.warm, color: '#cc7700', bg: '#fff8ec', borderColor: '#ffc866', shadowColor: '#e6a820', anim: 'warmBreath 1.4s ease-in-out infinite' },
-    { word: t.fire, color: '#ff4b4b', bg: '#fff0f0', borderColor: '#ff4b4b', shadowColor: '#cc0000', anim: 'fireFlicker 0.55s ease-in-out infinite' },
+    { word: 'FREE',  anim: 'freePulse 5.0s ease-in-out infinite' },
+    { word: t.cold,  anim: 'freePulse 2.4s ease-in-out infinite' },
+    { word: t.warm,  anim: 'freePulse 1.1s ease-in-out infinite' },
+    { word: t.fire,  anim: 'freePulse 0.38s ease-in-out infinite' },
   ];
-  const tempStage = tempStages[daubProgress < 0.3 ? 0 : daubProgress < 0.6 ? 1 : 2];
+  const tempStage = tempStages[daubProgress < 0.5 ? 0 : daubProgress < 0.7 ? 1 : daubProgress < 0.9 ? 2 : 3];
   const allPlayers = Object.values(session.players || {});
   const leaderboard = allPlayers.map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), color: '#1cb0f6', bingo: p.bingo })).sort((a, b) => b.hits - a.hits);
 
@@ -1211,14 +1212,14 @@ function CastScreen({ me, room, onExit }) {
             const isCalled = !isFree && drawnSet.has(val);
             const isLatest = !isFree && val === lastDrawn;
             let bg = '#fafafa', fg = '#3c3c3c', border = '2px solid #ececec', shadow = '0 2px 0 #ececec';
-            if (isFree) { bg = tempStage.bg; fg = tempStage.color; border = `2px solid ${tempStage.borderColor}`; shadow = `0 3px 0 ${tempStage.shadowColor}`; }
+            if (isFree) { bg = '#fafafa'; fg = '#afafaf'; border = '2px solid #ececec'; shadow = '0 2px 0 #ececec'; }
             else if (isDaubed) { bg = '#1cb0f6'; fg = '#ffffff'; border = '2px solid #0d8fcc'; shadow = '0 3px 0 #0d8fcc'; }
             else if (isLatest) { bg = '#e7f8d4'; fg = '#46a302'; border = '2px solid #58cc02'; shadow = '0 3px 0 #58cc02, 0 0 0 3px rgba(88,204,2,0.2)'; }
             else if (isCalled) { bg = '#ffffff'; fg = '#3c3c3c'; border = '2px dashed #58cc02'; shadow = '0 2px 0 #e5e5e5'; }
             return (
               <button key={`${r}-${c}`} data-cell={val} disabled
                 style={{ background: bg, color: fg, border, borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', fontSize: isFree ? 'clamp(16px, 4vw, 24px)' : 'clamp(12px, 3.5vw, 18px)', fontWeight: 900, letterSpacing: '0.02em', cursor: 'default', opacity: 1, transition: 'all 200ms cubic-bezier(0.34, 1.56, 0.64, 1)', padding: 0, minWidth: 0, minHeight: 0 }}>
-                {isFree ? <span style={{ fontSize: 'clamp(9px, 1.9vw, 13px)', fontWeight: 900, color: tempStage.color, letterSpacing: '0.08em', animation: tempStage.anim, lineHeight: 1, transition: 'color 500ms ease' }}>{tempStage.word}</span> : String(val).padStart(2, '0')}
+                {isFree ? <span style={{ fontSize: 'clamp(9px, 1.9vw, 13px)', fontWeight: 900, color: '#afafaf', letterSpacing: '0.08em', animation: tempStage.anim, lineHeight: 1 }}>{tempStage.word}</span> : String(val).padStart(2, '0')}
               </button>
             );
           }))}
