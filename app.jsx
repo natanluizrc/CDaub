@@ -523,7 +523,7 @@ function HostScreen({ me, room, onExit }) {
         {/* Draw button */}
         <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} height='10vh' margin='clamp(6px, 1vw, 12px)' />
 
-        {callout && <HostCallout n={callout} msg={hostMsg} />}
+        {callout && <HostCallout n={callout} msg={hostMsg} onClose={() => setCallout(null)} />}
         {confetti && <GameConfetti />}
 
         {showLeaderboard && <LeaderboardModal players={leaderboard} onClose={() => setShowLeaderboard(false)} totalCalled={drawn.length} room={room} />}
@@ -556,7 +556,11 @@ function DrawButton({ onClick, disabled, rolling, height = '15vh', margin }) {
   );
 }
 
-function HostCallout({ n, msg }) {
+function HostCallout({ n, msg, onClose }) {
+  useEffect(() => {
+    const t = setTimeout(onClose, 3000);
+    return () => clearTimeout(t);
+  }, [n]);
   return (
     <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', zIndex: 50 }}>
       <div style={{ background: '#ffffff', border: '4px solid #58cc02', borderRadius: 32, boxShadow: '0 10px 0 #46a302, 0 20px 60px rgba(0,0,0,0.18)', padding: '4vh 56px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 0, width: '50vw', height: '50vh', animation: 'calloutPop 1.1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
@@ -788,7 +792,7 @@ function CastScreen({ me, room, onExit }) {
 
 function CastCallout({ n, msg, onClose }) {
   useEffect(() => {
-    const t = setTimeout(onClose, 2400);
+    const t = setTimeout(onClose, 3000);
     return () => clearTimeout(t);
   }, [n]);
   return (
