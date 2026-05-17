@@ -331,8 +331,8 @@ function RotatePrompt() {
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#3c3c3c', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24, fontFamily: '"Nunito", system-ui, sans-serif', padding: 32, textAlign: 'center' }}>
       <div style={{ fontSize: 72, animation: 'rotateHint 2s ease-in-out infinite' }}>📱</div>
-      <div style={{ fontSize: 22, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.01em' }}>Gire o celular</div>
-      <div style={{ fontSize: 15, fontWeight: 700, color: '#afafaf', lineHeight: 1.5, maxWidth: 260 }}>A tela do host funciona melhor na horizontal. Gire o aparelho para continuar.</div>
+      <div style={{ fontSize: 22, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.01em' }}>Rotate your phone</div>
+      <div style={{ fontSize: 15, fontWeight: 700, color: '#afafaf', lineHeight: 1.5, maxWidth: 260 }}>The host screen works best in landscape.</div>
     </div>
   );
 }
