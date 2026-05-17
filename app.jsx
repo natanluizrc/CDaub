@@ -575,7 +575,7 @@ function StatTile({ label, value, accent }) {
 
 function DrawButton({ onClick, disabled, rolling, done, height = '15vh', margin }) {
   const [pressed, setPressed] = useState(false);
-  const label = rolling ? 'Drawing...' : done ? 'Done!' : disabled ? 'All drawn!' : 'Draw';
+  const label = rolling ? 'Drawing...' : done ? 'Done!' : disabled ? 'Done!' : 'Draw';
   disabled = disabled || done;
   return (
     <button onMouseDown={() => setPressed(true)} onMouseUp={() => setPressed(false)} onMouseLeave={() => setPressed(false)} onClick={onClick} disabled={disabled}
