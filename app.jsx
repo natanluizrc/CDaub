@@ -120,13 +120,14 @@ function BigCta({ children, onClick, disabled }) {
       onClick={onClick}
       disabled={disabled}
       style={{
-        width: '100%', padding: '18px 0',
+        width: '100%', height: '100%', boxSizing: 'border-box',
+        padding: 'clamp(12px, 1.5vh, 18px) 0',
         background: disabled ? '#cfd2d6' : '#58cc02',
-        color: '#ffffff', border: 'none', borderRadius: 18,
+        color: '#ffffff', border: 'none', borderRadius: 'clamp(12px, 1.5vw, 18px)',
         boxShadow: disabled ? '0 2px 0 #b3b6ba' : pressed ? '0 1px 0 #46a302' : '0 5px 0 #46a302',
         transform: pressed && !disabled ? 'translateY(4px)' : 'translateY(0)',
         transition: 'transform 80ms ease, box-shadow 80ms ease',
-        fontFamily: 'inherit', fontWeight: 900, fontSize: 18,
+        fontFamily: 'inherit', fontWeight: 900, fontSize: 'clamp(14px, 2vw, 18px)',
         letterSpacing: '0.06em', textTransform: 'uppercase',
         cursor: disabled ? 'not-allowed' : 'pointer',
       }}
@@ -781,8 +782,8 @@ function CastCallout({ n, msg, onClose }) {
     return () => clearTimeout(t);
   }, [n]);
   return (
-    <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto' }}>
-      <div style={{ background: '#ffffff', border: '4px solid #58cc02', borderRadius: 28, boxShadow: '0 10px 0 #46a302, 0 20px 60px rgba(0,0,0,0.18)', padding: '22px 44px 26px', display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: 'min(86vw, 380px)', animation: 'calloutPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
+      <div onClick={onClose} style={{ pointerEvents: 'auto', background: '#ffffff', border: '4px solid #58cc02', borderRadius: 28, boxShadow: '0 10px 0 #46a302, 0 20px 60px rgba(0,0,0,0.18)', padding: '22px 44px 26px', display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: 'min(86vw, 380px)', animation: 'calloutPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards', cursor: 'pointer' }}>
         <div style={{ fontSize: 11, fontWeight: 900, color: '#58cc02', letterSpacing: '0.22em' }}>DRAWN</div>
         <div style={{ fontSize: 90, fontWeight: 900, color: '#3c3c3c', lineHeight: 1, letterSpacing: '-0.04em', marginTop: 4 }}>{String(n).padStart(2, '0')}</div>
         <div style={{ fontSize: 14, fontWeight: 800, color: '#58cc02', textAlign: 'center', marginTop: 10 }}>"{msg}"</div>
@@ -802,7 +803,7 @@ function CalledList({ called, latest, onClose }) {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {called.length === 0 && <div style={{ fontSize: 13, color: '#afafaf', fontWeight: 700 }}>No balls drawn yet.</div>}
           {called.map((n) => (
-            <div key={n} style={{ padding: '6px 10px', background: n === latest ? '#58cc02' : '#ffc800', color: n === latest ? '#ffffff' : '#7a5a00', border: `1.5px solid ${n === latest ? '#46a302' : '#e0a800'}`, borderRadius: 10, fontSize: 13, fontWeight: 900, boxShadow: `0 2px 0 ${n === latest ? '#46a302' : '#c79100'}` }}>{String(n).padStart(2, '00')}</div>
+            <div key={n} style={{ padding: '6px 10px', background: n === latest ? '#58cc02' : '#ffc800', color: n === latest ? '#ffffff' : '#7a5a00', border: `1.5px solid ${n === latest ? '#46a302' : '#e0a800'}`, borderRadius: 10, fontSize: 13, fontWeight: 900, boxShadow: `0 2px 0 ${n === latest ? '#46a302' : '#c79100'}` }}>{String(n).padStart(2, '0')}</div>
           ))}
         </div>
       </div>
