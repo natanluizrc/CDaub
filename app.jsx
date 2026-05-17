@@ -360,6 +360,12 @@ function HostScreen({ me, room, onExit }) {
   }, []);
 
   useEffect(() => {
+    const handleUnload = () => sessionRef(room).delete();
+    window.addEventListener('beforeunload', handleUnload);
+    return () => window.removeEventListener('beforeunload', handleUnload);
+  }, [room]);
+
+  useEffect(() => {
     const ref = sessionRef(room);
     const unsub = ref.onSnapshot(
       (snap) => {
@@ -513,7 +519,7 @@ function HostScreen({ me, room, onExit }) {
         {confetti && <GameConfetti />}
 
         {showLeaderboard && <LeaderboardModal players={leaderboard} onClose={() => setShowLeaderboard(false)} totalCalled={drawn.length} room={room} />}
-        {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); onExit(); }} room={room} />}
+        {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); sessionRef(room).delete(); onExit(); }} room={room} />}
         {session.winner && <WinOverlay winner={session.winner} onClose={() => sessionRef(room).update({ winner: null })} isHost={true} />}
       </div>
     </div>
