@@ -110,7 +110,7 @@ function Field({ label, children }) {
   );
 }
 
-function BigCta({ children, onClick, disabled }) {
+function BigCta({ children, onClick, disabled, pulse }) {
   const [pressed, setPressed] = useState(false);
   return (
     <button
@@ -130,8 +130,12 @@ function BigCta({ children, onClick, disabled }) {
         fontFamily: 'inherit', fontWeight: 900, fontSize: 'clamp(14px, 2vw, 18px)',
         letterSpacing: '0.06em', textTransform: 'uppercase',
         cursor: disabled ? 'not-allowed' : 'pointer',
+        position: 'relative',
       }}
-    >{children}</button>
+    >
+      {pulse && !disabled && <div style={{ position: 'absolute', inset: 0, borderRadius: 'clamp(12px, 1.5vw, 18px)', animation: 'buttonPulse 1.8s ease-out infinite', pointerEvents: 'none' }} />}
+      {children}
+    </button>
   );
 }
 
@@ -189,9 +193,11 @@ function WelcomeScreen({ onContinue, initialName }) {
         <span style={{ fontSize: 12, fontWeight: 900, color: '#7a7a7a', letterSpacing: '0.22em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Cards that build moments</span>
         <span style={{ width: 24, height: 2, background: '#e5e5e5', borderRadius: 2 }} />
       </div>
-      <Field label="NAME">
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Natan" maxLength={20} autoFocus style={inputStyle} />
-      </Field>
+      <div style={{ textAlign: 'center' }}>
+        <Field label="NAME">
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Natan" maxLength={20} autoFocus style={{ ...inputStyle, textAlign: 'center' }} />
+        </Field>
+      </div>
       <div style={{ marginTop: 28 }}>
         <BigCta disabled={!canGo} onClick={() => canGo && onContinue({ name: trimmed })}>Continue</BigCta>
       </div>
@@ -540,7 +546,7 @@ function StatTile({ label, value, accent }) {
 
 function DrawButton({ onClick, disabled, rolling, height = '15vh', margin }) {
   const [pressed, setPressed] = useState(false);
-  const label = rolling ? 'Drawing...' : disabled ? 'All drawn!' : 'Draw Next';
+  const label = rolling ? 'Drawing...' : disabled ? 'All drawn!' : 'Draw';
   return (
     <button onMouseDown={() => setPressed(true)} onMouseUp={() => setPressed(false)} onMouseLeave={() => setPressed(false)} onClick={onClick} disabled={disabled}
       style={{ width: '100%', height, flexShrink: 0, padding: 0, ...(margin ? { marginLeft: margin, marginRight: margin, width: `calc(100% - 2 * ${margin})` } : {}), background: rolling ? '#1cb0f6' : disabled ? '#cfd2d6' : '#58cc02', color: '#ffffff', border: 'none', borderRadius: 'clamp(14px, 2vw, 20px)', boxShadow: rolling ? '0 5px 0 #0d8fcc' : disabled ? '0 2px 0 #b3b6ba' : pressed ? '0 1px 0 #46a302' : '0 5px 0 #46a302', transform: pressed && !disabled && !rolling ? 'translateY(4px)' : 'translateY(0)', transition: 'transform 60ms ease, box-shadow 60ms ease, background 200ms ease', fontFamily: 'inherit', fontWeight: 900, fontSize: 'clamp(15px, 2vw, 20px)', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: disabled && !rolling ? 'not-allowed' : rolling ? 'progress' : 'pointer', position: 'relative' }}>
@@ -625,6 +631,13 @@ function CastScreen({ me, room, onExit }) {
       if (saved.session === room && saved.playerId && saved.card) {
         setPlayerId(saved.playerId);
         setLocalCard(saved.card);
+        // Re-register in Firestore if entry was removed while player was away
+        sessionRef(room).get().then(snap => {
+          if (!snap.exists) return;
+          if (!(snap.data().players || {})[saved.playerId]) {
+            sessionRef(room).update({ [`players.${saved.playerId}`]: { id: saved.playerId, name: me.name, joinedAt: Date.now(), card: saved.card, marked: [], bingo: false } });
+          }
+        }).catch(() => {});
         return;
       }
     } catch {}
@@ -632,6 +645,11 @@ function CastScreen({ me, room, onExit }) {
     setJoining(true);
     sessionRef(room).get().then((snap) => {
       if (!snap.exists) { setJoinError("Room not found. Check the code with the host."); setJoining(false); return; }
+      const players = snap.data().players || {};
+      const takenNames = Object.values(players).map(p => p.name.toLowerCase());
+      if (takenNames.includes(me.name.toLowerCase())) {
+        setJoinError("Name already taken in this room. Go back and choose a different name."); setJoining(false); return;
+      }
       const pid = `p_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
       const card = makeCard();
       return sessionRef(room).update({ [`players.${pid}`]: { id: pid, name: me.name, joinedAt: Date.now(), card, marked: [], bingo: false } })
@@ -753,7 +771,7 @@ function CastScreen({ me, room, onExit }) {
 
         {/* DAUB / BINGO button */}
         <div style={{ flexShrink: 0, height: '10vh' }}>
-          <BigCta onClick={daub} disabled={myPlayer.bingo || !pendingDaub}>
+          <BigCta onClick={daub} disabled={myPlayer.bingo || !pendingDaub} pulse={pendingDaub && !myPlayer.bingo}>
             DAUB
           </BigCta>
         </div>
