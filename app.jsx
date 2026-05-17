@@ -129,7 +129,7 @@ function BigCta({ children, onClick, disabled, pulse, variant = 'green' }) {
         boxShadow: disabled ? '0 2px 0 #b3b6ba' : pressed ? `0 1px 0 ${shade}` : `0 5px 0 ${shade}`,
         transform: pressed && !disabled ? 'translateY(4px)' : 'translateY(0)',
         transition: 'transform 80ms ease, box-shadow 80ms ease',
-        fontFamily: 'inherit', fontWeight: 900, fontSize: 'clamp(14px, 2vw, 18px)',
+        fontFamily: 'inherit', fontWeight: 900, fontSize: 'clamp(15px, 2vw, 20px)',
         letterSpacing: '0.06em', textTransform: 'uppercase',
         cursor: disabled ? 'not-allowed' : 'pointer',
         position: 'relative',
@@ -316,7 +316,7 @@ function StatChip({ value, accent, textColor, style = {}, pulse = false }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', position: 'relative', ...style }}>
       {pulse && <div style={{ position: 'absolute', inset: 0, borderRadius: 'inherit', animation: 'chipPulse 1.8s ease-out infinite', pointerEvents: 'none' }} />}
-      <span style={{ fontSize: 15, fontWeight: 900, color: textColor || accent, lineHeight: 1 }}>{value}</span>
+      <span style={{ fontSize: 'clamp(12px, 1.4vw, 16px)', fontWeight: 900, color: textColor || accent, lineHeight: 1 }}>{value}</span>
     </div>
   );
 }
@@ -538,7 +538,7 @@ function HostScreen({ me, room, onExit }) {
             else if (winCell) { bg = 'linear-gradient(180deg, #ffd84d 0%, #ffc800 100%)'; fg = '#7a5a00'; border = '2px solid #c79100'; shadow = '0 3px 0 #c79100, 0 0 0 3px rgba(255,200,0,0.3)'; }
             else if (isCalled) { bg = '#ffc800'; fg = '#7a5a00'; border = '2px solid #e0a800'; shadow = '0 3px 0 #c79100'; }
             return (
-              <div key={n} style={{ background: bg, color: fg, border, borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', fontWeight: 900, letterSpacing: '0.02em', fontSize: 'clamp(10px, 1.4vw + 0.4rem, 17px)', transition: 'all 200ms cubic-bezier(0.34, 1.56, 0.64, 1)', transform: `scale(${scale})`, minWidth: 0, minHeight: 0 }}>
+              <div key={n} style={{ background: bg, color: fg, border, borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', fontWeight: 900, letterSpacing: '0.02em', fontSize: 'clamp(10px, 1.5vw, 17px)', transition: 'all 200ms cubic-bezier(0.34, 1.56, 0.64, 1)', transform: `scale(${scale})`, minWidth: 0, minHeight: 0 }}>
                 {String(n).padStart(2, '0')}
               </div>
             );
