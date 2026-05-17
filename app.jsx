@@ -227,7 +227,7 @@ function RoleScreen({ name, onPick, onBack, generating, genError }) {
   return (
     <ScreenShell>
       <BackLink onClick={onBack}>← Back</BackLink>
-      <div style={{ fontSize: 15, fontWeight: 700, color: '#afafaf', textAlign: 'center', marginBottom: 28, marginTop: 28 }}>Pick a role to enter the game.</div>
+      <div style={{ fontSize: 28, fontWeight: 900, color: '#3c3c3c', textAlign: 'center', marginBottom: 28, marginTop: 28 }}>Pick a role to enter the game.</div>
       {genError && <div style={{ color: '#ff4b4b', fontWeight: 700, fontSize: 14, textAlign: 'center', marginBottom: 16 }}>{genError}</div>}
       <div style={{ display: 'grid', gap: 14 }}>
         <RoleCard color="#58cc02" emoji="🎙️" title="HOST" tagline={generating ? 'Generating room…' : "You'll call the balls"} desc="Run the room. Draw numbers, watch the leaderboard, keep the party going." onClick={() => !generating && onPick('host')} />
