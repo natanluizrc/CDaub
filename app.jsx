@@ -492,14 +492,14 @@ function HostScreen({ me, room, onExit }) {
 
         {/* Progress bar — 5vh (desktop/tablet apenas) */}
         {!isMobile && (
-          <div style={{ height: '5vh', flexShrink: 0, background: '#e5e5e5', borderRadius: 999, overflow: 'hidden' }}>
-            <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', borderRadius: 999, transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -3px 0 rgba(0,0,0,0.12)' }} />
+          <div style={{ height: 40, flexShrink: 0, margin: '0 calc(clamp(6px, 1vw, 12px) + 2px)', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', overflow: 'hidden' }}>
+            <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', borderRadius: 10, transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)' }} />
           </div>
         )}
 
         {/* Stat tiles — 15vh (ocultos no mobile) */}
         {!isMobile && (
-          <div style={{ height: '15vh', flexShrink: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <div style={{ height: '15vh', flexShrink: 0, margin: '0 calc(clamp(6px, 1vw, 12px) + 2px)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             <StatTile label="PAST DRAWN" value={String(drawn.length).padStart(2, '0')} accent="#58cc02" />
             <StatTile label="LEFT BALLS" value={String(left).padStart(2, '0')} accent="#ff4b4b" />
           </div>
@@ -526,7 +526,7 @@ function HostScreen({ me, room, onExit }) {
         </div>
 
         {/* Draw button */}
-        <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} height={isMobile ? '10vh' : '15vh'} margin={isMobile ? 'calc(clamp(6px, 1vw, 12px) + 2px)' : undefined} />
+        <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} height={isMobile ? '10vh' : '15vh'} margin='calc(clamp(6px, 1vw, 12px) + 2px)' />
 
         {callout && <HostCallout n={callout} msg={hostMsg} />}
         {confetti && <GameConfetti />}
