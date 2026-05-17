@@ -478,8 +478,10 @@ function HostScreen({ me, room, onExit }) {
         {/* Header */}
         <div style={{ flex: 1, minHeight: 0, display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gridTemplateRows: '1fr', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)', alignItems: 'stretch' }}>
           <div style={{ gridColumn: 'span 4', alignSelf: 'stretch', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: '0.4vh' }}>
-            <div style={{ fontSize: '6vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>CDaub.</div>
-            <div style={{ height: 2, background: '#e5e5e5', borderRadius: 2 }} />
+            <div style={{ width: 'fit-content', display: 'flex', flexDirection: 'column', gap: '0.3vh' }}>
+              <div style={{ fontSize: '6vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>CDaub.</div>
+              <div style={{ height: 3, background: '#3c3c3c', borderRadius: 2 }} />
+            </div>
             <div style={{ fontSize: '2vh', fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase', lineHeight: 1 }}>ROOM: {String(room).padStart(2, '0')} · NAME: {me.name}</div>
           </div>
           <div style={{ gridColumn: 'span 4', height: '100%', background: '#ffffff', border: '2px solid #46a302', borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: '0 2px 0 #46a302', overflow: 'hidden' }}>
