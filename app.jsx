@@ -451,7 +451,7 @@ function HostScreen({ me, room, onExit }) {
       <div style={{ width: '100%', maxWidth: 1400, height: '100%', display: 'flex', flexDirection: 'column', gap: '1vh', position: 'relative' }}>
 
         {/* Header — 10vh */}
-        <div style={{ height: '10vh', flexShrink: 0, display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 calc(clamp(6px, 1vw, 12px) + 2px)', alignItems: 'center' }}>
+        <div style={{ height: '10vh', flexShrink: 0, display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)', alignItems: 'center' }}>
           <div style={{ gridColumn: 'span 4' }}>
             <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.01em' }}>CDaub.</div>
             <div style={{ fontSize: 12, fontWeight: 700, color: '#afafaf', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Room {String(room).padStart(2, '0')} · {me.name}</div>
@@ -466,7 +466,7 @@ function HostScreen({ me, room, onExit }) {
         </div>
 
         {/* Number grid */}
-        <div style={{ ...{ flex: 1, minHeight: 0 }, display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 'clamp(14px, 2vw, 24px)', boxShadow: '0 4px 0 #e5e5e5' }}>
+        <div style={{ flex: 1, minHeight: 0, display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)' }}>
           {cells.map(({ n, r, c }) => {
             const isCalled = drawnSet.has(n);
             const isLatest = n === latest && !rolling;
@@ -486,7 +486,7 @@ function HostScreen({ me, room, onExit }) {
         </div>
 
         {/* Draw button */}
-        <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} height='15vh' margin='calc(clamp(6px, 1vw, 12px) + 2px)' />
+        <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} height='15vh' margin='clamp(6px, 1vw, 12px)' />
 
         {callout && <HostCallout n={callout} msg={hostMsg} />}
         {confetti && <GameConfetti />}
