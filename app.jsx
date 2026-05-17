@@ -926,14 +926,14 @@ function LeaderboardModal({ players, onClose, totalCalled, room }) {
   const { t } = useLang();
   return (
     <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 70, background: 'rgba(31, 41, 55, 0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
-      <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 24, boxShadow: '0 12px 0 #d6d6d6, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', position: 'relative', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, maxHeight: 'min(80vh, 560px)', background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 24, boxShadow: '0 12px 0 #d6d6d6, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', position: 'relative', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards', display: 'flex', flexDirection: 'column' }}>
         <button onClick={onClose} style={{ position: 'absolute', top: 14, right: 14, width: 36, height: 36, background: '#f3f3f3', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 900, color: '#afafaf', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>✕</button>
-        <div style={{ padding: '28px 24px 8px' }}>
-          <div style={{ width: 64, height: 64, margin: '0 auto 14px', background: '#f3f3f3', border: '3px solid #e5e5e5', borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 0 #d6d6d6', fontSize: 28 }}>🏆</div>
+        <div style={{ padding: '32px 28px 8px', flexShrink: 0 }}>
+          <div style={{ width: 64, height: 64, margin: '0 auto 16px', background: '#f3f3f3', border: '3px solid #e5e5e5', borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 0 #d6d6d6', fontSize: 28 }}>🏆</div>
           <div style={{ fontSize: 11, fontWeight: 800, color: '#afafaf', letterSpacing: '0.18em', marginBottom: 4 }}>{t.roomLabel} {String(room).padStart(2, '0')}</div>
           <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c' }}>{t.leaderboard}</div>
         </div>
-        <div style={{ padding: '12px 16px 20px', display: 'flex', flexDirection: 'column', gap: 8, borderTop: '2px solid #f3f3f3' }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px 22px', display: 'flex', flexDirection: 'column', gap: 8, borderTop: '2px solid #f3f3f3' }}>
           {players.length === 0 && <div style={{ textAlign: 'center', padding: '20px 0', fontSize: 14, fontWeight: 700, color: '#afafaf' }}>{t.noPlayersPre} {String(room).padStart(2, '0')} {t.noPlayersPost}</div>}
           {players.map((p, i) => {
             const pct = totalCalled > 0 ? p.hits / totalCalled : 0;
