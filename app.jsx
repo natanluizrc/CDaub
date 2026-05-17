@@ -110,8 +110,10 @@ function Field({ label, children }) {
   );
 }
 
-function BigCta({ children, onClick, disabled, pulse }) {
+function BigCta({ children, onClick, disabled, pulse, variant = 'green' }) {
   const [pressed, setPressed] = useState(false);
+  const bg    = variant === 'blue' ? '#1cb0f6' : '#58cc02';
+  const shade = variant === 'blue' ? '#0d8fcc' : '#46a302';
   return (
     <button
       onMouseDown={() => setPressed(true)}
@@ -122,9 +124,9 @@ function BigCta({ children, onClick, disabled, pulse }) {
       style={{
         width: '100%', height: '100%', boxSizing: 'border-box',
         padding: 'clamp(12px, 1.5vh, 18px) 0',
-        background: disabled ? '#cfd2d6' : '#58cc02',
+        background: disabled ? '#cfd2d6' : bg,
         color: '#ffffff', border: 'none', borderRadius: 'clamp(12px, 1.5vw, 18px)',
-        boxShadow: disabled ? '0 2px 0 #b3b6ba' : pressed ? '0 1px 0 #46a302' : '0 5px 0 #46a302',
+        boxShadow: disabled ? '0 2px 0 #b3b6ba' : pressed ? `0 1px 0 ${shade}` : `0 5px 0 ${shade}`,
         transform: pressed && !disabled ? 'translateY(4px)' : 'translateY(0)',
         transition: 'transform 80ms ease, box-shadow 80ms ease',
         fontFamily: 'inherit', fontWeight: 900, fontSize: 'clamp(14px, 2vw, 18px)',
@@ -775,7 +777,7 @@ function CastScreen({ me, room, onExit }) {
 
         {/* DAUB / BINGO button */}
         <div style={{ flexShrink: 0, height: '10vh' }}>
-          <BigCta onClick={daub} disabled={myPlayer.bingo || !pendingDaub} pulse={pendingDaub && !myPlayer.bingo}>
+          <BigCta onClick={daub} disabled={myPlayer.bingo || !pendingDaub} pulse={pendingDaub && !myPlayer.bingo} variant="blue">
             DAUB
           </BigCta>
         </div>
