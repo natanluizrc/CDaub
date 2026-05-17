@@ -522,13 +522,13 @@ function HostScreen({ me, room, onExit }) {
         </div>
 
         {/* Number grid */}
-        <div style={{ flex: 6, minHeight: 0, display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)' }}>
+        <div style={{ flex: 6, minHeight: 0, background: '#ffffff', borderRadius: 'clamp(14px, 2vw, 24px)', display: 'grid', gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`, gap: 'clamp(3px, 0.7vw, 8px)', padding: 'clamp(6px, 1vw, 12px)' }}>
           {cells.map(({ n, r, c }) => {
             const isCalled = drawnSet.has(n);
             const isLatest = n === latest && !rolling;
             const isPreview = n === previewN && rolling;
             const winCell = isCalled && isWinCell(r, c);
-            let bg = '#fafafa', fg = '#c8c8c8', border = '2px solid #ececec', shadow = '0 2px 0 #ececec', weight = 700, scale = 1;
+            let bg = '#fafafa', fg = '#3c3c3c', border = '2px solid #ececec', shadow = '0 2px 0 #ececec', weight = 700, scale = 1;
             if (isPreview) { bg = '#1cb0f6'; fg = '#ffffff'; border = '2px solid #0d8fcc'; shadow = '0 3px 0 #0d8fcc, 0 0 0 4px rgba(28,176,246,0.22)'; weight = 900; scale = 1.08; }
             else if (isLatest) { bg = '#58cc02'; fg = '#ffffff'; border = '2px solid #46a302'; shadow = '0 4px 0 #46a302, 0 0 0 4px rgba(88,204,2,0.18)'; weight = 900; scale = 1.06; }
             else if (winCell) { bg = 'linear-gradient(180deg, #ffd84d 0%, #ffc800 100%)'; fg = '#7a5a00'; border = '2px solid #c79100'; shadow = '0 3px 0 #c79100, 0 0 0 3px rgba(255,200,0,0.3)'; weight = 900; }
