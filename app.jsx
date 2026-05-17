@@ -639,7 +639,7 @@ function LeaderboardModal({ players, onClose, totalCalled, room }) {
   );
 }
 
-function PendingScreen({ players, onApprove, onReject, onClose }) {
+function PendingScreen({ players, onApprove, onReject }) {
   return (
     <ScreenShell>
       <div style={{ textAlign: 'center', padding: '20px 0 16px' }}>
@@ -647,8 +647,7 @@ function PendingScreen({ players, onApprove, onReject, onClose }) {
         <div style={{ fontSize: 24, fontWeight: 900, color: '#3c3c3c', marginBottom: 6 }}>Waiting to join</div>
         <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 20 }}>Approve or reject each player.</div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20 }}>
-        {players.length === 0 && <div style={{ textAlign: 'center', padding: '20px 0', fontSize: 14, fontWeight: 700, color: '#afafaf' }}>No one waiting.</div>}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {players.map((p) => (
           <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', background: '#ffffff', border: '2px solid #ececec', borderRadius: 16, boxShadow: '0 2px 0 #ececec' }}>
             <div style={{ width: 40, height: 40, background: '#ff960022', border: '2px solid #ff9600', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>{mascotFor(p.name)}</div>
@@ -658,7 +657,6 @@ function PendingScreen({ players, onApprove, onReject, onClose }) {
           </div>
         ))}
       </div>
-      <ChunkyButton onClick={onClose} variant="ghost">Back to game</ChunkyButton>
     </ScreenShell>
   );
 }
