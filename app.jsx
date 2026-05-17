@@ -514,7 +514,7 @@ function HostScreen({ me, room, onExit }) {
             <div style={{ fontSize: '6vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>CDaub.</div>
             <div style={{ fontSize: 'clamp(9px, 1.1vw, 11px)', fontWeight: 800, color: '#afafaf', letterSpacing: '0.14em', lineHeight: 1.5 }}>
               <div>ROOM {String(room).padStart(2, '0')}</div>
-              <div>{me.name}</div>
+              <div>HOST · {me.name}</div>
             </div>
           </div>
           <div style={{ gridColumn: 'span 5', height: '100%', background: '#ffffff', border: '2px solid #46a302', borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: '0 2px 0 #46a302', overflow: 'hidden' }}>
@@ -876,7 +876,7 @@ function CastScreen({ me, room, onExit }) {
             <div style={{ fontSize: '6vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>CDaub.</div>
             <div style={{ fontSize: 'clamp(9px, 1.1vw, 11px)', fontWeight: 800, color: '#afafaf', letterSpacing: '0.14em', lineHeight: 1.5 }}>
               <div>ROOM {String(room).padStart(2, '0')}</div>
-              <div>{me.name}</div>
+              <div>CAST · {me.name}</div>
             </div>
           </div>
           <div style={{ gridColumn: 'span 2', background: '#ffffff', border: '2px solid #0d8fcc', borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: '0 2px 0 #0d8fcc', overflow: 'hidden' }}>
@@ -902,7 +902,8 @@ function CastScreen({ me, room, onExit }) {
             const isCalled = !isFree && drawnSet.has(val);
             const isLatest = !isFree && val === lastDrawn;
             let bg = '#fafafa', fg = '#3c3c3c', border = '2px solid #ececec', shadow = '0 2px 0 #ececec';
-            if (isFree || isDaubed) { bg = '#1cb0f6'; fg = '#ffffff'; border = '2px solid #0d8fcc'; shadow = '0 3px 0 #0d8fcc'; }
+            if (isFree) { bg = '#fff8ec'; fg = '#ff9600'; border = '2px solid #ffc866'; shadow = '0 3px 0 #e6a820'; }
+            else if (isDaubed) { bg = '#1cb0f6'; fg = '#ffffff'; border = '2px solid #0d8fcc'; shadow = '0 3px 0 #0d8fcc'; }
             else if (isLatest) { bg = '#e7f8d4'; fg = '#46a302'; border = '2px solid #58cc02'; shadow = '0 3px 0 #58cc02, 0 0 0 3px rgba(88,204,2,0.2)'; }
             else if (isCalled) { bg = '#ffffff'; fg = '#3c3c3c'; border = '2px dashed #58cc02'; shadow = '0 2px 0 #e5e5e5'; }
             return (
