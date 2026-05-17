@@ -713,16 +713,15 @@ function CastScreen({ me, room, onExit }) {
   };
 
   const daubedCount = markedArr.length;
-  const lastBalls = drawn.slice(-5).reverse();
 
   return (
     <div style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#f7fafc', fontFamily: '"Nunito", system-ui, sans-serif', color: '#3c3c3c', display: 'flex', justifyContent: 'center', padding: '3vh clamp(14px, 3vw, 24px)', boxSizing: 'border-box' }}>
       <div style={{ width: '100%', maxWidth: 480, height: '100%', display: 'flex', flexDirection: 'column', gap: '5vh', position: 'relative' }}>
 
         {/* Header */}
-        <div style={{ flex: 1, minHeight: 0, display: 'flex', alignItems: 'stretch', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)' }}>
+        <div style={{ flex: 1, minHeight: 0, display: 'flex', alignItems: 'stretch', gap: 'clamp(4px, 1.5vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)' }}>
           <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0, paddingRight: 2 }}>
-            <div style={{ fontSize: '6vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>CDaub.</div>
+            <div style={{ fontSize: 'clamp(14px, 5vw, 22px)', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>CDaub.</div>
           </div>
           <div style={{ flex: 1, background: '#ffffff', border: `2px solid ${lastDrawn ? '#46a302' : '#e5e5e5'}`, borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: `0 2px 0 ${lastDrawn ? '#46a302' : '#e5e5e5'}`, display: 'flex', alignItems: 'center', gap: 8, padding: '0 clamp(8px, 1.2vw, 14px)', overflow: 'hidden', transition: 'border-color 300ms, box-shadow 300ms' }}>
             <div style={{ fontSize: 'clamp(18px, 5vh, 32px)', fontWeight: 900, color: lastDrawn ? '#58cc02' : '#cfcfcf', lineHeight: 1, flexShrink: 0, letterSpacing: '-0.02em' }}>{lastDrawn ? String(lastDrawn).padStart(2, '0') : '··'}</div>
@@ -738,7 +737,7 @@ function CastScreen({ me, room, onExit }) {
         </div>
 
         {/* Card grid */}
-        <div style={{ flex: 6, minHeight: 0, background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 24, padding: 'clamp(6px, 1vw, 12px)', boxShadow: '0 4px 0 #e5e5e5', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(5, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)' }}>
+        <div style={{ flex: 6, minHeight: 0, background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 'clamp(14px, 2vw, 24px)', padding: 'clamp(6px, 1vw, 12px)', boxShadow: '0 4px 0 #e5e5e5', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(5, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)' }}>
           {grid.flatMap((row, r) => row.map((val, c) => {
             const isFree = val === 'FREE';
             const isDaubed = !isFree && marked.has(val);
