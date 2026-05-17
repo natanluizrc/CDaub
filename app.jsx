@@ -308,10 +308,10 @@ function mascotFor(name) {
 
 const inputStyle = {
   width: '100%', padding: '14px 16px',
-  background: '#fafafa', border: '2px solid #e5e5e5',
+  background: '#fafafa', border: '2px solid #afafaf',
   borderRadius: 14, fontSize: 17, fontWeight: 800,
   fontFamily: 'inherit', color: '#3c3c3c', outline: 'none',
-  boxShadow: '0 2px 0 #e5e5e5', boxSizing: 'border-box',
+  boxShadow: '0 2px 0 #afafaf', boxSizing: 'border-box',
 };
 
 function ScreenShell({ children }) {
@@ -441,10 +441,10 @@ function LangPicker() {
           <button key={code} onClick={() => setLang(code)} style={{
             display: 'flex', alignItems: 'center', gap: 6,
             padding: '7px 14px', borderRadius: 99,
-            background: active ? '#3c3c3c' : '#ffffff',
+            background: active ? '#afafaf' : '#ffffff',
             color: active ? '#ffffff' : '#7a7a7a',
-            border: `2px solid ${active ? '#3c3c3c' : '#e5e5e5'}`,
-            boxShadow: active ? '0 2px 0 #1a1a1a' : '0 2px 0 #e5e5e5',
+            border: `2px solid ${active ? '#afafaf' : '#e5e5e5'}`,
+            boxShadow: active ? '0 2px 0 #8a8a8a' : '0 2px 0 #e5e5e5',
             fontFamily: 'inherit', fontWeight: 900, fontSize: 13, letterSpacing: '0.08em',
             cursor: 'pointer', transition: 'all 120ms ease',
           }}>
