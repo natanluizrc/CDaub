@@ -186,6 +186,7 @@ function WelcomeScreen({ onContinue, initialName }) {
   const [name, setName] = useState(initialName || '');
   const trimmed = name.trim();
   const canGo = trimmed.length >= 2;
+  const tooLong = trimmed.length > 10;
 
   return (
     <ScreenShell>
@@ -197,11 +198,12 @@ function WelcomeScreen({ onContinue, initialName }) {
       </div>
       <div style={{ textAlign: 'center' }}>
         <Field label="NAME">
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Natan" maxLength={10} autoFocus style={{ ...inputStyle, textAlign: 'center' }} />
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Natan" autoFocus style={{ ...inputStyle, textAlign: 'center', borderColor: tooLong ? '#ff4b4b' : undefined }} />
         </Field>
+        {tooLong && <div style={{ marginTop: 8, fontSize: 12, fontWeight: 800, color: '#ff4b4b' }}>Name must be 10 characters or less.</div>}
       </div>
       <div style={{ marginTop: 28 }}>
-        <BigCta disabled={!canGo} onClick={() => canGo && onContinue({ name: trimmed })}>Continue</BigCta>
+        <BigCta disabled={!canGo || tooLong} onClick={() => canGo && !tooLong && onContinue({ name: trimmed })}>Continue</BigCta>
       </div>
     </ScreenShell>
   );
