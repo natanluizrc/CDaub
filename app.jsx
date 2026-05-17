@@ -535,9 +535,14 @@ function HostScreen({ me, room, onExit }) {
               <div>{me.name}</div>
             </div>
           </div>
-          <div style={{ gridColumn: 'span 5', height: '100%', background: '#ffffff', border: '2px solid #46a302', borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: '0 2px 0 #46a302', overflow: 'hidden' }}>
-            <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)', position: 'relative', overflow: 'hidden' }}>
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.45) 50%, transparent 100%)', animation: 'shimmer 2s ease-in-out infinite', pointerEvents: 'none' }} />
+          <div style={{ gridColumn: 'span 5', height: '100%', position: 'relative' }}>
+            <div style={{ height: '100%', background: '#ffffff', border: '2px solid #46a302', borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: '0 2px 0 #46a302', overflow: 'hidden' }}>
+              <div style={{ width: `${progress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #58cc02 0%, #89e219 100%)', transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.45) 50%, transparent 100%)', animation: 'shimmer 2s ease-in-out infinite', pointerEvents: 'none' }} />
+              </div>
+            </div>
+            <div style={{ position: 'absolute', top: '50%', left: `${progress * 100}%`, transform: `translateY(-50%) translateX(${progress >= 0.7 ? 'calc(-100% - 8px)' : '6px'})`, color: progress >= 0.7 ? '#ffffff' : '#46a302', fontSize: 'clamp(9px, 1vw, 11px)', fontWeight: 900, whiteSpace: 'nowrap', pointerEvents: 'none', transition: 'left 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', letterSpacing: '0.04em', zIndex: 1 }}>
+              {Math.round(progress * 100)}%
             </div>
           </div>
           <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" textColor="#ffffff" style={{ width: '100%', height: '100%', background: '#58cc02', border: '2px solid #46a302', boxShadow: '0 2px 0 #46a302', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
@@ -892,9 +897,14 @@ function CastScreen({ me, room, onExit }) {
               <div>{me.name}</div>
             </div>
           </div>
-          <div style={{ gridColumn: 'span 2', background: '#ffffff', border: '2px solid #0d8fcc', borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: '0 2px 0 #0d8fcc', overflow: 'hidden' }}>
-            <div style={{ width: `${daubProgress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #1cb0f6 0%, #5bc8ff 100%)', transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)', position: 'relative', overflow: 'hidden' }}>
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.45) 50%, transparent 100%)', animation: 'shimmer 2s ease-in-out infinite', pointerEvents: 'none' }} />
+          <div style={{ gridColumn: 'span 2', position: 'relative' }}>
+            <div style={{ height: '100%', background: '#ffffff', border: '2px solid #0d8fcc', borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: '0 2px 0 #0d8fcc', overflow: 'hidden' }}>
+              <div style={{ width: `${daubProgress * 100}%`, height: '100%', background: 'linear-gradient(90deg, #1cb0f6 0%, #5bc8ff 100%)', transition: 'width 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.12)', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.45) 50%, transparent 100%)', animation: 'shimmer 2s ease-in-out infinite', pointerEvents: 'none' }} />
+              </div>
+            </div>
+            <div style={{ position: 'absolute', top: '50%', left: `${daubProgress * 100}%`, transform: `translateY(-50%) translateX(${daubProgress >= 0.7 ? 'calc(-100% - 8px)' : '6px'})`, color: daubProgress >= 0.7 ? '#ffffff' : '#0d8fcc', fontSize: 'clamp(9px, 1vw, 11px)', fontWeight: 900, whiteSpace: 'nowrap', pointerEvents: 'none', transition: 'left 400ms cubic-bezier(0.34, 1.56, 0.64, 1)', letterSpacing: '0.04em', zIndex: 1 }}>
+              {Math.round(daubProgress * 100)}%
             </div>
           </div>
           <div style={{ display: 'flex', gap: 'clamp(3px, 0.7vw, 8px)' }}>
