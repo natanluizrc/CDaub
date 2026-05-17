@@ -337,12 +337,12 @@ function useIsPortraitMobile() {
   return val;
 }
 
-function RotatePrompt() {
+function RotatePrompt({ message = 'The host screen works best in landscape.' }) {
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#3c3c3c', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24, fontFamily: '"Nunito", system-ui, sans-serif', padding: 32, textAlign: 'center' }}>
       <div style={{ fontSize: 72, animation: 'rotateHint 2s ease-in-out infinite' }}>📱</div>
       <div style={{ fontSize: 22, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.01em' }}>Rotate your phone</div>
-      <div style={{ fontSize: 15, fontWeight: 700, color: '#afafaf', lineHeight: 1.5, maxWidth: 260 }}>The host screen works best in landscape.</div>
+      <div style={{ fontSize: 15, fontWeight: 700, color: '#afafaf', lineHeight: 1.5, maxWidth: 260 }}>{message}</div>
     </div>
   );
 }
@@ -662,6 +662,7 @@ function PendingModal({ players, onApprove, onReject, onClose }) {
 
 // ---------- CAST Screen ----------
 function CastScreen({ me, room, onExit }) {
+  const isPortraitMobile = useIsPortraitMobile();
   const [session, setSession] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [joining, setJoining] = useState(false);
@@ -743,6 +744,8 @@ function CastScreen({ me, room, onExit }) {
       </div>
     </ScreenShell>
   );
+
+  if (isPortraitMobile) return <RotatePrompt message="The player screen works best in landscape." />;
 
   if (joining || (!loaded && playerId)) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#afafaf', textAlign: 'center', padding: 40, fontWeight: 700 }}>Connecting…</div></div>;
 
