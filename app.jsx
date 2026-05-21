@@ -617,7 +617,7 @@ function ExitModal({ onCancel, onConfirm, room }) {
 function LineNotif({ name, onClose }) {
   const { t } = useLang();
   useEffect(() => {
-    const timer = setTimeout(onClose, 3000);
+    const timer = setTimeout(onClose, 5000);
     return () => clearTimeout(timer);
   }, [name]);
   return (
@@ -701,7 +701,6 @@ function HostScreen({ me, room, onExit }) {
   const [fsError, setFsError] = useState(null);
   const [rolling, setRolling] = useState(false);
   const [previewN, setPreviewN] = useState(null);
-  const [callout, setCallout] = useState(null);
   const [hostMsg, setHostMsg] = useState(null);
   const [confetti, setConfetti] = useState(false);
   const [winnerQueue, setWinnerQueue] = useState([]);
@@ -779,7 +778,7 @@ function HostScreen({ me, room, onExit }) {
       if (next[p.id] > (prev[p.id] ?? 0)) {
         setConfetti(true);
         setTimeout(() => setConfetti(false), 2200);
-        setWinnerQueue(q => [...q, { name: p.name, isBingo: !!p.bingo }]);
+        setWinnerQueue(q => [...q, { type: p.bingo ? 'bingo' : 'line', name: p.name }]);
       }
     }
     prevPlayerWinsRef.current = next;
@@ -813,7 +812,6 @@ function HostScreen({ me, room, onExit }) {
 
     const pick = remaining[Math.floor(Math.random() * remaining.length)];
     setRolling(true);
-    setCallout(null);
 
     const DURATION = 3000, start = performance.now();
     const pool = remaining.length > 1 ? remaining : Array.from({ length: TOTAL }, (_, i) => i + 1);
@@ -837,7 +835,7 @@ function HostScreen({ me, room, onExit }) {
           const msg = pickHostLine(hostMsgRef.current, lang);
           hostMsgRef.current = msg;
           setHostMsg(msg);
-          setCallout(pick);
+          setWinnerQueue(q => [...q, { type: 'number', n: pick, msg }]);
           sessionRef(room).update({ drawn: newDrawn, lastDrawn: pick, lastDrawnAt: Date.now() });
           playSound('pop');
         }, 200);
@@ -919,11 +917,11 @@ function HostScreen({ me, room, onExit }) {
         {/* Draw button */}
         <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} done={!!session.winner} height='10vh' margin='clamp(6px, 1vw, 12px)' />
 
-        {callout && <HostCallout n={callout} msg={hostMsg} onClose={() => setCallout(null)} />}
         {confetti && <GameConfetti />}
 
-        {winnerQueue[0] && !winnerQueue[0].isBingo && <LineNotif name={winnerQueue[0].name} onClose={() => setWinnerQueue(q => q.slice(1))} />}
-        {winnerQueue[0] && winnerQueue[0].isBingo && <WinNotif name={winnerQueue[0].name} onClose={() => { setWinnerQueue(q => q.slice(1)); setShowLeaderboard(true); }} />}
+        {winnerQueue[0]?.type === 'number' && <HostCallout n={winnerQueue[0].n} msg={winnerQueue[0].msg} onClose={() => setWinnerQueue(q => q.slice(1))} />}
+        {winnerQueue[0]?.type === 'line'   && <LineNotif name={winnerQueue[0].name} onClose={() => setWinnerQueue(q => q.slice(1))} />}
+        {winnerQueue[0]?.type === 'bingo'  && <WinNotif  name={winnerQueue[0].name} onClose={() => { setWinnerQueue(q => q.slice(1)); setShowLeaderboard(true); }} />}
         {showLeaderboard && <LeaderboardModal players={leaderboard} onClose={() => setShowLeaderboard(false)} totalCalled={drawn.length} room={room} />}
         {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); sessionRef(room).delete(); onExit(); }} room={room} />}
       </div>
@@ -957,7 +955,7 @@ function DrawButton({ onClick, disabled, rolling, done, height = '15vh', margin 
 
 function HostCallout({ n, msg, onClose }) {
   useEffect(() => {
-    const t = setTimeout(onClose, 3000);
+    const t = setTimeout(onClose, 5000);
     return () => clearTimeout(t);
   }, [n]);
   return (
@@ -1324,7 +1322,7 @@ function CastScreen({ me, room, onExit }) {
 
 function CastCallout({ n, msg, onClose }) {
   useEffect(() => {
-    const t = setTimeout(onClose, 3000);
+    const t = setTimeout(onClose, 5000);
     return () => clearTimeout(t);
   }, [n]);
   return (
