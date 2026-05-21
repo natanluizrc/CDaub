@@ -830,7 +830,7 @@ function HostScreen({ me, room, onExit }) {
         <div style={{ flex: 1, minHeight: 0, display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gridTemplateRows: '1fr', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)', alignItems: 'stretch' }}>
           <div style={{ gridColumn: 'span 2', alignSelf: 'stretch', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: 3 }}>
             <div style={{ fontSize: '4vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>DaubCard</div>
-            <div style={{ fontSize: '4vh', fontWeight: 800, color: '#6b6b6b', letterSpacing: '-0.01em', lineHeight: 1 }}>{me.name}</div>
+            <div style={{ fontSize: '4vh', fontWeight: 900, color: '#6b6b6b', letterSpacing: '-0.01em', lineHeight: 1 }}>{me.name}</div>
           </div>
           <div style={{ gridColumn: 'span 5', height: '100%', position: 'relative' }}>
             <div style={{ height: '100%', background: '#ffffff', border: '2px solid #46a302', borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: '0 2px 0 #46a302', overflow: 'hidden' }}>
@@ -1211,7 +1211,7 @@ function CastScreen({ me, room, onExit }) {
         <div style={{ flex: 1, minHeight: 0, display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: 3 }}>
             <div style={{ fontSize: '4vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>DaubCard</div>
-            <div style={{ fontSize: '4vh', fontWeight: 800, color: '#6b6b6b', letterSpacing: '-0.01em', lineHeight: 1 }}>{me.name}</div>
+            <div style={{ fontSize: '4vh', fontWeight: 900, color: '#6b6b6b', letterSpacing: '-0.01em', lineHeight: 1 }}>{me.name}</div>
           </div>
           <div style={{ gridColumn: 'span 2', position: 'relative' }}>
             <div style={{ height: '100%', background: '#ffffff', border: '2px solid #0d8fcc', borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: '0 2px 0 #0d8fcc', overflow: 'hidden' }}>
