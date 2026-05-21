@@ -343,7 +343,7 @@ function ScreenShell({ children }) {
 function Logo() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 12 }}>
-      <div style={{ fontSize: 48, fontWeight: 900, color: '#3c3c3c', letterSpacing: '-0.035em', lineHeight: 1 }}>DaubCard.</div>
+      <div style={{ fontSize: 48, fontWeight: 900, color: '#3c3c3c', letterSpacing: '-0.035em', lineHeight: 1 }}>DaubCard</div>
     </div>
   );
 }
@@ -829,7 +829,7 @@ function HostScreen({ me, room, onExit }) {
         {/* Header */}
         <div style={{ flex: 1, minHeight: 0, display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gridTemplateRows: '1fr', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)', alignItems: 'stretch' }}>
           <div style={{ gridColumn: 'span 2', alignSelf: 'stretch', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: 3 }}>
-            <div style={{ fontSize: '6vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>DaubCard.</div>
+            <div style={{ fontSize: '6vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>DaubCard</div>
             <div style={{ fontSize: 'clamp(9px, 1.1vw, 11px)', fontWeight: 800, color: '#6b6b6b', letterSpacing: '0.14em', lineHeight: 1.5 }}>
               <div>HOST</div>
               <div>{me.name}</div>
@@ -1213,7 +1213,7 @@ function CastScreen({ me, room, onExit }) {
         {/* Header */}
         <div style={{ flex: 1, minHeight: 0, display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: 3 }}>
-            <div style={{ fontSize: '6vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>DaubCard.</div>
+            <div style={{ fontSize: '6vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>DaubCard</div>
             <div style={{ fontSize: 'clamp(9px, 1.1vw, 11px)', fontWeight: 800, color: '#6b6b6b', letterSpacing: '0.14em', lineHeight: 1.5 }}>
               <div>CAST</div>
               <div>{me.name}</div>
