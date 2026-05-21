@@ -74,6 +74,7 @@ const TRANSLATIONS = {
     joinNameTaken: 'Name already taken in this room. Go back and choose a different name.',
     joinConnectionError: 'Connection error. Please try again.',
     retry: 'Try again',
+    developedBy: 'Developed by NL Consultoria',
     cold: 'COLD',
     warm: 'WARM',
     fire: 'FIRE',
@@ -141,6 +142,7 @@ const TRANSLATIONS = {
     joinNameTaken: 'Nome já usado nessa sala. Volte e escolha outro nome.',
     joinConnectionError: 'Erro de conexão. Tente novamente.',
     retry: 'Tentar novamente',
+    developedBy: 'Desenvolvido por NL Consultoria',
     cold: 'FRIO',
     warm: 'QUENTE',
     fire: 'FOGO',
@@ -208,6 +210,7 @@ const TRANSLATIONS = {
     joinNameTaken: 'Nombre ya usado en esta sala. Vuelve y elige otro nombre.',
     joinConnectionError: 'Error de conexión. Inténtalo de nuevo.',
     retry: 'Intentar de nuevo',
+    developedBy: 'Desarrollado por NL Consultoria',
     cold: 'FRÍO',
     warm: 'CÁLIDO',
     fire: 'FUEGO',
@@ -473,7 +476,7 @@ function WelcomeScreen({ onContinue, initialName }) {
       <Logo />
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 22 }}>
         <span style={{ width: 24, height: 2, background: '#e5e5e5', borderRadius: 2 }} />
-        <span style={{ fontSize: 12, fontWeight: 900, color: '#7a7a7a', letterSpacing: '0.22em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Developed by NL Solutions</span>
+        <span style={{ fontSize: 12, fontWeight: 900, color: '#7a7a7a', letterSpacing: '0.22em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{t.developedBy}</span>
         <span style={{ width: 24, height: 2, background: '#e5e5e5', borderRadius: 2 }} />
       </div>
       <LangPicker />
