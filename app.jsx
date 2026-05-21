@@ -1335,25 +1335,7 @@ function CastCallout({ n, msg, onClose }) {
   );
 }
 
-function CalledList({ called, latest, onClose }) {
-  const { t } = useLang();
-  return (
-    <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 70, background: 'rgba(31, 41, 55, 0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', padding: 16, animation: 'fadeIn 180ms ease forwards' }}>
-      <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 460, background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 24, boxShadow: '0 12px 0 #d6d6d6, 0 24px 64px rgba(0,0,0,0.18)', padding: '20px 20px 24px', animation: 'modalPop 240ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <div style={{ fontSize: 20, fontWeight: 900 }}>{t.drawnBalls} ({called.length})</div>
-          <button onClick={onClose} style={{ width: 32, height: 32, border: 'none', background: '#f3f3f3', borderRadius: 10, fontSize: 16, fontWeight: 900, color: '#6b6b6b', cursor: 'pointer' }}>✕</button>
-        </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {called.length === 0 && <div style={{ fontSize: 13, color: '#6b6b6b', fontWeight: 700 }}>{t.noBallsDrawn}</div>}
-          {called.map((n) => (
-            <div key={n} style={{ padding: '6px 10px', background: n === latest ? '#58cc02' : '#ffc800', color: n === latest ? '#ffffff' : '#7a5a00', border: `1.5px solid ${n === latest ? '#46a302' : '#e0a800'}`, borderRadius: 10, fontSize: 13, fontWeight: 900, boxShadow: `0 2px 0 ${n === latest ? '#46a302' : '#c79100'}` }}>{String(n).padStart(2, '0')}</div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
+
 
 // ---------- Room generation ----------
 async function generateUniqueRoom() {
