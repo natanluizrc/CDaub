@@ -1045,7 +1045,7 @@ function CastScreen({ me, room, onExit }) {
   const [joinErrorTitle, setJoinErrorTitle] = useState(null);
   const [playerId, setPlayerId] = useState(null);
   const [localCard, setLocalCard] = useState(null);
-  const [callout, setCallout] = useState(null);
+  const [calloutQueue, setCalloutQueue] = useState([]);
   const [showExit, setShowExit] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [hostMsg, setHostMsg] = useState(t.waitingForHost);
@@ -1137,7 +1137,7 @@ function CastScreen({ me, room, onExit }) {
     const msg = pickHostLine(hostMsgRef.current, lang);
     hostMsgRef.current = msg;
     setHostMsg(msg);
-    setCallout(session.lastDrawn);
+    setCalloutQueue(q => [...q, { n: session.lastDrawn, msg }]);
   }, [session?.lastDrawn]);
 
   useEffect(() => {
@@ -1308,7 +1308,7 @@ function CastScreen({ me, room, onExit }) {
           </BigCta>
         </div>
 
-        {callout && <CastCallout n={callout} msg={hostMsg} onClose={() => setCallout(null)} />}
+        {calloutQueue[0] && <CastCallout n={calloutQueue[0].n} msg={calloutQueue[0].msg} onClose={() => setCalloutQueue(q => q.slice(1))} />}
         {(castConfetti || localBingo) && <GameConfetti />}
         {showInfo && <LeaderboardModal players={leaderboard} onClose={() => setShowInfo(false)} totalCalled={drawn.length} room={room} />}
         {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => {
