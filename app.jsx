@@ -54,7 +54,7 @@ const TRANSLATIONS = {
     tagline: 'Cards that build moments',
     nameLabel: 'NAME',
     namePlaceholder: 'e.g. Natan',
-    nameTooLong: 'Name must be 10 characters or less.',
+    nameTooLong: 'Name must be 15 characters or less.',
     continue: 'Continue',
     back: '← Back',
     enterRoomCode: 'Enter the room code.',
@@ -123,7 +123,7 @@ const TRANSLATIONS = {
     tagline: 'Cartelas que criam momentos',
     nameLabel: 'NOME',
     namePlaceholder: 'ex: Natan',
-    nameTooLong: 'O nome deve ter no máximo 10 caracteres.',
+    nameTooLong: 'O nome deve ter no máximo 15 caracteres.',
     continue: 'Continuar',
     back: '← Voltar',
     enterRoomCode: 'Digite o código da sala.',
@@ -192,7 +192,7 @@ const TRANSLATIONS = {
     tagline: 'Tarjetas que crean momentos',
     nameLabel: 'NOMBRE',
     namePlaceholder: 'ej: Natan',
-    nameTooLong: 'El nombre debe tener 10 caracteres o menos.',
+    nameTooLong: 'El nombre debe tener 15 caracteres o menos.',
     continue: 'Continuar',
     back: '← Atrás',
     enterRoomCode: 'Ingresa el código de sala.',
@@ -511,7 +511,7 @@ function WelcomeScreen({ onContinue, initialName, error, claiming }) {
   const [name, setName] = useState(initialName || '');
   const trimmed = name.trim();
   const canGo = trimmed.length >= 2;
-  const tooLong = trimmed.length > 10;
+  const tooLong = trimmed.length > 15;
   const showError = !tooLong && error;
 
   return (
