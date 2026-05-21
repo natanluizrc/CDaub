@@ -797,9 +797,9 @@ function HostScreen({ me, room, onExit }) {
   const latest = drawn[drawn.length - 1] || null;
   const left = TOTAL - drawn.length;
   const progress = drawn.length / TOTAL;
-  const cells = Array.from({ length: TOTAL }, (_, i) => ({ n: i + 1, r: Math.floor(i / COLS), c: i % COLS }));
+  const cells = useMemo(() => Array.from({ length: TOTAL }, (_, i) => ({ n: i + 1, r: Math.floor(i / COLS), c: i % COLS })), []);
   const players = Object.values(session.players || {});
-  const leaderboard = players.map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), color: '#1cb0f6', isYou: false, bingo: p.bingo })).sort((a, b) => b.hits - a.hits);
+  const leaderboard = useMemo(() => players.map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), color: '#1cb0f6', isYou: false, bingo: p.bingo })).sort((a, b) => b.hits - a.hits), [players]);
   const pendingPlayers = Object.values(session.pending || {});
 
   const approvePending = (p) => {
