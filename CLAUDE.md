@@ -65,8 +65,8 @@ Não há `APP_VERSION` no código — o versionamento é exclusivamente via quer
 1. `WelcomeScreen` — nome do jogador (persiste localStorage)
 2. `RoleScreen` — escolha HOST ou JOIN
 3. `JoinScreen` — digita código de 2 dígitos
-4. `HostScreen` — layout fixo `height:100vh overflow:hidden`; header 12-col grid; subtítulo "ROOM XX" / "HOST · Name"
-5. `CastScreen` — mesmo padrão que HostScreen; header 5-col grid; subtítulo "ROOM XX" / "CAST · Name"; FREE central com fogo 🔥 que cresce com daubProgress
+4. `HostScreen` — layout fixo `height:100vh overflow:hidden`; header 12-col grid; wordmark "DaubCard" (4vh, preto) + nome do host (4vh, cinza `#6b6b6b`)
+5. `CastScreen` — mesmo padrão que HostScreen; header 5-col grid; wordmark "DaubCard" (4vh, preto) + nome do jogador (4vh, cinza `#6b6b6b`); FREE central com fogo 🔥 que cresce com daubProgress
 
 ## Componentes reutilizáveis
 
