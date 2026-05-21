@@ -1,12 +1,12 @@
-# CDaub — Bingo em Tempo Real
+# DaubCard — Bingo em Tempo Real
 
-App de bingo multiplayer React + Firebase. Live em https://nl-cdaub.web.app.
+App de bingo multiplayer React + Firebase. Live em https://nl-daubcard.web.app.
 
 ## Stack
 
 - React 18 via CDN (Babel standalone, sem bundler)
 - Firebase Firestore v9.23.0 compat CDN
-- Firebase Hosting (projeto `nl-cdaub`)
+- Firebase Hosting (projeto `nl-daubcard`)
 - Sem build step — tudo carregado via CDN
 
 ## Arquivos principais
