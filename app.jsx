@@ -1028,29 +1028,31 @@ function CastScreen({ me, room, onExit }) {
 
     setJoining(true);
     setJoinCanRetry(false);
-    const fetchWithTimeout = Promise.race([
-      sessionRef(room).get(),
-      new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 5000)),
-    ]);
-    fetchWithTimeout.then((snap) => {
-      if (!snap.exists) { setJoinError(t.joinRoomNotFound); setJoinCanRetry(false); return; }
+    const pid = `p_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    const card = makeCard();
+    const txn = firebase.firestore().runTransaction(async (tx) => {
+      const snap = await tx.get(sessionRef(room));
+      if (!snap.exists) throw { code: 'not-found' };
       const data = snap.data();
       const takenNames = [
         ...Object.values(data.players || {}),
         ...Object.values(data.pending || {}),
       ].map(p => p.name.toLowerCase());
-      if (takenNames.includes(me.name.toLowerCase())) {
-        setJoinError(t.joinNameTaken); setJoinCanRetry(false); return;
-      }
-      const pid = `p_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
-      const card = makeCard();
-      return sessionRef(room).update({ [`pending.${pid}`]: { id: pid, name: me.name, joinedAt: Date.now(), card } })
-        .then(() => {
-          setPlayerId(pid);
-          setLocalCard(card);
-          localStorage.setItem(ME_KEY, JSON.stringify({ name: me.name, session: room, playerId: pid, card }));
-        });
-    }).catch(() => { setJoinError(t.joinConnectionError); setJoinCanRetry(true); }).finally(() => setJoining(false));
+      if (takenNames.includes(me.name.toLowerCase())) throw { code: 'name-taken' };
+      tx.update(sessionRef(room), { [`pending.${pid}`]: { id: pid, name: me.name, joinedAt: Date.now(), card } });
+    });
+    Promise.race([txn, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 8000))])
+      .then(() => {
+        setPlayerId(pid);
+        setLocalCard(card);
+        localStorage.setItem(ME_KEY, JSON.stringify({ name: me.name, session: room, playerId: pid, card }));
+      })
+      .catch((err) => {
+        if (err?.code === 'not-found') { setJoinError(t.joinRoomNotFound); setJoinCanRetry(false); }
+        else if (err?.code === 'name-taken') { setJoinError(t.joinNameTaken); setJoinCanRetry(false); }
+        else { setJoinError(t.joinConnectionError); setJoinCanRetry(true); }
+      })
+      .finally(() => setJoining(false));
   }, [room, joinAttempt]);
 
   useEffect(() => {
