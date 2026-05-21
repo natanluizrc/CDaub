@@ -6,8 +6,35 @@ const { useState, useEffect, useRef, useCallback, useMemo, createContext, useCon
 
 const ME_KEY = "bingo_me";
 const LANG_KEY = "bingo_lang";
+const INACTIVE_MS = 15 * 60 * 1000;
+const HEARTBEAT_MS =  5 * 60 * 1000;
 const db = () => firebase.firestore();
 const sessionRef = (code) => db().collection("sessions").doc(code);
+const nameRef_fs = (name) => db().collection('names').doc(name.toLowerCase());
+
+async function claimName(name, uid) {
+  const ref = nameRef_fs(name);
+  return firebase.firestore().runTransaction(async tx => {
+    const snap = await tx.get(ref);
+    const now = Date.now();
+    if (snap.exists) {
+      const d = snap.data();
+      const expired = (now - d.lastActive) > INACTIVE_MS;
+      if (!expired && d.uid !== uid) throw { code: 'name-taken' };
+    }
+    tx.set(ref, { uid, name, lastActive: now });
+  });
+}
+
+function releaseName(name) {
+  if (!name) return;
+  nameRef_fs(name).delete().catch(() => {});
+}
+
+function heartbeatName(name) {
+  if (!name) return;
+  nameRef_fs(name).update({ lastActive: Date.now() }).catch(() => {});
+}
 
 function trackUser(uid) {
   const ref = db().collection('users').doc(uid);
@@ -90,6 +117,7 @@ const TRANSLATIONS = {
     cold: 'COLD',
     warm: 'WARM',
     fire: 'FIRE',
+    globalNameTaken: 'This name is already in use by another player.',
   },
   pt: {
     tagline: 'Cartelas que criam momentos',
@@ -158,6 +186,7 @@ const TRANSLATIONS = {
     cold: 'FRIO',
     warm: 'QUENTE',
     fire: 'FOGO',
+    globalNameTaken: 'Este nome já está sendo usado por outro jogador.',
   },
   es: {
     tagline: 'Tarjetas que crean momentos',
@@ -226,6 +255,7 @@ const TRANSLATIONS = {
     cold: 'FRÍO',
     warm: 'CÁLIDO',
     fire: 'FUEGO',
+    globalNameTaken: 'Este nombre ya lo está usando otro jugador.',
   },
 };
 
@@ -476,12 +506,13 @@ function LangPicker() {
 }
 
 // ---------- Welcome Screen ----------
-function WelcomeScreen({ onContinue, initialName }) {
+function WelcomeScreen({ onContinue, initialName, error, claiming }) {
   const { t } = useLang();
   const [name, setName] = useState(initialName || '');
   const trimmed = name.trim();
   const canGo = trimmed.length >= 2;
   const tooLong = trimmed.length > 10;
+  const showError = !tooLong && error;
 
   return (
     <ScreenShell>
@@ -494,12 +525,15 @@ function WelcomeScreen({ onContinue, initialName }) {
       <LangPicker />
       <div style={{ textAlign: 'center' }}>
         <Field label={t.nameLabel}>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder={t.namePlaceholder} autoFocus style={{ ...inputStyle, textAlign: 'center', borderColor: tooLong ? '#ff4b4b' : undefined }} />
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder={t.namePlaceholder} autoFocus style={{ ...inputStyle, textAlign: 'center', borderColor: tooLong || showError ? '#ff4b4b' : undefined }} />
         </Field>
         {tooLong && <div style={{ marginTop: 8, fontSize: 12, fontWeight: 800, color: '#ff4b4b' }}>{t.nameTooLong}</div>}
+        {showError && <div style={{ marginTop: 8, fontSize: 12, fontWeight: 800, color: '#ff4b4b' }}>{error}</div>}
       </div>
       <div style={{ marginTop: 28 }}>
-        <BigCta disabled={!canGo || tooLong} onClick={() => canGo && !tooLong && onContinue({ name: trimmed })}>{t.continue}</BigCta>
+        <BigCta disabled={!canGo || tooLong || claiming} onClick={() => canGo && !tooLong && !claiming && onContinue({ name: trimmed })}>
+          {claiming ? '…' : t.continue}
+        </BigCta>
       </div>
     </ScreenShell>
   );
@@ -1358,6 +1392,41 @@ function App() {
   const [room, setRoom] = useState('');
   const [generating, setGenerating] = useState(false);
   const [genError, setGenError] = useState(null);
+  const [welcomeError, setWelcomeError] = useState(null);
+  const [claiming, setClaiming] = useState(false);
+
+  const currentNameRef = useRef(name);
+  useEffect(() => { currentNameRef.current = name; }, [name]);
+
+  const inactivityTimerRef = useRef(null);
+
+  function resetInactivityTimer() {
+    clearTimeout(inactivityTimerRef.current);
+    inactivityTimerRef.current = setTimeout(() => {
+      releaseName(currentNameRef.current);
+      localStorage.removeItem(ME_KEY);
+      setName('');
+      setRoom('');
+      setStage('welcome');
+    }, INACTIVE_MS);
+  }
+
+  useEffect(() => {
+    if (stage === 'welcome') { clearTimeout(inactivityTimerRef.current); return; }
+    const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'];
+    events.forEach(e => window.addEventListener(e, resetInactivityTimer, { passive: true }));
+    resetInactivityTimer();
+    return () => {
+      events.forEach(e => window.removeEventListener(e, resetInactivityTimer));
+      clearTimeout(inactivityTimerRef.current);
+    };
+  }, [stage]);
+
+  useEffect(() => {
+    if (stage === 'welcome' || !name) return;
+    const id = setInterval(() => heartbeatName(name), HEARTBEAT_MS);
+    return () => clearInterval(id);
+  }, [stage, name]);
 
   async function handlePickHost() {
     setGenerating(true);
@@ -1373,13 +1442,27 @@ function App() {
     }
   }
 
-  function handleWelcome({ name: n }) { setName(n); setStage('role'); }
+  async function handleWelcome({ name: n }) {
+    if (!uid) { setName(n); setStage('role'); return; }
+    setClaiming(true);
+    setWelcomeError(null);
+    try {
+      await claimName(n, uid);
+      setName(n);
+      setStage('role');
+    } catch (err) {
+      setWelcomeError(err?.code === 'name-taken' ? t.globalNameTaken : t.joinConnectionError);
+    } finally {
+      setClaiming(false);
+    }
+  }
+
   function handleJoin(r) { setRoom(r); setStage('cast'); }
-  function handleExit() { localStorage.removeItem(ME_KEY); setName(''); setRoom(''); setStage('welcome'); }
+  function handleExit() { releaseName(currentNameRef.current); localStorage.removeItem(ME_KEY); setName(''); setRoom(''); setStage('welcome'); }
 
   return (
     <LangContext.Provider value={{ lang, setLang, t }}>
-      {stage === 'welcome' && <WelcomeScreen onContinue={handleWelcome} initialName={name} />}
+      {stage === 'welcome' && <WelcomeScreen onContinue={handleWelcome} initialName={name} error={welcomeError} claiming={claiming} />}
       {stage === 'role' && <RoleScreen name={name} onPick={(r) => r === 'host' ? handlePickHost() : setStage('join')} onBack={() => setStage('welcome')} generating={generating} genError={genError} />}
       {stage === 'join' && <JoinScreen name={name} onJoin={handleJoin} onBack={() => setStage('role')} />}
       {stage === 'host' && <HostScreen me={{ name, uid }} room={room} onExit={handleExit} />}
