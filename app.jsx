@@ -640,7 +640,7 @@ function RotatePrompt({ title, message }) {
     <div style={{ position: 'fixed', inset: 0, background: '#3c3c3c', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24, fontFamily: '"Nunito", system-ui, sans-serif', padding: 32, textAlign: 'center' }}>
       <div role="img" aria-label="Celular — gire para horizontal" style={{ fontSize: 72, animation: 'rotateHint 2s ease-in-out infinite' }}>📱</div>
       <div style={{ fontSize: 22, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.01em' }}>{title}</div>
-      <div style={{ fontSize: 15, fontWeight: 700, color: '#6b6b6b', lineHeight: 1.5, maxWidth: 260 }}>{message}</div>
+      <div style={{ fontSize: 15, fontWeight: 700, color: '#c0c0c0', lineHeight: 1.5, maxWidth: 260 }}>{message}</div>
     </div>
   );
 }
