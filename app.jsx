@@ -51,7 +51,6 @@ function trackUser(uid) {
 // ---------- Translations ----------
 const TRANSLATIONS = {
   en: {
-    tagline: 'Cards that build moments',
     nameLabel: 'NAME',
     namePlaceholder: 'e.g. Natan',
     nameTooLong: 'Name must be 12 characters or less.',
@@ -82,7 +81,6 @@ const TRANSLATIONS = {
     gotItPre: '',
     gotItPost: ' got it!',
     seeResults: 'See results',
-    continueBtn: 'Continue',
     leaderboard: 'Leaderboard',
     noPlayersPre: 'No players yet. Share Room',
     noPlayersPost: 'to get started!',
@@ -106,8 +104,6 @@ const TRANSLATIONS = {
     daub: 'DAUB',
     wins: 'WINS',
     lost: 'LOST',
-    drawnBalls: 'Drawn balls',
-    noBallsDrawn: 'No balls drawn yet.',
     allRoomsInUse: 'All rooms (01–99) are currently in use. Try again later.',
     joinRoomNotFound: 'Room not found. Check the code with the host.',
     joinNameTaken: 'Name already taken in this room. Go back and choose a different name.',
@@ -120,7 +116,6 @@ const TRANSLATIONS = {
     globalNameTaken: 'This name is already in use by another player.',
   },
   pt: {
-    tagline: 'Cartelas que criam momentos',
     nameLabel: 'NOME',
     namePlaceholder: 'ex: Natan',
     nameTooLong: 'O nome deve ter no máximo 12 caracteres.',
@@ -151,7 +146,6 @@ const TRANSLATIONS = {
     gotItPre: '',
     gotItPost: ' conseguiu!',
     seeResults: 'Ver resultados',
-    continueBtn: 'Continuar',
     leaderboard: 'Ranking',
     noPlayersPre: 'Nenhum jogador ainda. Compartilhe a Sala',
     noPlayersPost: 'para começar!',
@@ -175,8 +169,6 @@ const TRANSLATIONS = {
     daub: 'MARCAR',
     wins: 'GANHOU',
     lost: 'PERDEU',
-    drawnBalls: 'Bolas sorteadas',
-    noBallsDrawn: 'Nenhuma bola sorteada ainda.',
     allRoomsInUse: 'Todas as salas (01–99) estão ocupadas. Tente novamente em breve.',
     joinRoomNotFound: 'Sala não encontrada. Confirme o código com o host.',
     joinNameTaken: 'Nome já usado nessa sala. Volte e escolha outro nome.',
@@ -189,7 +181,6 @@ const TRANSLATIONS = {
     globalNameTaken: 'Este nome já está sendo usado por outro jogador.',
   },
   es: {
-    tagline: 'Tarjetas que crean momentos',
     nameLabel: 'NOMBRE',
     namePlaceholder: 'ej: Natan',
     nameTooLong: 'El nombre debe tener 12 caracteres o menos.',
@@ -220,7 +211,6 @@ const TRANSLATIONS = {
     gotItPre: '¡',
     gotItPost: ' lo logró!',
     seeResults: 'Ver resultados',
-    continueBtn: 'Continuar',
     leaderboard: 'Clasificación',
     noPlayersPre: 'Sin jugadores aún. ¡Comparte la Sala',
     noPlayersPost: 'para empezar!',
@@ -244,8 +234,6 @@ const TRANSLATIONS = {
     daub: 'MARCAR',
     wins: 'GANÓ',
     lost: 'PERDIÓ',
-    drawnBalls: 'Bolas sorteadas',
-    noBallsDrawn: 'Aún no se han sorteado bolas.',
     allRoomsInUse: 'Todas las salas (01–99) están en uso. Inténtalo más tarde.',
     joinRoomNotFound: 'Sala no encontrada. Confirma el código con el host.',
     joinNameTaken: 'Nombre ya usado en esta sala. Vuelve y elige otro nombre.',
@@ -468,9 +456,6 @@ function InfoIcon() {
 }
 function ExitIcon() {
   return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 4h3.5a1.5 1.5 0 0 1 1.5 1.5v13a1.5 1.5 0 0 1-1.5 1.5H15" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /><path d="M10 8l-4 4 4 4" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /><path d="M6 12h10" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /></svg>;
-}
-function HistoryIcon() {
-  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7" stroke="#3c3c3c" strokeWidth="2.2" strokeLinecap="round" /><path d="M3 3v5h5" stroke="#3c3c3c" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 7v5l3 2" stroke="#3c3c3c" strokeWidth="2.2" strokeLinecap="round" /></svg>;
 }
 
 // ---------- Lang Picker ----------
@@ -701,7 +686,6 @@ function HostScreen({ me, room, onExit }) {
   const [fsError, setFsError] = useState(null);
   const [rolling, setRolling] = useState(false);
   const [previewN, setPreviewN] = useState(null);
-  const [hostMsg, setHostMsg] = useState(null);
   const [confetti, setConfetti] = useState(false);
   const [winnerQueue, setWinnerQueue] = useState([]);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
@@ -834,7 +818,6 @@ function HostScreen({ me, room, onExit }) {
           const newDrawn = [...currentDrawn, pick];
           const msg = pickHostLine(hostMsgRef.current, lang);
           hostMsgRef.current = msg;
-          setHostMsg(msg);
           setWinnerQueue(q => [...q, { type: 'number', n: pick, msg }]);
           sessionRef(room).update({ drawn: newDrawn, lastDrawn: pick, lastDrawnAt: Date.now() });
           playSound('pop');
@@ -929,15 +912,6 @@ function HostScreen({ me, room, onExit }) {
   );
 }
 
-function StatTile({ label, value, accent }) {
-  return (
-    <div style={{ height: '100%', boxSizing: 'border-box', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 18, boxShadow: '0 3px 0 #e5e5e5', padding: 'clamp(10px, 1.5vw, 14px) clamp(12px, 2vw, 18px)', display: 'flex', alignItems: 'center', gap: 'clamp(8px, 1.5vw, 14px)', minWidth: 0 }}>
-      <div style={{ width: 4, height: 'clamp(28px, 4vw, 36px)', background: accent, borderRadius: 4, flexShrink: 0 }} />
-      <span style={{ fontSize: 'clamp(20px, 3vw, 26px)', fontWeight: 900, color: '#3c3c3c', lineHeight: 1, letterSpacing: '-0.02em' }}>{value}</span>
-      <span style={{ marginLeft: 'auto', fontSize: 'clamp(10px, 1.3vw, 12px)', color: '#6b6b6b', fontWeight: 800, letterSpacing: '0.16em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</span>
-    </div>
-  );
-}
 
 function DrawButton({ onClick, disabled, rolling, done, height = '15vh', margin }) {
   const { t } = useLang();
@@ -1048,7 +1022,6 @@ function CastScreen({ me, room, onExit }) {
   const [calloutQueue, setCalloutQueue] = useState([]);
   const [showExit, setShowExit] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  const [hostMsg, setHostMsg] = useState(t.waitingForHost);
   const [localBingo, setLocalBingo] = useState(false);
   const [castConfetti, setCastConfetti] = useState(false);
   const [rejected, setRejected] = useState(false);
@@ -1136,7 +1109,6 @@ function CastScreen({ me, room, onExit }) {
     prevLastDrawnRef.current = session.lastDrawn;
     const msg = pickHostLine(hostMsgRef.current, lang);
     hostMsgRef.current = msg;
-    setHostMsg(msg);
     setCalloutQueue(q => [...q, { n: session.lastDrawn, msg }]);
   }, [session?.lastDrawn]);
 
