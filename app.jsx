@@ -53,6 +53,8 @@ const TRANSLATIONS = {
     reject: 'REJECT',
     approve: 'APPROVE',
     roomNotFoundTitle: 'Room not found',
+    nameTakenTitle: 'Name already taken',
+    connectionErrorTitle: 'Connection error',
     waitingForApprovalTitle: 'Waiting for approval',
     hostWillLetYouIn: 'The host will let you in shortly.',
     cancel: 'Cancel',
@@ -118,6 +120,8 @@ const TRANSLATIONS = {
     reject: 'REJEITAR',
     approve: 'APROVAR',
     roomNotFoundTitle: 'Sala não encontrada',
+    nameTakenTitle: 'Nome já em uso',
+    connectionErrorTitle: 'Erro de conexão',
     waitingForApprovalTitle: 'Aguardando aprovação',
     hostWillLetYouIn: 'O host vai liberar sua entrada em breve.',
     cancel: 'Cancelar',
@@ -183,6 +187,8 @@ const TRANSLATIONS = {
     reject: 'RECHAZAR',
     approve: 'APROBAR',
     roomNotFoundTitle: 'Sala no encontrada',
+    nameTakenTitle: 'Nombre ya en uso',
+    connectionErrorTitle: 'Error de conexión',
     waitingForApprovalTitle: 'Esperando aprobación',
     hostWillLetYouIn: 'El host te dejará entrar pronto.',
     cancel: 'Cancelar',
@@ -992,6 +998,7 @@ function CastScreen({ me, room, onExit }) {
   const [joinError, setJoinError] = useState(null);
   const [joinCanRetry, setJoinCanRetry] = useState(false);
   const [joinAttempt, setJoinAttempt] = useState(0);
+  const [joinErrorTitle, setJoinErrorTitle] = useState(null);
   const [playerId, setPlayerId] = useState(null);
   const [localCard, setLocalCard] = useState(null);
   const [callout, setCallout] = useState(null);
@@ -1048,9 +1055,9 @@ function CastScreen({ me, room, onExit }) {
         localStorage.setItem(ME_KEY, JSON.stringify({ name: me.name, session: room, playerId: pid, card }));
       })
       .catch((err) => {
-        if (err?.code === 'not-found') { setJoinError(t.joinRoomNotFound); setJoinCanRetry(false); }
-        else if (err?.code === 'name-taken') { setJoinError(t.joinNameTaken); setJoinCanRetry(false); }
-        else { setJoinError(t.joinConnectionError); setJoinCanRetry(true); }
+        if (err?.code === 'not-found') { setJoinErrorTitle(t.roomNotFoundTitle); setJoinError(t.joinRoomNotFound); setJoinCanRetry(false); }
+        else if (err?.code === 'name-taken') { setJoinErrorTitle(t.nameTakenTitle); setJoinError(t.joinNameTaken); setJoinCanRetry(false); }
+        else { setJoinErrorTitle(t.connectionErrorTitle); setJoinError(t.joinConnectionError); setJoinCanRetry(true); }
       })
       .finally(() => setJoining(false));
   }, [room, joinAttempt]);
@@ -1115,7 +1122,7 @@ function CastScreen({ me, room, onExit }) {
     <ScreenShell>
       <div style={{ textAlign: 'center', padding: '20px 0' }}>
         <div role="img" aria-label="Cara confusa" style={{ fontSize: 48, marginBottom: 12 }}>😕</div>
-        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>{t.roomNotFoundTitle}</div>
+        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>{joinErrorTitle}</div>
         <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>{joinError}</div>
         {joinCanRetry && <BigCta onClick={() => { setJoinError(null); setJoinAttempt(a => a + 1); }} style={{ marginBottom: 12 }}>{t.retry}</BigCta>}
         <BigCta onClick={onExit}>{t.backToStart}</BigCta>
