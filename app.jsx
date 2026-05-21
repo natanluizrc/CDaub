@@ -71,6 +71,7 @@ const TRANSLATIONS = {
     joinRoomNotFound: 'Room not found. Check the code with the host.',
     joinNameTaken: 'Name already taken in this room. Go back and choose a different name.',
     joinConnectionError: 'Connection error. Please try again.',
+    retry: 'Try again',
     cold: 'COLD',
     warm: 'WARM',
     fire: 'FIRE',
@@ -135,6 +136,7 @@ const TRANSLATIONS = {
     joinRoomNotFound: 'Sala não encontrada. Confirme o código com o host.',
     joinNameTaken: 'Nome já usado nessa sala. Volte e escolha outro nome.',
     joinConnectionError: 'Erro de conexão. Tente novamente.',
+    retry: 'Tentar novamente',
     cold: 'FRIO',
     warm: 'QUENTE',
     fire: 'FOGO',
@@ -199,6 +201,7 @@ const TRANSLATIONS = {
     joinRoomNotFound: 'Sala no encontrada. Confirma el código con el host.',
     joinNameTaken: 'Nombre ya usado en esta sala. Vuelve y elige otro nombre.',
     joinConnectionError: 'Error de conexión. Inténtalo de nuevo.',
+    retry: 'Intentar de nuevo',
     cold: 'FRÍO',
     warm: 'CÁLIDO',
     fire: 'FUEGO',
@@ -342,7 +345,7 @@ function Logo() {
 function Field({ label, children }) {
   return (
     <label style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 14 }}>
-      <span style={{ fontSize: 11, fontWeight: 900, color: '#afafaf', letterSpacing: '0.2em' }}>{label}</span>
+      <span style={{ fontSize: 11, fontWeight: 900, color: '#6b6b6b', letterSpacing: '0.2em' }}>{label}</span>
       {children}
     </label>
   );
@@ -385,7 +388,7 @@ function BackLink({ onClick, children }) {
       position: 'absolute', top: 18, left: 22,
       background: 'transparent', border: 'none', cursor: 'pointer',
       fontFamily: 'inherit', fontSize: 13, fontWeight: 800,
-      color: '#afafaf', padding: 6,
+      color: '#6b6b6b', padding: 6,
     }}>{children}</button>
   );
 }
@@ -492,7 +495,7 @@ function JoinScreen({ name, onJoin, onBack }) {
       <BackLink onClick={onBack}>{t.back}</BackLink>
       <div style={{ fontSize: 28, fontWeight: 900, color: '#3c3c3c', textAlign: 'center', marginBottom: 28, marginTop: 28 }}>{t.enterRoomCode}</div>
       <div style={{ padding: '18px 20px', background: '#ffffff', border: '2px solid #ff9600', borderRadius: 20, boxShadow: '0 5px 0 #cc7700', display: 'flex', flexDirection: 'column', gap: 8 }}>
-        <span style={{ fontSize: 11, fontWeight: 900, color: '#afafaf', letterSpacing: '0.2em' }}>{t.roomLabel}</span>
+        <span style={{ fontSize: 11, fontWeight: 900, color: '#6b6b6b', letterSpacing: '0.2em' }}>{t.roomLabel}</span>
         <input type="text" value={room} onChange={(e) => setRoom(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))} placeholder="00" autoFocus style={{ ...inputStyle, letterSpacing: '0.2em', fontVariantNumeric: 'tabular-nums', fontSize: 32, textAlign: 'center', padding: '10px 16px' }} onKeyDown={(e) => e.key === 'Enter' && canGo && onJoin(room.trim())} />
       </div>
       <div style={{ marginTop: 14 }}>
@@ -544,7 +547,7 @@ function ExitModal({ onCancel, onConfirm, room }) {
       <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, maxHeight: 'min(80vh, 560px)', background: '#ffffff', border: '3px solid #ff4b4b', borderRadius: 24, boxShadow: '0 12px 0 #d63030, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', position: 'relative', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards', display: 'flex', flexDirection: 'column' }}>
         <button onClick={onCancel} style={{ position: 'absolute', top: 14, right: 14, width: 36, height: 36, background: '#ffe9e9', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 900, color: '#ff4b4b', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>✕</button>
         <div style={{ padding: '32px 28px 8px', flexShrink: 0 }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: '#afafaf', letterSpacing: '0.18em', marginBottom: 4 }}>{t.roomLabel} {String(room).padStart(2, '0')}</div>
+          <div style={{ fontSize: 11, fontWeight: 800, color: '#6b6b6b', letterSpacing: '0.18em', marginBottom: 4 }}>{t.roomLabel} {String(room).padStart(2, '0')}</div>
           <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c' }}>{t.exitRoomQuestion}</div>
         </div>
         <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px 22px', display: 'flex', flexDirection: 'column', gap: 16, borderTop: '2px solid #f3f3f3' }}>
@@ -577,8 +580,8 @@ function WinNotif({ name, onClose }) {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 80, background: 'rgba(31, 41, 55, 0.6)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 200ms ease forwards' }}>
       <div style={{ background: '#ffffff', border: '4px solid #58cc02', borderRadius: 32, boxShadow: '0 12px 0 #46a302, 0 24px 64px rgba(0,0,0,0.22)', padding: '40px 32px 28px', textAlign: 'center', maxWidth: 360, width: '100%', animation: 'modalPop 320ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards', position: 'relative' }}>
-        <button onClick={onClose} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#afafaf', fontWeight: 900, lineHeight: 1, padding: 4 }}>✕</button>
-        <div style={{ fontSize: 64, marginBottom: 8 }}>🏆</div>
+        <button onClick={onClose} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#6b6b6b', fontWeight: 900, lineHeight: 1, padding: 4 }}>✕</button>
+        <div role="img" aria-label="Troféu" style={{ fontSize: 64, marginBottom: 8 }}>🏆</div>
         <div style={{ fontSize: 36, fontWeight: 900, color: '#58cc02', letterSpacing: '-0.02em', lineHeight: 1 }}>BINGO!</div>
         <div style={{ fontSize: 18, fontWeight: 800, color: '#3c3c3c', marginTop: 10, marginBottom: 22 }}>{t.gotItPre}{name}{t.gotItPost}</div>
         <BigCta onClick={onClose}>{t.seeResults}</BigCta>
@@ -629,9 +632,9 @@ function useIsPortraitMobile() {
 function RotatePrompt({ title, message }) {
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#3c3c3c', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24, fontFamily: '"Nunito", system-ui, sans-serif', padding: 32, textAlign: 'center' }}>
-      <div style={{ fontSize: 72, animation: 'rotateHint 2s ease-in-out infinite' }}>📱</div>
+      <div role="img" aria-label="Celular — gire para horizontal" style={{ fontSize: 72, animation: 'rotateHint 2s ease-in-out infinite' }}>📱</div>
       <div style={{ fontSize: 22, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.01em' }}>{title}</div>
-      <div style={{ fontSize: 15, fontWeight: 700, color: '#afafaf', lineHeight: 1.5, maxWidth: 260 }}>{message}</div>
+      <div style={{ fontSize: 15, fontWeight: 700, color: '#6b6b6b', lineHeight: 1.5, maxWidth: 260 }}>{message}</div>
     </div>
   );
 }
@@ -792,7 +795,7 @@ function HostScreen({ me, room, onExit }) {
 
   if (isPortraitMobile) return <RotatePrompt title={t.rotating} message={t.hostLandscape} />;
   if (fsError) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#ff4b4b', textAlign: 'center', padding: 40, fontWeight: 700 }}>Firestore error: {fsError}</div></div>;
-  if (!session) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#afafaf', textAlign: 'center', padding: 40, fontWeight: 700 }}>{t.connecting}</div></div>;
+  if (!session) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#6b6b6b', textAlign: 'center', padding: 40, fontWeight: 700 }}>{t.connecting}</div></div>;
 
   const drawn = session.drawn || [];
   const drawnSet = new Set(drawn);
@@ -821,7 +824,7 @@ function HostScreen({ me, room, onExit }) {
         <div style={{ flex: 1, minHeight: 0, display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gridTemplateRows: '1fr', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)', alignItems: 'stretch' }}>
           <div style={{ gridColumn: 'span 2', alignSelf: 'stretch', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: 3 }}>
             <div style={{ fontSize: '6vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>CDaub.</div>
-            <div style={{ fontSize: 'clamp(9px, 1.1vw, 11px)', fontWeight: 800, color: '#afafaf', letterSpacing: '0.14em', lineHeight: 1.5 }}>
+            <div style={{ fontSize: 'clamp(9px, 1.1vw, 11px)', fontWeight: 800, color: '#6b6b6b', letterSpacing: '0.14em', lineHeight: 1.5 }}>
               <div>HOST</div>
               <div>{me.name}</div>
             </div>
@@ -881,7 +884,7 @@ function StatTile({ label, value, accent }) {
     <div style={{ height: '100%', boxSizing: 'border-box', background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 18, boxShadow: '0 3px 0 #e5e5e5', padding: 'clamp(10px, 1.5vw, 14px) clamp(12px, 2vw, 18px)', display: 'flex', alignItems: 'center', gap: 'clamp(8px, 1.5vw, 14px)', minWidth: 0 }}>
       <div style={{ width: 4, height: 'clamp(28px, 4vw, 36px)', background: accent, borderRadius: 4, flexShrink: 0 }} />
       <span style={{ fontSize: 'clamp(20px, 3vw, 26px)', fontWeight: 900, color: '#3c3c3c', lineHeight: 1, letterSpacing: '-0.02em' }}>{value}</span>
-      <span style={{ marginLeft: 'auto', fontSize: 'clamp(10px, 1.3vw, 12px)', color: '#afafaf', fontWeight: 800, letterSpacing: '0.16em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</span>
+      <span style={{ marginLeft: 'auto', fontSize: 'clamp(10px, 1.3vw, 12px)', color: '#6b6b6b', fontWeight: 800, letterSpacing: '0.16em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</span>
     </div>
   );
 }
@@ -920,13 +923,13 @@ function LeaderboardModal({ players, onClose, totalCalled, room }) {
   return (
     <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 70, background: 'rgba(31, 41, 55, 0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
       <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, maxHeight: 'min(80vh, 560px)', background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 24, boxShadow: '0 12px 0 #d6d6d6, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', position: 'relative', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards', display: 'flex', flexDirection: 'column' }}>
-        <button onClick={onClose} style={{ position: 'absolute', top: 14, right: 14, width: 36, height: 36, background: '#f3f3f3', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 900, color: '#afafaf', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>✕</button>
+        <button onClick={onClose} style={{ position: 'absolute', top: 14, right: 14, width: 36, height: 36, background: '#f3f3f3', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 900, color: '#6b6b6b', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>✕</button>
         <div style={{ padding: '32px 28px 8px', flexShrink: 0 }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: '#afafaf', letterSpacing: '0.18em', marginBottom: 4 }}>{t.roomLabel} {String(room).padStart(2, '0')}</div>
+          <div style={{ fontSize: 11, fontWeight: 800, color: '#6b6b6b', letterSpacing: '0.18em', marginBottom: 4 }}>{t.roomLabel} {String(room).padStart(2, '0')}</div>
           <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c' }}>{t.leaderboard}</div>
         </div>
         <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px 22px', display: 'flex', flexDirection: 'column', gap: 8, borderTop: '2px solid #f3f3f3' }}>
-          {players.length === 0 && <div style={{ textAlign: 'center', padding: '20px 0', fontSize: 14, fontWeight: 700, color: '#afafaf' }}>{t.noPlayersPre} {String(room).padStart(2, '0')} {t.noPlayersPost}</div>}
+          {players.length === 0 && <div style={{ textAlign: 'center', padding: '20px 0', fontSize: 14, fontWeight: 700, color: '#6b6b6b' }}>{t.noPlayersPre} {String(room).padStart(2, '0')} {t.noPlayersPost}</div>}
           {players.map((p, i) => {
             const pct = totalCalled > 0 ? p.hits / totalCalled : 0;
             return (
@@ -945,7 +948,7 @@ function LeaderboardModal({ players, onClose, totalCalled, room }) {
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', minWidth: 52 }}>
                   <span style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', lineHeight: 1 }}>{p.hits}</span>
-                  <span style={{ fontSize: 10, fontWeight: 800, color: '#afafaf', letterSpacing: '0.1em', marginTop: 2 }}>{t.hits}</span>
+                  <span style={{ fontSize: 10, fontWeight: 800, color: '#6b6b6b', letterSpacing: '0.1em', marginTop: 2 }}>{t.hits}</span>
                 </div>
               </div>
             );
@@ -961,7 +964,7 @@ function PendingScreen({ players, onApprove, onReject }) {
   return (
     <ScreenShell>
       <div style={{ textAlign: 'center', padding: '20px 0 16px' }}>
-        <div style={{ fontSize: 48, marginBottom: 12 }}>⏳</div>
+        <div role="img" aria-label="Ampulheta — aguardando" style={{ fontSize: 48, marginBottom: 12 }}>⏳</div>
         <div style={{ fontSize: 24, fontWeight: 900, color: '#3c3c3c', marginBottom: 6 }}>{t.waitingToJoin}</div>
         <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 20 }}>{t.approveOrReject}</div>
       </div>
@@ -987,6 +990,8 @@ function CastScreen({ me, room, onExit }) {
   const [loaded, setLoaded] = useState(false);
   const [joining, setJoining] = useState(false);
   const [joinError, setJoinError] = useState(null);
+  const [joinCanRetry, setJoinCanRetry] = useState(false);
+  const [joinAttempt, setJoinAttempt] = useState(0);
   const [playerId, setPlayerId] = useState(null);
   const [localCard, setLocalCard] = useState(null);
   const [callout, setCallout] = useState(null);
@@ -1022,15 +1027,20 @@ function CastScreen({ me, room, onExit }) {
     } catch {}
 
     setJoining(true);
-    sessionRef(room).get().then((snap) => {
-      if (!snap.exists) { setJoinError(t.joinRoomNotFound); setJoining(false); return; }
+    setJoinCanRetry(false);
+    const fetchWithTimeout = Promise.race([
+      sessionRef(room).get(),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 5000)),
+    ]);
+    fetchWithTimeout.then((snap) => {
+      if (!snap.exists) { setJoinError(t.joinRoomNotFound); setJoinCanRetry(false); return; }
       const data = snap.data();
       const takenNames = [
         ...Object.values(data.players || {}),
         ...Object.values(data.pending || {}),
       ].map(p => p.name.toLowerCase());
       if (takenNames.includes(me.name.toLowerCase())) {
-        setJoinError(t.joinNameTaken); setJoining(false); return;
+        setJoinError(t.joinNameTaken); setJoinCanRetry(false); return;
       }
       const pid = `p_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
       const card = makeCard();
@@ -1040,13 +1050,22 @@ function CastScreen({ me, room, onExit }) {
           setLocalCard(card);
           localStorage.setItem(ME_KEY, JSON.stringify({ name: me.name, session: room, playerId: pid, card }));
         });
-    }).catch(() => setJoinError(t.joinConnectionError)).finally(() => setJoining(false));
-  }, [room]);
+    }).catch(() => { setJoinError(t.joinConnectionError); setJoinCanRetry(true); }).finally(() => setJoining(false));
+  }, [room, joinAttempt]);
 
   useEffect(() => {
     if (!playerId) return;
-    const unsub = sessionRef(room).onSnapshot((snap) => { setSession(snap.exists ? snap.data() : null); setLoaded(true); });
-    return () => unsub();
+    let unsub;
+    let retryTimeout;
+    let retries = 0;
+    const subscribe = () => {
+      unsub = sessionRef(room).onSnapshot(
+        (snap) => { setSession(snap.exists ? snap.data() : null); setLoaded(true); },
+        () => { if (retries++ < 3) retryTimeout = setTimeout(subscribe, 5000); }
+      );
+    };
+    subscribe();
+    return () => { if (unsub) unsub(); clearTimeout(retryTimeout); };
   }, [playerId, room]);
 
   useEffect(() => {
@@ -1093,9 +1112,10 @@ function CastScreen({ me, room, onExit }) {
   if (joinError) return (
     <ScreenShell>
       <div style={{ textAlign: 'center', padding: '20px 0' }}>
-        <div style={{ fontSize: 48, marginBottom: 12 }}>😕</div>
+        <div role="img" aria-label="Cara confusa" style={{ fontSize: 48, marginBottom: 12 }}>😕</div>
         <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>{t.roomNotFoundTitle}</div>
         <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>{joinError}</div>
+        {joinCanRetry && <BigCta onClick={() => { setJoinError(null); setJoinAttempt(a => a + 1); }} style={{ marginBottom: 12 }}>{t.retry}</BigCta>}
         <BigCta onClick={onExit}>{t.backToStart}</BigCta>
       </div>
     </ScreenShell>
@@ -1103,7 +1123,7 @@ function CastScreen({ me, room, onExit }) {
 
   if (isPortraitMobile) return <RotatePrompt title={t.rotating} message={t.castLandscape} />;
 
-  if (joining || (!loaded && playerId)) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#afafaf', textAlign: 'center', padding: 40, fontWeight: 700 }}>{t.connecting}</div></div>;
+  if (joining || (!loaded && playerId)) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#6b6b6b', textAlign: 'center', padding: 40, fontWeight: 700 }}>{t.connecting}</div></div>;
 
   if (loaded && !session) return (
     <ScreenShell>
@@ -1123,7 +1143,7 @@ function CastScreen({ me, room, onExit }) {
   if (!myPlayer && isPending) return (
     <ScreenShell>
       <div style={{ textAlign: 'center', padding: '20px 0' }}>
-        <div style={{ fontSize: 48, marginBottom: 12 }}>⏳</div>
+        <div role="img" aria-label="Ampulheta — aguardando aprovação" style={{ fontSize: 48, marginBottom: 12 }}>⏳</div>
         <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>{t.waitingForApprovalTitle}</div>
         <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>{t.hostWillLetYouIn}</div>
         <BigCta onClick={onExit}>{t.cancel}</BigCta>
@@ -1134,7 +1154,7 @@ function CastScreen({ me, room, onExit }) {
   if (rejected || (!myPlayer && !isPending)) return (
     <ScreenShell>
       <div style={{ textAlign: 'center', padding: '20px 0' }}>
-        <div style={{ fontSize: 48, marginBottom: 12 }}>🚫</div>
+        <div role="img" aria-label="Proibido — solicitação negada" style={{ fontSize: 48, marginBottom: 12 }}>🚫</div>
         <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>{t.requestDeniedTitle}</div>
         <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>{t.hostDidntLetIn}</div>
         <BigCta onClick={onExit}>{t.backToStart}</BigCta>
@@ -1185,7 +1205,7 @@ function CastScreen({ me, room, onExit }) {
         <div style={{ flex: 1, minHeight: 0, display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 'clamp(3px, 0.7vw, 8px)', padding: '0 clamp(6px, 1vw, 12px)' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: 3 }}>
             <div style={{ fontSize: '6vh', fontWeight: 900, letterSpacing: '-0.01em', lineHeight: 1 }}>CDaub.</div>
-            <div style={{ fontSize: 'clamp(9px, 1.1vw, 11px)', fontWeight: 800, color: '#afafaf', letterSpacing: '0.14em', lineHeight: 1.5 }}>
+            <div style={{ fontSize: 'clamp(9px, 1.1vw, 11px)', fontWeight: 800, color: '#6b6b6b', letterSpacing: '0.14em', lineHeight: 1.5 }}>
               <div>CAST</div>
               <div>{me.name}</div>
             </div>
@@ -1225,7 +1245,7 @@ function CastScreen({ me, room, onExit }) {
             return (
               <button key={`${r}-${c}`} data-cell={val} disabled
                 style={{ background: bg, color: fg, border, borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', fontSize: isFree ? 'clamp(16px, 4vw, 24px)' : 'clamp(12px, 3.5vw, 18px)', fontWeight: 900, letterSpacing: '0.02em', cursor: 'default', opacity: 1, transition: 'all 200ms cubic-bezier(0.34, 1.56, 0.64, 1)', padding: 0, minWidth: 0, minHeight: 0 }}>
-                {isFree ? <span style={{ fontSize: 'clamp(9px, 1.9vw, 13px)', fontWeight: 900, color: '#afafaf', letterSpacing: '0.08em', animation: tempStage.anim, lineHeight: 1 }}>{tempStage.word}</span> : String(val).padStart(2, '0')}
+                {isFree ? <span style={{ fontSize: 'clamp(9px, 1.9vw, 13px)', fontWeight: 900, color: '#6b6b6b', letterSpacing: '0.08em', animation: tempStage.anim, lineHeight: 1 }}>{tempStage.word}</span> : String(val).padStart(2, '0')}
               </button>
             );
           }))}
@@ -1272,10 +1292,10 @@ function CalledList({ called, latest, onClose }) {
       <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 460, background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 24, boxShadow: '0 12px 0 #d6d6d6, 0 24px 64px rgba(0,0,0,0.18)', padding: '20px 20px 24px', animation: 'modalPop 240ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
           <div style={{ fontSize: 20, fontWeight: 900 }}>{t.drawnBalls} ({called.length})</div>
-          <button onClick={onClose} style={{ width: 32, height: 32, border: 'none', background: '#f3f3f3', borderRadius: 10, fontSize: 16, fontWeight: 900, color: '#afafaf', cursor: 'pointer' }}>✕</button>
+          <button onClick={onClose} style={{ width: 32, height: 32, border: 'none', background: '#f3f3f3', borderRadius: 10, fontSize: 16, fontWeight: 900, color: '#6b6b6b', cursor: 'pointer' }}>✕</button>
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {called.length === 0 && <div style={{ fontSize: 13, color: '#afafaf', fontWeight: 700 }}>{t.noBallsDrawn}</div>}
+          {called.length === 0 && <div style={{ fontSize: 13, color: '#6b6b6b', fontWeight: 700 }}>{t.noBallsDrawn}</div>}
           {called.map((n) => (
             <div key={n} style={{ padding: '6px 10px', background: n === latest ? '#58cc02' : '#ffc800', color: n === latest ? '#ffffff' : '#7a5a00', border: `1.5px solid ${n === latest ? '#46a302' : '#e0a800'}`, borderRadius: 10, fontSize: 13, fontWeight: 900, boxShadow: `0 2px 0 ${n === latest ? '#46a302' : '#c79100'}` }}>{String(n).padStart(2, '0')}</div>
           ))}
