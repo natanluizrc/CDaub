@@ -2,8 +2,12 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /sessions/{code} {
-      // Qualquer pessoa com o código pode ler e escrever na sessão.
-      // Para produção: adicione autenticação anônima e valide com request.auth != null
+      allow read, write: if true;
+    }
+    match /names/{name} {
+      allow read, write: if true;
+    }
+    match /users/{uid} {
       allow read, write: if true;
     }
   }
