@@ -9,6 +9,18 @@ const LANG_KEY = "bingo_lang";
 const db = () => firebase.firestore();
 const sessionRef = (code) => db().collection("sessions").doc(code);
 
+function trackUser(uid) {
+  const ref = db().collection('users').doc(uid);
+  ref.get().then(snap => {
+    const now = firebase.firestore.FieldValue.serverTimestamp();
+    if (snap.exists) {
+      ref.update({ lastSeen: now, sessionCount: firebase.firestore.FieldValue.increment(1) });
+    } else {
+      ref.set({ uid, firstSeen: now, lastSeen: now, sessionCount: 1 });
+    }
+  }).catch(() => {});
+}
+
 // ---------- Translations ----------
 const TRANSLATIONS = {
   en: {
@@ -699,7 +711,7 @@ function HostScreen({ me, room, onExit }) {
           drawnRef.current = snap.data().drawn || [];
         } else if (!createdRef.current) {
           createdRef.current = true;
-          ref.set({ code: room, callerName: me.name, createdAt: Date.now(), drawn: [], lastDrawn: null, lastDrawnAt: null, players: {}, winner: null })
+          ref.set({ code: room, callerName: me.name, hostUid: me.uid || null, createdAt: Date.now(), drawn: [], lastDrawn: null, lastDrawnAt: null, players: {}, winner: null })
             .catch((err) => setFsError(err.message));
         }
       },
@@ -1046,7 +1058,7 @@ function CastScreen({ me, room, onExit }) {
         ...Object.values(data.pending || {}),
       ].map(p => p.name.toLowerCase());
       if (takenNames.includes(me.name.toLowerCase())) throw { code: 'name-taken' };
-      tx.update(sessionRef(room), { [`pending.${pid}`]: { id: pid, name: me.name, joinedAt: Date.now(), card } });
+      tx.update(sessionRef(room), { [`pending.${pid}`]: { id: pid, name: me.name, uid: me.uid || null, joinedAt: Date.now(), card } });
     });
     Promise.race([txn, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 8000))])
       .then(() => {
@@ -1333,6 +1345,14 @@ function App() {
     localStorage.setItem(LANG_KEY, l);
   }, []);
 
+  const [uid, setUid] = useState(null);
+
+  useEffect(() => {
+    firebase.auth().signInAnonymously()
+      .then(cred => { setUid(cred.user.uid); trackUser(cred.user.uid); })
+      .catch(() => {});
+  }, []);
+
   const [stage, setStage] = useState('welcome');
   const [name, setName] = useState(() => { try { return JSON.parse(localStorage.getItem(ME_KEY) || '{}').name || ''; } catch { return ''; } });
   const [room, setRoom] = useState('');
@@ -1362,8 +1382,8 @@ function App() {
       {stage === 'welcome' && <WelcomeScreen onContinue={handleWelcome} initialName={name} />}
       {stage === 'role' && <RoleScreen name={name} onPick={(r) => r === 'host' ? handlePickHost() : setStage('join')} onBack={() => setStage('welcome')} generating={generating} genError={genError} />}
       {stage === 'join' && <JoinScreen name={name} onJoin={handleJoin} onBack={() => setStage('role')} />}
-      {stage === 'host' && <HostScreen me={{ name }} room={room} onExit={handleExit} />}
-      {stage === 'cast' && <CastScreen me={{ name }} room={room} onExit={handleExit} />}
+      {stage === 'host' && <HostScreen me={{ name, uid }} room={room} onExit={handleExit} />}
+      {stage === 'cast' && <CastScreen me={{ name, uid }} room={room} onExit={handleExit} />}
     </LangContext.Provider>
   );
 }
