@@ -135,7 +135,7 @@ welcome → home → [Criar Sala] → host (HostScreen → LobbyScreen → jogo)
 
 | `screen` | Componente | Descrição |
 |----------|-----------|-----------|
-| `'welcome'` | `WelcomeScreen` | Nome + LangPicker; F5 limpa campo |
+| `'welcome'` | `WelcomeScreen` | Nome + LangPicker; F5 pré-preenche com nome salvo |
 | `'home'` | `HomeScreen` | Criar Sala / Entrar na Sala |
 | `'join'` | `JoinScreen` | Input de código de 2 dígitos |
 | `'host'` | `HostScreen` | Grid de 72 bolas + LobbyScreen embutida |
@@ -187,7 +187,7 @@ Para saídas explícitas (BackLink, ExitModal, inatividade), o SDK é seguro —
 
 ⚠️ **Problema conhecido**: extensões de browser (uBlock, AdGuard, etc.) podem bloquear `sendBeacon` para `firestore.googleapis.com` em guias normais — funciona em guia anônima e mobile. Solução pendente: sistema de presença por heartbeat.
 
-1. **WelcomeScreen** — nome do jogador (**não** persiste localStorage — campo em branco no F5); valida e reserva nome globalmente ao clicar Continuar; `LangPicker` no topo; rodapé `t.developedBy`
+1. **WelcomeScreen** — nome do jogador (persiste em `localStorage` via `ME_KEY` — campo pré-preenchido no F5); valida e reserva nome globalmente ao clicar Continuar; `LangPicker` no topo; rodapé `t.developedBy`
 2. **HomeScreen** — saudação `t.greeting` + `t.whatToDo`; dois `HomeCard`:
    - 🎙️ `t.createRoom` (verde `#58cc02`) — chama `onPick('host')`
    - 🎟️ `t.joinRoom` (azul `#1cb0f6`) — chama `onPick('cast')` → vai para JoinScreen
@@ -249,7 +249,7 @@ Para saídas explícitas (BackLink, ExitModal, inatividade), o SDK é seguro —
 
 ## Comportamento do nome
 
-- **F5** → campo em branco (nome não é lido do localStorage)
+- **F5** → WelcomeScreen com nome pré-preenchido (lido de `localStorage`); nome ainda reservado no Firestore até expirar por inatividade
 - **Back da HomeScreen** → Welcome com nome pré-preenchido; `releaseName` chamado
 - **Exit do jogo/lobby** → HomeScreen com nome ainda ativo (pode criar/entrar em outra sala)
 - **Timeout de inatividade** → Welcome com nome pré-preenchido; `releaseName` chamado

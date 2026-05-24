@@ -60,17 +60,11 @@ const TRANSLATIONS = {
     roomLabel: 'ROOM',
     join: 'Join',
     greeting: 'Hello, {name}!',
-    pickRole: 'Pick a role to enter the game.',
     generatingRoom: 'Generating room…',
-    hostTagline: "You'll call the balls",
-    hostDesc: 'Run the room. Draw numbers, watch the leaderboard, keep the party going.',
-    castTagline: "You'll play with a card",
-    castDesc: 'Mark your card as numbers are drawn. Be the first to complete a line and shout it out.',
     rotating: 'Rotate your phone',
     hostLandscape: 'The host screen works best in landscape.',
     castLandscape: 'The player screen works best in landscape.',
     connecting: 'Connecting…',
-    waiting: 'waiting',
     roomInfo: 'Room info',
     exitRoom: 'Exit room',
     draw: 'Draw',
@@ -86,8 +80,6 @@ const TRANSLATIONS = {
     noPlayersPre: 'No players yet. Share Room',
     noPlayersPost: 'to get started!',
     hits: 'HITS',
-    waitingToJoin: 'Waiting to join',
-    approveOrReject: 'Approve or reject each player.',
     reject: 'REJECT',
     approve: 'APPROVE',
     roomNotFoundTitle: 'Room not found',
@@ -116,8 +108,6 @@ const TRANSLATIONS = {
     fire: 'FIRE',
     globalNameTaken: 'This name is already in use by another player.',
     startGame: 'Start game',
-    joinGameStartedTitle: 'Game in progress',
-    joinGameStarted: 'This game has already started. Wait for the next round.',
     roomFullTitle: 'Room Full',
     joinRoomFull: 'This room already has 12 players.',
     you: 'YOU',
@@ -142,17 +132,11 @@ const TRANSLATIONS = {
     roomLabel: 'SALA',
     join: 'Entrar',
     greeting: 'Olá, {name}!',
-    pickRole: 'Escolha um papel para entrar no jogo.',
     generatingRoom: 'Criando sala…',
-    hostTagline: 'Você vai sortear as bolas',
-    hostDesc: 'Conduza a sala. Sorteie números, acompanhe o ranking e anime a galera.',
-    castTagline: 'Você vai jogar com uma cartela',
-    castDesc: 'Marque sua cartela conforme os números são sorteados. Seja o primeiro a completar uma linha!',
     rotating: 'Vire o celular',
     hostLandscape: 'A tela do host funciona melhor na horizontal.',
     castLandscape: 'A tela do jogador funciona melhor na horizontal.',
     connecting: 'Conectando…',
-    waiting: 'aguardando',
     roomInfo: 'Info da sala',
     exitRoom: 'Sair da sala',
     draw: 'Sortear',
@@ -168,8 +152,6 @@ const TRANSLATIONS = {
     noPlayersPre: 'Nenhum jogador ainda. Compartilhe a Sala',
     noPlayersPost: 'para começar!',
     hits: 'ACERTOS',
-    waitingToJoin: 'Aguardando entrar',
-    approveOrReject: 'Aprove ou rejeite cada jogador.',
     reject: 'REJEITAR',
     approve: 'APROVAR',
     roomNotFoundTitle: 'Sala não encontrada',
@@ -198,8 +180,6 @@ const TRANSLATIONS = {
     fire: 'FOGO',
     globalNameTaken: 'Este nome já está sendo usado por outro jogador.',
     startGame: 'Iniciar jogo',
-    joinGameStartedTitle: 'Jogo em andamento',
-    joinGameStarted: 'Este jogo já começou. Aguarde a próxima partida.',
     roomFullTitle: 'Sala Cheia',
     joinRoomFull: 'Esta sala já tem 12 jogadores.',
     you: 'VOCÊ',
@@ -224,17 +204,11 @@ const TRANSLATIONS = {
     roomLabel: 'SALA',
     join: 'Unirse',
     greeting: '¡Hola, {name}!',
-    pickRole: 'Elige un rol para entrar al juego.',
     generatingRoom: 'Creando sala…',
-    hostTagline: 'Tú cantarás los números',
-    hostDesc: 'Conduce la sala. Sortea números, mira el ranking y anima a los jugadores.',
-    castTagline: 'Jugarás con un cartón',
-    castDesc: 'Marca tu cartón mientras se sortean los números. ¡Sé el primero en completar una línea!',
     rotating: 'Gira tu teléfono',
     hostLandscape: 'La pantalla del host funciona mejor en horizontal.',
     castLandscape: 'La pantalla del jugador funciona mejor en horizontal.',
     connecting: 'Conectando…',
-    waiting: 'esperando',
     roomInfo: 'Info de sala',
     exitRoom: 'Salir de la sala',
     draw: 'Sortear',
@@ -250,8 +224,6 @@ const TRANSLATIONS = {
     noPlayersPre: 'Sin jugadores aún. ¡Comparte la Sala',
     noPlayersPost: 'para empezar!',
     hits: 'ACIERTOS',
-    waitingToJoin: 'Esperando entrar',
-    approveOrReject: 'Aprueba o rechaza a cada jugador.',
     reject: 'RECHAZAR',
     approve: 'APROBAR',
     roomNotFoundTitle: 'Sala no encontrada',
@@ -280,8 +252,6 @@ const TRANSLATIONS = {
     fire: 'FUEGO',
     globalNameTaken: 'Este nombre ya lo está usando otro jugador.',
     startGame: 'Iniciar juego',
-    joinGameStartedTitle: 'Juego en curso',
-    joinGameStarted: 'Este juego ya comenzó. Espera la próxima partida.',
     roomFullTitle: 'Sala Llena',
     joinRoomFull: 'Esta sala ya tiene 12 jugadores.',
     you: 'TÚ',
@@ -1086,9 +1056,8 @@ function HostLobbyScreen({ me, room, session, onStart, onExit }) {
   const canStart = players.length >= 2;
 
   return (
-    <>
-      <ScreenShell>
-        <BackLink onClick={onExit}>{t.back}</BackLink>
+    <ScreenShell>
+      <BackLink onClick={onExit}>{t.back}</BackLink>
         <div style={{ background: '#fff7e6', border: '2px solid #ffd580', borderRadius: 20, padding: '16px 20px', marginTop: 28, marginBottom: 20, textAlign: 'center' }}>
           <div style={{ fontSize: 11, fontWeight: 900, color: '#6b6b6b', letterSpacing: '0.2em', marginBottom: 6 }}>{t.roomCodeLabel}</div>
           <div style={{ fontSize: 52, fontWeight: 900, color: '#ff9600', letterSpacing: '0.15em', fontVariantNumeric: 'tabular-nums', lineHeight: 1 }}>{String(room).padStart(2, '0')}</div>
@@ -1111,8 +1080,7 @@ function HostLobbyScreen({ me, room, session, onStart, onExit }) {
           ))}
         </div>
         <BigCta onClick={onStart} disabled={!canStart} pulse={canStart}>{canStart ? t.startGame : t.waitingPlayers}</BigCta>
-      </ScreenShell>
-    </>
+    </ScreenShell>
   );
 }
 
@@ -1137,13 +1105,9 @@ function CastScreen({ me, room, onExit }) {
   const [showInfo, setShowInfo] = useState(false);
   const [localBingo, setLocalBingo] = useState(false);
   const [castConfetti, setCastConfetti] = useState(false);
-  const [autoRedirect, setAutoRedirect] = useState(false);
   const prevLastDrawnRef = useRef(null);
   const hostMsgRef = useRef(t.waitingForHost);
   const castWinLinesRef = useRef([]);
-  const lastPhaseRef = useRef(null);
-
-  useEffect(() => { if (autoRedirect) onExit(); }, [autoRedirect]);
 
   useEffect(() => {
     setJoining(true);
