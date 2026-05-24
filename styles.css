@@ -9,6 +9,7 @@ html, body {
   background: #f7fafc;
   font-family: 'Nunito', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
 }
 
 #root { min-height: 100vh; }

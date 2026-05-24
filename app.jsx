@@ -52,13 +52,14 @@ function trackUser(uid) {
 const TRANSLATIONS = {
   en: {
     nameLabel: 'NAME',
-    namePlaceholder: 'e.g. Natan',
+    namePlaceholder: 'e.g. John/Mary',
     nameTooLong: 'Name must be 12 characters or less.',
     continue: 'Continue',
     back: '← Back',
     enterRoomCode: 'Enter the room code.',
     roomLabel: 'ROOM',
     join: 'Join',
+    greeting: 'Hello, {name}!',
     pickRole: 'Pick a role to enter the game.',
     generatingRoom: 'Generating room…',
     hostTagline: "You'll call the balls",
@@ -99,8 +100,8 @@ const TRANSLATIONS = {
     hostDidntLetIn: "The host didn't let you in.",
     backToStart: 'Back to start',
     roomEndedTitle: 'Room ended',
-    hostLeft: 'The host has left the room.',
-    waitingForHost: 'Waiting for the host…',
+    roomClosedByHost: 'The host closed the room.',
+    waitingForHost: 'Waiting to start…',
     daub: 'DAUB',
     wins: 'WINS',
     lost: 'LOST',
@@ -109,21 +110,38 @@ const TRANSLATIONS = {
     joinNameTaken: 'Name already taken in this room. Go back and choose a different name.',
     joinConnectionError: 'Connection error. Please try again.',
     retry: 'Try again',
-    developedBy: 'Developed by NL Consultancy',
+    developedBy: 'By NL Consultancy',
     cold: 'COLD',
     warm: 'WARM',
     fire: 'FIRE',
     globalNameTaken: 'This name is already in use by another player.',
+    startGame: 'Start game',
+    joinGameStartedTitle: 'Game in progress',
+    joinGameStarted: 'This game has already started. Wait for the next round.',
+    roomFullTitle: 'Room Full',
+    joinRoomFull: 'This room already has 12 players.',
+    you: 'YOU',
+    creator: 'HOST',
+    roomCodeLabel: 'ROOM CODE',
+    shareCode: 'Share this code with your friends',
+    players: 'PLAYERS',
+    waitingPlayers: 'Waiting for players…',
+    whatToDo: 'What do you want to do?',
+    createRoom: 'Create Room',
+    joinRoom: 'Join Room',
+    createDesc: 'Create a new room and share the code with your friends.',
+    joinDesc: 'Join an existing room using the 2-digit code.',
   },
   pt: {
     nameLabel: 'NOME',
-    namePlaceholder: 'ex: Natan',
+    namePlaceholder: 'ex: João/Maria',
     nameTooLong: 'O nome deve ter no máximo 12 caracteres.',
     continue: 'Continuar',
     back: '← Voltar',
     enterRoomCode: 'Digite o código da sala.',
     roomLabel: 'SALA',
     join: 'Entrar',
+    greeting: 'Olá, {name}!',
     pickRole: 'Escolha um papel para entrar no jogo.',
     generatingRoom: 'Criando sala…',
     hostTagline: 'Você vai sortear as bolas',
@@ -164,8 +182,8 @@ const TRANSLATIONS = {
     hostDidntLetIn: 'O host não te deixou entrar.',
     backToStart: 'Voltar ao início',
     roomEndedTitle: 'Sala encerrada',
-    hostLeft: 'O host saiu da sala.',
-    waitingForHost: 'Aguardando o host…',
+    roomClosedByHost: 'O criador encerrou a sala.',
+    waitingForHost: 'Aguardando início…',
     daub: 'MARCAR',
     wins: 'GANHOU',
     lost: 'PERDEU',
@@ -174,21 +192,38 @@ const TRANSLATIONS = {
     joinNameTaken: 'Nome já usado nessa sala. Volte e escolha outro nome.',
     joinConnectionError: 'Erro de conexão. Tente novamente.',
     retry: 'Tentar novamente',
-    developedBy: 'Desenvolvido por NL Consultoria',
+    developedBy: 'Por NL Consultoria',
     cold: 'FRIO',
     warm: 'QUENTE',
     fire: 'FOGO',
     globalNameTaken: 'Este nome já está sendo usado por outro jogador.',
+    startGame: 'Iniciar jogo',
+    joinGameStartedTitle: 'Jogo em andamento',
+    joinGameStarted: 'Este jogo já começou. Aguarde a próxima partida.',
+    roomFullTitle: 'Sala Cheia',
+    joinRoomFull: 'Esta sala já tem 12 jogadores.',
+    you: 'VOCÊ',
+    creator: 'CRIADOR',
+    roomCodeLabel: 'CÓDIGO DA SALA',
+    shareCode: 'Compartilhe este código com seus amigos',
+    players: 'JOGADORES',
+    waitingPlayers: 'Aguardando jogadores…',
+    whatToDo: 'O que deseja fazer?',
+    createRoom: 'Criar Sala',
+    joinRoom: 'Entrar na Sala',
+    createDesc: 'Crie uma nova sala e compartilhe o código com seus amigos.',
+    joinDesc: 'Entre em uma sala existente usando o código de 2 dígitos.',
   },
   es: {
     nameLabel: 'NOMBRE',
-    namePlaceholder: 'ej: Natan',
+    namePlaceholder: 'ej: Juan/María',
     nameTooLong: 'El nombre debe tener 12 caracteres o menos.',
     continue: 'Continuar',
     back: '← Atrás',
     enterRoomCode: 'Ingresa el código de sala.',
     roomLabel: 'SALA',
     join: 'Unirse',
+    greeting: '¡Hola, {name}!',
     pickRole: 'Elige un rol para entrar al juego.',
     generatingRoom: 'Creando sala…',
     hostTagline: 'Tú cantarás los números',
@@ -229,8 +264,8 @@ const TRANSLATIONS = {
     hostDidntLetIn: 'El host no te dejó entrar.',
     backToStart: 'Volver al inicio',
     roomEndedTitle: 'Sala terminada',
-    hostLeft: 'El host ha salido de la sala.',
-    waitingForHost: 'Esperando al host…',
+    roomClosedByHost: 'El creador cerró la sala.',
+    waitingForHost: 'Esperando inicio…',
     daub: 'MARCAR',
     wins: 'GANÓ',
     lost: 'PERDIÓ',
@@ -239,11 +274,27 @@ const TRANSLATIONS = {
     joinNameTaken: 'Nombre ya usado en esta sala. Vuelve y elige otro nombre.',
     joinConnectionError: 'Error de conexión. Inténtalo de nuevo.',
     retry: 'Intentar de nuevo',
-    developedBy: 'Desarrollado por NL Consultoría',
+    developedBy: 'Por NL Consultoría',
     cold: 'FRÍO',
     warm: 'CÁLIDO',
     fire: 'FUEGO',
     globalNameTaken: 'Este nombre ya lo está usando otro jugador.',
+    startGame: 'Iniciar juego',
+    joinGameStartedTitle: 'Juego en curso',
+    joinGameStarted: 'Este juego ya comenzó. Espera la próxima partida.',
+    roomFullTitle: 'Sala Llena',
+    joinRoomFull: 'Esta sala ya tiene 12 jugadores.',
+    you: 'TÚ',
+    creator: 'CREADOR',
+    roomCodeLabel: 'CÓDIGO DE SALA',
+    shareCode: 'Comparte este código con tus amigos',
+    players: 'JUGADORES',
+    waitingPlayers: 'Esperando jugadores…',
+    whatToDo: '¿Qué deseas hacer?',
+    createRoom: 'Crear Sala',
+    joinRoom: 'Entrar a la Sala',
+    createDesc: 'Crea una nueva sala y comparte el código con tus amigos.',
+    joinDesc: 'Únete a una sala existente usando el código de 2 dígitos.',
   },
 };
 
@@ -350,14 +401,16 @@ const inputStyle = {
   boxShadow: '0 2px 0 #afafaf', boxSizing: 'border-box',
 };
 
-function ScreenShell({ children }) {
+function ScreenShell({ children, back }) {
   return (
     <div style={{
-      height: '100vh', overflowY: 'auto', background: '#f7fafc',
+      minHeight: '100vh', overflowY: 'auto', background: '#f7fafc',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       padding: 'clamp(16px, 4vw, 32px)',
       fontFamily: '"Nunito", system-ui, sans-serif', boxSizing: 'border-box',
+      position: 'relative',
     }}>
+      {back}
       <div style={{
         width: '100%', maxWidth: 460,
         background: '#ffffff', border: '2px solid #e5e5e5',
@@ -412,10 +465,10 @@ function BigCta({ children, onClick, disabled, pulse, variant = 'green' }) {
         fontFamily: 'inherit', fontWeight: 900, fontSize: 'clamp(15px, 2vw, 20px)',
         letterSpacing: '0.06em', textTransform: 'uppercase',
         cursor: disabled ? 'not-allowed' : 'pointer',
-        position: 'relative',
+        position: 'relative', overflow: 'hidden',
       }}
     >
-      {pulse && !disabled && <div style={{ position: 'absolute', inset: 0, borderRadius: 'clamp(12px, 1.5vw, 18px)', animation: `${variant === 'blue' ? 'buttonPulseBlue' : 'buttonPulse'} 1.8s ease-out infinite`, pointerEvents: 'none' }} />}
+      {pulse && !disabled && <div style={{ position: 'absolute', inset: 0, borderRadius: 'inherit', animation: `${variant === 'blue' ? 'buttonPulseBlue' : 'buttonPulse'} 1.8s ease-out infinite`, pointerEvents: 'none' }} />}
       {children}
     </button>
   );
@@ -432,20 +485,20 @@ function BackLink({ onClick, children }) {
   );
 }
 
-function ChunkyButton({ onClick, variant = 'primary', children }) {
+function ChunkyButton({ onClick, variant = 'primary', children, disabled }) {
   const [pressed, setPressed] = useState(false);
   const VARIANTS = { ghost: { bg: '#ffffff', fg: '#3c3c3c', border: '#e5e5e5', shadow: '#cfcfcf' }, danger: { bg: '#ff4b4b', fg: '#ffffff', border: '#ff4b4b', shadow: '#d63030' }, primary: { bg: '#58cc02', fg: '#ffffff', border: '#58cc02', shadow: '#46a302' } };
-  const v = VARIANTS[variant];
+  const v = VARIANTS[variant] || VARIANTS.primary;
   return (
-    <button onMouseDown={() => setPressed(true)} onMouseUp={() => setPressed(false)} onMouseLeave={() => setPressed(false)} onClick={onClick}
-      style={{ width: '100%', padding: '14px 16px', background: v.bg, color: v.fg, border: `2px solid ${v.border}`, borderRadius: 14, boxShadow: pressed ? `0 1px 0 ${v.shadow}` : `0 4px 0 ${v.shadow}`, transform: pressed ? 'translateY(3px)' : 'translateY(0)', transition: 'transform 60ms ease, box-shadow 60ms ease', fontFamily: 'inherit', fontWeight: 900, fontSize: 15, letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}
+    <button onMouseDown={() => setPressed(true)} onMouseUp={() => setPressed(false)} onMouseLeave={() => setPressed(false)} onClick={onClick} disabled={disabled}
+      style={{ width: '100%', padding: '14px 16px', background: disabled ? '#cfd2d6' : v.bg, color: disabled ? '#fff' : v.fg, border: `2px solid ${disabled ? '#b3b6ba' : v.border}`, borderRadius: 14, boxShadow: pressed && !disabled ? `0 1px 0 ${v.shadow}` : `0 4px 0 ${v.shadow}`, transform: pressed && !disabled ? 'translateY(3px)' : 'translateY(0)', transition: 'transform 60ms ease, box-shadow 60ms ease', fontFamily: 'inherit', fontWeight: 900, fontSize: 15, letterSpacing: '0.06em', textTransform: 'uppercase', cursor: disabled ? 'not-allowed' : 'pointer' }}
     >{children}</button>
   );
 }
 
-function IconButton({ onClick, children, title, style = {} }) {
+function IconButton({ onClick, children, title, style: extraStyle = {} }) {
   return (
-    <button onClick={onClick} title={title} style={{ width: 40, height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, ...style }}>
+    <button onClick={onClick} title={title} style={{ width: 40, height: 40, background: '#ffffff', border: '2px solid #e5e5e5', borderRadius: 12, boxShadow: '0 2px 0 #e5e5e5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, ...extraStyle }}>
       {children}
     </button>
   );
@@ -459,6 +512,13 @@ function ExitIcon() {
 }
 
 // ---------- Lang Picker ----------
+function TwemojiFlag({ emoji }) {
+  const html = window.twemoji
+    ? twemoji.parse(emoji, { folder: 'svg', ext: '.svg', attributes: () => ({ style: 'height:1.1em;width:1.1em;vertical-align:-0.15em' }) })
+    : emoji;
+  return <span dangerouslySetInnerHTML={{ __html: html }} style={{ display: 'inline-flex', alignItems: 'center' }} />;
+}
+
 function LangPicker() {
   const { lang, setLang } = useLang();
   const options = [
@@ -481,7 +541,7 @@ function LangPicker() {
             fontFamily: 'inherit', fontWeight: 900, fontSize: 13, letterSpacing: '0.08em',
             cursor: 'pointer', transition: 'all 120ms ease',
           }}>
-            <span style={{ fontSize: 16, lineHeight: 1 }}>{flag}</span>
+            <TwemojiFlag emoji={flag} />
             <span>{label}</span>
           </button>
         );
@@ -510,14 +570,14 @@ function WelcomeScreen({ onContinue, initialName, error, claiming }) {
       <LangPicker />
       <div style={{ textAlign: 'center' }}>
         <Field label={t.nameLabel}>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder={t.namePlaceholder} autoFocus style={{ ...inputStyle, textAlign: 'center', borderColor: tooLong || showError ? '#ff4b4b' : undefined }} />
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder={t.namePlaceholder} autoFocus style={{ ...inputStyle, textAlign: 'center', borderColor: tooLong || showError ? '#ff4b4b' : undefined }} onKeyDown={(e) => e.key === 'Enter' && canGo && !tooLong && !claiming && onContinue({ name: trimmed })} />
         </Field>
         {tooLong && <div style={{ marginTop: 8, fontSize: 12, fontWeight: 800, color: '#ff4b4b' }}>{t.nameTooLong}</div>}
         {showError && <div style={{ marginTop: 8, fontSize: 12, fontWeight: 800, color: '#ff4b4b' }}>{error}</div>}
       </div>
       <div style={{ marginTop: 28 }}>
         <BigCta disabled={!canGo || tooLong || claiming} onClick={() => canGo && !tooLong && !claiming && onContinue({ name: trimmed })}>
-          {claiming ? '…' : t.continue}
+          {t.continue}
         </BigCta>
       </div>
     </ScreenShell>
@@ -525,7 +585,7 @@ function WelcomeScreen({ onContinue, initialName, error, claiming }) {
 }
 
 // ---------- Join Screen ----------
-function JoinScreen({ name, onJoin, onBack }) {
+function JoinScreen({ onJoin, onBack, error }) {
   const { t } = useLang();
   const [room, setRoom] = useState('');
   const canGo = room.trim().length >= 1;
@@ -538,6 +598,7 @@ function JoinScreen({ name, onJoin, onBack }) {
         <span style={{ fontSize: 11, fontWeight: 900, color: '#6b6b6b', letterSpacing: '0.2em' }}>{t.roomLabel}</span>
         <input type="text" value={room} onChange={(e) => setRoom(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))} placeholder="00" autoFocus style={{ ...inputStyle, letterSpacing: '0.2em', fontVariantNumeric: 'tabular-nums', fontSize: 32, textAlign: 'center', padding: '10px 16px' }} onKeyDown={(e) => e.key === 'Enter' && canGo && onJoin(room.trim())} />
       </div>
+      {error && <div style={{ marginTop: 12, fontSize: 13, fontWeight: 800, color: '#ff4b4b', textAlign: 'center' }}>{error}</div>}
       <div style={{ marginTop: 14 }}>
         <BigCta variant="orange" disabled={!canGo} onClick={() => canGo && onJoin(room.trim())}>{t.join}</BigCta>
       </div>
@@ -545,33 +606,33 @@ function JoinScreen({ name, onJoin, onBack }) {
   );
 }
 
-// ---------- Role Screen ----------
-function RoleScreen({ name, onPick, onBack, generating, genError }) {
+// ---------- Home Screen ----------
+function HomeScreen({ name, onPick, onBack, generating, genError }) {
   const { t } = useLang();
   return (
     <ScreenShell>
       <BackLink onClick={onBack}>{t.back}</BackLink>
-      <div style={{ fontSize: 28, fontWeight: 900, color: '#3c3c3c', textAlign: 'center', marginBottom: 28, marginTop: 28 }}>{t.pickRole}</div>
+      <div style={{ textAlign: 'center', marginBottom: 28, marginTop: 28 }}>
+        <div style={{ fontSize: 28, fontWeight: 900, color: '#3c3c3c' }}>{t.greeting.replace('{name}', name)}</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginTop: 6 }}>{t.whatToDo}</div>
+      </div>
       {genError && <div style={{ color: '#ff4b4b', fontWeight: 700, fontSize: 14, textAlign: 'center', marginBottom: 16 }}>{genError}</div>}
       <div style={{ display: 'grid', gap: 14 }}>
-        <RoleCard color="#58cc02" emoji="🎙️" title="HOST" tagline={generating ? t.generatingRoom : t.hostTagline} desc={t.hostDesc} onClick={() => !generating && onPick('host')} />
-        <RoleCard color="#1cb0f6" emoji="🎯" title="CAST" tagline={t.castTagline} desc={t.castDesc} onClick={() => !generating && onPick('cast')} />
+        <HomeCard color="#58cc02" emoji="🎙️" title={t.createRoom} desc={t.createDesc} onClick={() => !generating && onPick('host')} />
+        <HomeCard color="#1cb0f6" emoji="🎟️" title={t.joinRoom} desc={t.joinDesc} onClick={() => !generating && onPick('cast')} />
       </div>
     </ScreenShell>
   );
 }
 
-function RoleCard({ color, emoji, title, tagline, desc, onClick }) {
+function HomeCard({ color, emoji, title, desc, onClick }) {
   const [pressed, setPressed] = useState(false);
   return (
     <button onMouseDown={() => setPressed(true)} onMouseUp={() => setPressed(false)} onMouseLeave={() => setPressed(false)} onClick={onClick}
       style={{ textAlign: 'left', padding: 18, background: '#ffffff', border: `2px solid ${color}`, borderRadius: 20, boxShadow: pressed ? `0 1px 0 ${color}` : `0 5px 0 ${color}`, transform: pressed ? 'translateY(4px)' : 'translateY(0)', transition: 'transform 80ms ease, box-shadow 80ms ease', cursor: 'pointer', display: 'grid', gridTemplateColumns: '64px 1fr', gap: 16, alignItems: 'center', fontFamily: 'inherit' }}>
       <div style={{ width: 64, height: 64, background: color + '14', border: `2px solid ${color}`, borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 }}>{emoji}</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c', letterSpacing: '0.04em' }}>{title}</span>
-          <span style={{ fontSize: 13, fontWeight: 800, color }}>{tagline}</span>
-        </div>
+        <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c', letterSpacing: '0.04em' }}>{title}</div>
         <div style={{ fontSize: 13, fontWeight: 700, color: '#7a7a7a', lineHeight: 1.4 }}>{desc}</div>
       </div>
     </button>
@@ -645,6 +706,31 @@ function GameConfetti() {
   );
 }
 
+// ---------- PendingApprovalModal ----------
+
+function PendingApprovalModal({ pending, onApprove, onReject }) {
+  const { t } = useLang();
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'rgba(31,41,55,0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
+      <div style={{ width: '100%', maxWidth: 420, background: '#ffffff', border: '3px solid #1cb0f6', borderRadius: 24, boxShadow: '0 12px 0 #0d8fcc, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', animation: 'modalPop 280ms cubic-bezier(0.34,1.56,0.64,1) forwards' }}>
+        <div style={{ padding: '24px 24px 8px', borderBottom: '2px solid #f3f3f3' }}>
+          <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c' }}>🚪 {t.waitingForApprovalTitle}</div>
+        </div>
+        <div style={{ padding: '12px 20px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {pending.map(p => (
+            <div key={p.uid} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', background: '#fafafa', border: '2px solid #e5e5e5', borderRadius: 14 }}>
+              <div style={{ fontSize: 20, flexShrink: 0 }}>{mascotFor(p.name)}</div>
+              <div style={{ flex: 1, fontWeight: 800, color: '#3c3c3c', fontSize: 15 }}>{p.name}</div>
+              <button onClick={() => onReject(p.uid)} style={{ padding: '7px 12px', background: '#fff0f0', border: '2px solid #ff4b4b', borderRadius: 10, fontFamily: 'inherit', fontWeight: 900, fontSize: 12, color: '#ff4b4b', cursor: 'pointer', letterSpacing: '0.06em' }}>{t.reject}</button>
+              <button onClick={() => onApprove(p.uid, p.name, p.card)} style={{ padding: '7px 12px', background: '#f0fff0', border: '2px solid #58cc02', borderRadius: 10, fontFamily: 'inherit', fontWeight: 900, fontSize: 12, color: '#46a302', cursor: 'pointer', letterSpacing: '0.06em' }}>{t.approve}</button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ---------- HOST Screen ----------
 const TOTAL = 72, COLS = 12, ROWS = 6;
 
@@ -689,35 +775,18 @@ function HostScreen({ me, room, onExit }) {
   const [confetti, setConfetti] = useState(false);
   const [winnerQueue, setWinnerQueue] = useState([]);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
-  const [showPending, setShowPending] = useState(false);
   const [showExit, setShowExit] = useState(false);
+  const [showPending, setShowPending] = useState(false);
+  const prevPendingCount = useRef(0);
   const createdRef = useRef(false);
   const rollTimeoutRef = useRef(null);
   const audioCtxRef = useRef(null);
   const hostMsgRef = useRef(null);
   const drawnRef = useRef([]);
-  const prevPendingCountRef = useRef(0);
   const prevPlayerWinsRef = useRef(null);
   const cells = useMemo(() => Array.from({ length: TOTAL }, (_, i) => ({ n: i + 1, r: Math.floor(i / COLS), c: i % COLS })), []);
   const leaderboard = useMemo(() => Object.values((session?.players) || {}).map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), bingo: p.bingo })).sort((a, b) => b.hits - a.hits).map((p, i) => ({ ...p, color: i === 0 ? '#ffc800' : i === 1 ? '#afafaf' : i === 2 ? '#cd7f32' : '#6b6b6b' })), [session]);
 
-  useEffect(() => {
-    localStorage.setItem(ME_KEY, JSON.stringify({ name: me.name, session: room }));
-  }, []);
-
-  useEffect(() => {
-    const handleUnload = () => sessionRef(room).delete();
-    window.addEventListener('beforeunload', handleUnload);
-    return () => window.removeEventListener('beforeunload', handleUnload);
-  }, [room]);
-
-  useEffect(() => {
-    if (!session) return;
-    const count = Object.values(session.pending || {}).length;
-    if (count > prevPendingCountRef.current) setShowPending(true);
-    if (count === 0) setShowPending(false);
-    prevPendingCountRef.current = count;
-  }, [session]);
 
   useEffect(() => {
     const ref = sessionRef(room);
@@ -728,7 +797,7 @@ function HostScreen({ me, room, onExit }) {
           drawnRef.current = snap.data().drawn || [];
         } else if (!createdRef.current) {
           createdRef.current = true;
-          ref.set({ code: room, callerName: me.name, hostUid: me.uid || null, createdAt: Date.now(), drawn: [], lastDrawn: null, lastDrawnAt: null, players: {}, winner: null })
+          ref.set({ code: room, callerName: me.name, hostUid: me.uid || null, createdAt: Date.now(), phase: 'lobby', drawn: [], lastDrawn: null, lastDrawnAt: null, players: { [me.uid || `host_${me.name}`]: { id: me.uid || `host_${me.name}`, name: me.name, uid: me.uid || null, joinedAt: Date.now(), card: [], marked: [], bingo: false } }, winner: null })
             .catch((err) => setFsError(err.message));
         }
       },
@@ -767,6 +836,27 @@ function HostScreen({ me, room, onExit }) {
     }
     prevPlayerWinsRef.current = next;
   }, [session]);
+
+  const pendingList = Object.values(session?.pending || {});
+
+  useEffect(() => {
+    if (pendingList.length > prevPendingCount.current) setShowPending(true);
+    prevPendingCount.current = pendingList.length;
+    if (pendingList.length === 0) setShowPending(false);
+  }, [pendingList.length]);
+
+  async function handleApprove(pendingUid, pendingName, pendingCard) {
+    await sessionRef(room).update({
+      [`players.${pendingUid}`]: { id: pendingUid, name: pendingName, uid: pendingUid, joinedAt: Date.now(), card: pendingCard || makeCard(), marked: [], bingo: false },
+      [`pending.${pendingUid}`]: firebase.firestore.FieldValue.delete(),
+    }).catch(() => {});
+  }
+
+  async function handleReject(pendingUid) {
+    await sessionRef(room).update({
+      [`pending.${pendingUid}`]: firebase.firestore.FieldValue.delete(),
+    }).catch(() => {});
+  }
 
   function playSound(type) {
     try {
@@ -829,29 +919,29 @@ function HostScreen({ me, room, onExit }) {
     step();
   }
 
-  if (isPortraitMobile) return <RotatePrompt title={t.rotating} message={t.hostLandscape} />;
   if (fsError) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#ff4b4b', textAlign: 'center', padding: 40, fontWeight: 700 }}>Firestore error: {fsError}</div></div>;
   if (!session) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#6b6b6b', textAlign: 'center', padding: 40, fontWeight: 700 }}>{t.connecting}</div></div>;
+  if (session.phase === 'lobby') return (
+    <>
+      <HostLobbyScreen me={me} room={room} session={session}
+        onStart={() => sessionRef(room).update({ phase: 'playing' })}
+        onExit={() => { sessionRef(room).delete(); onExit(); }}
+      />
+      {showPending && pendingList.length > 0 && <PendingApprovalModal pending={pendingList} onApprove={handleApprove} onReject={handleReject} />}
+      {!showPending && pendingList.length > 0 && (
+        <button onClick={() => setShowPending(true)} style={{ position: 'fixed', bottom: 20, right: 20, zIndex: 80, background: '#1cb0f6', color: '#fff', border: 'none', borderRadius: 99, padding: '10px 16px', fontFamily: 'inherit', fontWeight: 900, fontSize: 14, cursor: 'pointer', boxShadow: '0 4px 0 #0d8fcc' }}>
+          🚪 {pendingList.length}
+        </button>
+      )}
+    </>
+  );
+  if (isPortraitMobile) return <RotatePrompt title={t.rotating} message={t.hostLandscape} />;
 
   const drawn = session.drawn || [];
   const drawnSet = new Set(drawn);
   const latest = drawn[drawn.length - 1] || null;
   const left = TOTAL - drawn.length;
   const progress = drawn.length / TOTAL;
-  const pendingPlayers = Object.values(session.pending || {});
-
-  const approvePending = (p) => {
-    sessionRef(room).update({
-      [`players.${p.id}`]: { ...p, marked: [], bingo: false },
-      [`pending.${p.id}`]: firebase.firestore.FieldValue.delete(),
-    });
-  };
-  const rejectPending = (p) => {
-    sessionRef(room).update({ [`pending.${p.id}`]: firebase.firestore.FieldValue.delete() });
-  };
-
-  if (showPending) return <PendingScreen players={pendingPlayers} onApprove={approvePending} onReject={rejectPending} onClose={() => setShowPending(false)} />;
-
   return (
     <div style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#f7fafc', fontFamily: '"Nunito", system-ui, sans-serif', color: '#3c3c3c', display: 'flex', justifyContent: 'center', padding: '3vh clamp(14px, 3vw, 24px)', boxSizing: 'border-box' }}>
       <div style={{ width: '100%', maxWidth: 1400, height: '100%', display: 'flex', flexDirection: 'column', gap: '5vh', position: 'relative' }}>
@@ -875,7 +965,7 @@ function HostScreen({ me, room, onExit }) {
           <StatChip value={String(drawn.length).padStart(2, '0')} accent="#58cc02" textColor="#ffffff" style={{ width: '100%', height: '100%', background: '#58cc02', border: '2px solid #46a302', boxShadow: '0 2px 0 #46a302', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
           <StatChip value={String(left).padStart(2, '0')} accent="#ff4b4b" textColor="#ffffff" style={{ width: '100%', height: '100%', background: '#ff4b4b', border: '2px solid #d63030', boxShadow: '0 2px 0 #d63030', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
           <StatChip value={String(room).padStart(2, '0')} accent="#ff9600" textColor="#ffffff" style={{ width: '100%', height: '100%', background: '#ff9600', border: '2px solid #cc7700', boxShadow: '0 2px 0 #cc7700', borderRadius: 'clamp(8px, 1.2vw, 14px)' }} />
-          <IconButton onClick={() => pendingPlayers.length > 0 ? setShowPending(true) : setShowLeaderboard(true)} title={pendingPlayers.length > 0 ? `${pendingPlayers.length} ${t.waiting}` : t.roomInfo} style={{ width: '100%', height: '100%', background: pendingPlayers.length > 0 ? '#ff9600' : '#6b6b6b', border: `2px solid ${pendingPlayers.length > 0 ? '#cc7700' : '#555555'}`, boxShadow: `0 2px 0 ${pendingPlayers.length > 0 ? '#cc7700' : '#555555'}`, color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)', fontSize: pendingPlayers.length > 0 ? 'clamp(12px, 1.4vw, 16px)' : undefined, fontWeight: 900 }}>{pendingPlayers.length > 0 ? pendingPlayers.length : <InfoIcon />}</IconButton>
+          <IconButton onClick={() => setShowLeaderboard(true)} title={t.roomInfo} style={{ width: '100%', height: '100%', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)' }}><InfoIcon /></IconButton>
           <IconButton onClick={() => setShowExit(true)} title={t.exitRoom} style={{ width: '100%', height: '100%', background: '#6b6b6b', border: '2px solid #555555', boxShadow: '0 2px 0 #555555', color: '#ffffff', borderRadius: 'clamp(8px, 1.2vw, 14px)' }}><ExitIcon /></IconButton>
         </div>
 
@@ -901,6 +991,13 @@ function HostScreen({ me, room, onExit }) {
         <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} done={!!session.winner} height='10vh' margin='clamp(6px, 1vw, 12px)' />
 
         {confetti && <GameConfetti />}
+
+        {showPending && pendingList.length > 0 && <PendingApprovalModal pending={pendingList} onApprove={handleApprove} onReject={handleReject} />}
+        {!showPending && pendingList.length > 0 && (
+          <button onClick={() => setShowPending(true)} style={{ position: 'fixed', bottom: 20, right: 20, zIndex: 80, background: '#1cb0f6', color: '#fff', border: 'none', borderRadius: 99, padding: '10px 16px', fontFamily: 'inherit', fontWeight: 900, fontSize: 14, cursor: 'pointer', boxShadow: '0 4px 0 #0d8fcc' }}>
+            🚪 {pendingList.length}
+          </button>
+        )}
 
         {winnerQueue[0]?.type === 'number' && <HostCallout n={winnerQueue[0].n} msg={winnerQueue[0].msg} onClose={() => setWinnerQueue(q => q.slice(1))} />}
         {winnerQueue[0]?.type === 'line'   && <LineNotif name={winnerQueue[0].name} onClose={() => setWinnerQueue(q => q.slice(1))} />}
@@ -983,26 +1080,39 @@ function LeaderboardModal({ players, onClose, totalCalled, room }) {
   );
 }
 
-function PendingScreen({ players, onApprove, onReject }) {
+function HostLobbyScreen({ me, room, session, onStart, onExit }) {
   const { t } = useLang();
+  const players = Object.values(session.players || {}).sort((a, b) => a.joinedAt - b.joinedAt);
+  const canStart = players.length >= 2;
+
   return (
-    <ScreenShell>
-      <div style={{ textAlign: 'center', padding: '20px 0 16px' }}>
-        <div role="img" aria-label="Ampulheta — aguardando" style={{ fontSize: 48, marginBottom: 12 }}>⏳</div>
-        <div style={{ fontSize: 24, fontWeight: 900, color: '#3c3c3c', marginBottom: 6 }}>{t.waitingToJoin}</div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 20 }}>{t.approveOrReject}</div>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {players.map((p) => (
-          <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', background: '#ffffff', border: '2px solid #ececec', borderRadius: 16, boxShadow: '0 2px 0 #ececec' }}>
-            <div style={{ width: 40, height: 40, background: '#ff960022', border: '2px solid #ff9600', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>{mascotFor(p.name)}</div>
-            <div style={{ flex: 1, fontSize: 16, fontWeight: 900, color: '#3c3c3c' }}>{p.name}</div>
-            <button onClick={() => onReject(p)} style={{ padding: '8px 16px', background: '#fff0f0', border: '2px solid #ff4b4b', borderRadius: 10, boxShadow: '0 2px 0 #d63030', color: '#ff4b4b', fontFamily: 'inherit', fontWeight: 900, fontSize: 13, letterSpacing: '0.06em', cursor: 'pointer' }}>{t.reject}</button>
-            <button onClick={() => onApprove(p)} style={{ padding: '8px 16px', background: '#58cc02', border: '2px solid #46a302', borderRadius: 10, boxShadow: '0 2px 0 #46a302', color: '#ffffff', fontFamily: 'inherit', fontWeight: 900, fontSize: 13, letterSpacing: '0.06em', cursor: 'pointer' }}>{t.approve}</button>
-          </div>
-        ))}
-      </div>
-    </ScreenShell>
+    <>
+      <ScreenShell>
+        <BackLink onClick={onExit}>{t.back}</BackLink>
+        <div style={{ background: '#fff7e6', border: '2px solid #ffd580', borderRadius: 20, padding: '16px 20px', marginTop: 28, marginBottom: 20, textAlign: 'center' }}>
+          <div style={{ fontSize: 11, fontWeight: 900, color: '#6b6b6b', letterSpacing: '0.2em', marginBottom: 6 }}>{t.roomCodeLabel}</div>
+          <div style={{ fontSize: 52, fontWeight: 900, color: '#ff9600', letterSpacing: '0.15em', fontVariantNumeric: 'tabular-nums', lineHeight: 1 }}>{String(room).padStart(2, '0')}</div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#7a7a7a', marginTop: 8 }}>{t.shareCode}</div>
+        </div>
+
+        <div style={{ fontSize: 11, fontWeight: 900, color: '#6b6b6b', letterSpacing: '0.2em', marginBottom: 10 }}>{t.players} — {players.length}</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20, maxHeight: 200, overflowY: 'auto' }}>
+          {players.map(p => (
+            <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: '#ffffff', border: '2px solid #ececec', borderRadius: 14, boxShadow: '0 2px 0 #ececec' }}>
+              <div style={{ width: 36, height: 36, background: '#ececec', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>{mascotFor(p.name)}</div>
+              <div style={{ flex: 1, fontSize: 15, fontWeight: 900, color: '#3c3c3c' }}>{p.name}</div>
+              {p.uid === session.hostUid && (
+                <span style={{ fontSize: 11, fontWeight: 900, color: '#ff9600', letterSpacing: '0.08em', background: '#fff7e6', border: '2px solid #ffd580', borderRadius: 8, padding: '3px 8px', flexShrink: 0 }}>{t.creator}</span>
+              )}
+              {p.uid === me.uid && (
+                <span style={{ fontSize: 11, fontWeight: 900, color: '#1cb0f6', letterSpacing: '0.08em', background: '#e8f7ff', border: '2px solid #9ae0ff', borderRadius: 8, padding: '3px 8px', flexShrink: 0 }}>{t.you}</span>
+              )}
+            </div>
+          ))}
+        </div>
+        <BigCta onClick={onStart} disabled={!canStart} pulse={canStart}>{canStart ? t.startGame : t.waitingPlayers}</BigCta>
+      </ScreenShell>
+    </>
   );
 }
 
@@ -1019,61 +1129,51 @@ function CastScreen({ me, room, onExit }) {
   const [joinErrorTitle, setJoinErrorTitle] = useState(null);
   const [playerId, setPlayerId] = useState(null);
   const [localCard, setLocalCard] = useState(null);
+  const [pendingId, setPendingId] = useState(null);
+  const [pendingCard, setPendingCard] = useState(null);
+  const [isRejected, setIsRejected] = useState(false);
   const [calloutQueue, setCalloutQueue] = useState([]);
   const [showExit, setShowExit] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [localBingo, setLocalBingo] = useState(false);
   const [castConfetti, setCastConfetti] = useState(false);
-  const [rejected, setRejected] = useState(false);
+  const [autoRedirect, setAutoRedirect] = useState(false);
   const prevLastDrawnRef = useRef(null);
   const hostMsgRef = useRef(t.waitingForHost);
   const castWinLinesRef = useRef([]);
-  const wasInPendingRef = useRef(false);
+  const lastPhaseRef = useRef(null);
+
+  useEffect(() => { if (autoRedirect) onExit(); }, [autoRedirect]);
 
   useEffect(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem(ME_KEY) || '{}');
-      if (saved.session === room && saved.playerId && saved.card) {
-        setPlayerId(saved.playerId);
-        setLocalCard(saved.card);
-        sessionRef(room).get().then(snap => {
-          if (!snap.exists) return;
-          const data = snap.data();
-          const inPending = !!(data.pending || {})[saved.playerId];
-          if (!inPending) {
-            const updates = { [`pending.${saved.playerId}`]: { id: saved.playerId, name: me.name, joinedAt: Date.now(), card: saved.card } };
-            if ((data.players || {})[saved.playerId]) updates[`players.${saved.playerId}`] = firebase.firestore.FieldValue.delete();
-            sessionRef(room).update(updates);
-          }
-        }).catch(() => {});
-        return;
-      }
-    } catch {}
-
     setJoining(true);
     setJoinCanRetry(false);
-    const pid = `p_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    const pid = me.uid || `p_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
     const card = makeCard();
     const txn = firebase.firestore().runTransaction(async (tx) => {
       const snap = await tx.get(sessionRef(room));
       if (!snap.exists) throw { code: 'not-found' };
       const data = snap.data();
-      const takenNames = [
-        ...Object.values(data.players || {}),
-        ...Object.values(data.pending || {}),
-      ].map(p => p.name.toLowerCase());
+      if (data.phase !== 'lobby') throw { code: 'game-started' };
+      if (Object.keys(data.players || {}).length >= 12) throw { code: 'room-full' };
+      const takenNames = Object.values(data.players || {}).map(p => p.name.toLowerCase());
       if (takenNames.includes(me.name.toLowerCase())) throw { code: 'name-taken' };
-      tx.update(sessionRef(room), { [`pending.${pid}`]: { id: pid, name: me.name, uid: me.uid || null, joinedAt: Date.now(), card } });
+      tx.update(sessionRef(room), { [`players.${pid}`]: { id: pid, name: me.name, uid: me.uid || null, joinedAt: Date.now(), card, marked: [], bingo: false } });
     });
     Promise.race([txn, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 8000))])
       .then(() => {
         setPlayerId(pid);
         setLocalCard(card);
-        localStorage.setItem(ME_KEY, JSON.stringify({ name: me.name, session: room, playerId: pid, card }));
       })
       .catch((err) => {
         if (err?.code === 'not-found') { setJoinErrorTitle(t.roomNotFoundTitle); setJoinError(t.joinRoomNotFound); setJoinCanRetry(false); }
         else if (err?.code === 'name-taken') { setJoinErrorTitle(t.nameTakenTitle); setJoinError(t.joinNameTaken); setJoinCanRetry(false); }
+        else if (err?.code === 'game-started') {
+          sessionRef(room).update({ [`pending.${pid}`]: { uid: me.uid, name: me.name, card, requestedAt: Date.now() } })
+            .then(() => { setPendingId(pid); setPendingCard(card); })
+            .catch(() => { setJoinErrorTitle(t.connectionErrorTitle); setJoinError(t.joinConnectionError); setJoinCanRetry(true); });
+        }
+        else if (err?.code === 'room-full') { setJoinErrorTitle(t.roomFullTitle); setJoinError(t.joinRoomFull); setJoinCanRetry(false); }
         else { setJoinErrorTitle(t.connectionErrorTitle); setJoinError(t.joinConnectionError); setJoinCanRetry(true); }
       })
       .finally(() => setJoining(false));
@@ -1086,7 +1186,7 @@ function CastScreen({ me, room, onExit }) {
     let retries = 0;
     const subscribe = () => {
       unsub = sessionRef(room).onSnapshot(
-        (snap) => { setSession(snap.exists ? snap.data() : null); setLoaded(true); },
+        (snap) => { retries = 0; setSession(snap.exists ? snap.data() : null); setLoaded(true); },
         () => { if (retries++ < 3) retryTimeout = setTimeout(subscribe, 5000); }
       );
     };
@@ -1095,14 +1195,30 @@ function CastScreen({ me, room, onExit }) {
   }, [playerId, room]);
 
   useEffect(() => {
-    if (!playerId) return;
-    const cleanup = () => sessionRef(room).update({
-      [`players.${playerId}`]: firebase.firestore.FieldValue.delete(),
-      [`pending.${playerId}`]: firebase.firestore.FieldValue.delete(),
-    });
-    window.addEventListener('beforeunload', cleanup);
-    return () => window.removeEventListener('beforeunload', cleanup);
-  }, [playerId, room]);
+    if (!pendingId) return;
+    let unsub;
+    let retryTimeout;
+    let retries = 0;
+    const subscribe = () => {
+      unsub = sessionRef(room).onSnapshot(
+        (snap) => {
+          retries = 0;
+          const data = snap.exists ? snap.data() : null;
+          if (!data) { setIsRejected(true); return; }
+          if (data.players?.[pendingId]) {
+            setPlayerId(pendingId);
+            setLocalCard(pendingCard);
+            setPendingId(null);
+          } else if (!data.pending?.[pendingId]) {
+            setIsRejected(true);
+          }
+        },
+        () => { if (retries++ < 3) retryTimeout = setTimeout(subscribe, 5000); }
+      );
+    };
+    subscribe();
+    return () => { if (unsub) unsub(); clearTimeout(retryTimeout); };
+  }, [pendingId, room]);
 
   useEffect(() => {
     if (!session?.lastDrawn || session.lastDrawn === prevLastDrawnRef.current) return;
@@ -1126,13 +1242,39 @@ function CastScreen({ me, room, onExit }) {
     castWinLinesRef.current = wins;
   }, [session, localCard, playerId]);
 
-  useEffect(() => {
-    if (!session || !playerId) return;
-    const inPending = !!(session.pending || {})[playerId];
-    const inPlayers = !!(session.players || {})[playerId];
-    if (inPending) wasInPendingRef.current = true;
-    if (wasInPendingRef.current && !inPending && !inPlayers) setRejected(true);
-  }, [session, playerId]);
+  if (isRejected) return (
+    <ScreenShell>
+      <div style={{ textAlign: 'center', padding: '20px 0' }}>
+        <div style={{ fontSize: 48, marginBottom: 12 }}>🚫</div>
+        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>{t.requestDeniedTitle}</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>{t.hostDidntLetIn}</div>
+        <BigCta onClick={onExit}>{t.backToStart}</BigCta>
+      </div>
+    </ScreenShell>
+  );
+
+  if (pendingId) return (
+    <ScreenShell>
+      <BackLink onClick={() => {
+        sessionRef(room).update({ [`pending.${pendingId}`]: firebase.firestore.FieldValue.delete() }).catch(() => {});
+        onExit();
+      }}>{t.back}</BackLink>
+      <div style={{ textAlign: 'center', padding: '20px 0' }}>
+        <div style={{ fontSize: 48, marginBottom: 16 }}>🚪</div>
+        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>{t.waitingForApprovalTitle}</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>{t.hostWillLetYouIn}</div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: 28 }}>
+          {[0, 1, 2].map(i => (
+            <div key={i} style={{ width: 10, height: 10, borderRadius: '50%', background: '#1cb0f6', animation: `rollDots 1.2s ${i * 0.2}s ease-in-out infinite` }} />
+          ))}
+        </div>
+        <BigCta variant="blue" onClick={() => {
+          sessionRef(room).update({ [`pending.${pendingId}`]: firebase.firestore.FieldValue.delete() }).catch(() => {});
+          onExit();
+        }}>{t.cancel}</BigCta>
+      </div>
+    </ScreenShell>
+  );
 
   if (joinError) return (
     <ScreenShell>
@@ -1146,15 +1288,13 @@ function CastScreen({ me, room, onExit }) {
     </ScreenShell>
   );
 
-  if (isPortraitMobile) return <RotatePrompt title={t.rotating} message={t.castLandscape} />;
-
   if (joining || (!loaded && playerId)) return <div style={{ minHeight: '100vh', background: '#f7fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}><div style={{ color: '#6b6b6b', textAlign: 'center', padding: 40, fontWeight: 700 }}>{t.connecting}</div></div>;
 
   if (loaded && !session) return (
     <ScreenShell>
       <div style={{ textAlign: 'center', padding: '20px 0' }}>
         <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>{t.roomEndedTitle}</div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>{t.hostLeft}</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>{t.roomClosedByHost}</div>
         <BigCta onClick={onExit}>{t.backToStart}</BigCta>
       </div>
     </ScreenShell>
@@ -1163,29 +1303,53 @@ function CastScreen({ me, room, onExit }) {
   if (!session || !localCard || !playerId) return null;
 
   const myPlayer = (session.players || {})[playerId];
-  const isPending = !!(session.pending || {})[playerId];
 
-  if (!myPlayer && isPending) return (
+  if (session.phase === 'lobby') {
+    const lobbyPlayers = Object.values(session.players || {}).sort((a, b) => a.joinedAt - b.joinedAt);
+    return (
+      <ScreenShell>
+        <BackLink onClick={() => {
+          if (playerId) sessionRef(room).update({ [`players.${playerId}`]: firebase.firestore.FieldValue.delete() });
+          onExit();
+        }}>{t.back}</BackLink>
+        <div style={{ background: '#fff7e6', border: '2px solid #ffd580', borderRadius: 20, padding: '16px 20px', marginTop: 28, marginBottom: 20, textAlign: 'center' }}>
+          <div style={{ fontSize: 11, fontWeight: 900, color: '#6b6b6b', letterSpacing: '0.2em', marginBottom: 6 }}>{t.roomCodeLabel}</div>
+          <div style={{ fontSize: 52, fontWeight: 900, color: '#ff9600', letterSpacing: '0.15em', fontVariantNumeric: 'tabular-nums', lineHeight: 1 }}>{String(room).padStart(2, '0')}</div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#7a7a7a', marginTop: 8 }}>{t.shareCode}</div>
+        </div>
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ fontSize: 11, fontWeight: 900, color: '#6b6b6b', letterSpacing: '0.2em', marginBottom: 10 }}>{t.players} — {lobbyPlayers.length}</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {lobbyPlayers.map(p => (
+              <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: '#ffffff', border: '2px solid #ececec', borderRadius: 14, boxShadow: '0 2px 0 #ececec' }}>
+                <div style={{ width: 36, height: 36, background: '#ececec', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>{mascotFor(p.name)}</div>
+                <div style={{ flex: 1, fontSize: 15, fontWeight: 900, color: '#3c3c3c' }}>{p.name}</div>
+                {p.uid === session.hostUid && (
+                  <span style={{ fontSize: 11, fontWeight: 900, color: '#ff9600', letterSpacing: '0.08em', background: '#fff7e6', border: '2px solid #ffd580', borderRadius: 8, padding: '3px 8px', flexShrink: 0 }}>{t.creator}</span>
+                )}
+                {p.id === playerId && (
+                  <span style={{ fontSize: 11, fontWeight: 900, color: '#1cb0f6', letterSpacing: '0.08em', background: '#e8f7ff', border: '2px solid #9ae0ff', borderRadius: 8, padding: '3px 8px', flexShrink: 0 }}>{t.you}</span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+        <BigCta disabled>{t.waitingForHost}</BigCta>
+      </ScreenShell>
+    );
+  }
+
+  if (!myPlayer) return (
     <ScreenShell>
       <div style={{ textAlign: 'center', padding: '20px 0' }}>
-        <div role="img" aria-label="Ampulheta — aguardando aprovação" style={{ fontSize: 48, marginBottom: 12 }}>⏳</div>
-        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>{t.waitingForApprovalTitle}</div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>{t.hostWillLetYouIn}</div>
-        <BigCta onClick={onExit}>{t.cancel}</BigCta>
-      </div>
-    </ScreenShell>
-  );
-
-  if (rejected || (!myPlayer && !isPending)) return (
-    <ScreenShell>
-      <div style={{ textAlign: 'center', padding: '20px 0' }}>
-        <div role="img" aria-label="Proibido — solicitação negada" style={{ fontSize: 48, marginBottom: 12 }}>🚫</div>
-        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>{t.requestDeniedTitle}</div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>{t.hostDidntLetIn}</div>
+        <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 8 }}>{t.roomEndedTitle}</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a', marginBottom: 24 }}>{t.roomClosedByHost}</div>
         <BigCta onClick={onExit}>{t.backToStart}</BigCta>
       </div>
     </ScreenShell>
   );
+
+  if (isPortraitMobile) return <RotatePrompt title={t.rotating} message={t.castLandscape} />;
 
   const grid = [0,1,2,3,4].map(r => localCard.slice(r*5, r*5+5));
   const drawn = session.drawn || [];
@@ -1284,7 +1448,7 @@ function CastScreen({ me, room, onExit }) {
         {(castConfetti || localBingo) && <GameConfetti />}
         {showInfo && <LeaderboardModal players={leaderboard} onClose={() => setShowInfo(false)} totalCalled={drawn.length} room={room} />}
         {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => {
-          if (playerId) sessionRef(room).update({ [`players.${playerId}`]: firebase.firestore.FieldValue.delete(), [`pending.${playerId}`]: firebase.firestore.FieldValue.delete() });
+          if (playerId) sessionRef(room).update({ [`players.${playerId}`]: firebase.firestore.FieldValue.delete() });
           setShowExit(false); onExit();
         }} room={room} />}
       </div>
@@ -1332,39 +1496,59 @@ function App() {
   }, []);
 
   const [uid, setUid] = useState(null);
+  const [name, setName] = useState(() => {
+    try {
+      const stored = localStorage.getItem(ME_KEY);
+      if (!stored) return '';
+      try { const p = JSON.parse(stored); if (p && typeof p.name === 'string') return p.name; } catch {}
+      return stored;
+    } catch { return ''; }
+  });
 
   useEffect(() => {
     firebase.auth().signInAnonymously()
-      .then(cred => { setUid(cred.user.uid); trackUser(cred.user.uid); })
+      .then(cred => {
+        setUid(cred.user.uid);
+        trackUser(cred.user.uid);
+      })
       .catch(() => {});
   }, []);
 
-  const [stage, setStage] = useState('welcome');
-  const [name, setName] = useState(() => { try { return JSON.parse(localStorage.getItem(ME_KEY) || '{}').name || ''; } catch { return ''; } });
+  const [screen, setScreen] = useState('welcome');
   const [room, setRoom] = useState('');
   const [generating, setGenerating] = useState(false);
   const [genError, setGenError] = useState(null);
+  const [joinError, setJoinError] = useState(null);
   const [welcomeError, setWelcomeError] = useState(null);
   const [claiming, setClaiming] = useState(false);
 
   const currentNameRef = useRef(name);
   useEffect(() => { currentNameRef.current = name; }, [name]);
+  const screenRef = useRef('welcome');
+  useEffect(() => { screenRef.current = screen; }, [screen]);
+  const roomRef = useRef('');
+  useEffect(() => { roomRef.current = room; }, [room]);
+  const uidRef = useRef(null);
+  useEffect(() => { uidRef.current = uid; }, [uid]);
 
   const inactivityTimerRef = useRef(null);
 
   function resetInactivityTimer() {
     clearTimeout(inactivityTimerRef.current);
     inactivityTimerRef.current = setTimeout(() => {
+      if (screen === 'host' && room) sessionRef(room).delete().catch(() => {});
+      else if (screen === 'cast' && room && uid) sessionRef(room).update({
+        [`players.${uid}`]: firebase.firestore.FieldValue.delete(),
+        [`pending.${uid}`]: firebase.firestore.FieldValue.delete(),
+      }).catch(() => {});
       releaseName(currentNameRef.current);
-      localStorage.removeItem(ME_KEY);
-      setName('');
       setRoom('');
-      setStage('welcome');
+      setScreen('welcome');
     }, INACTIVE_MS);
   }
 
   useEffect(() => {
-    if (stage === 'welcome') { clearTimeout(inactivityTimerRef.current); return; }
+    if (screen === 'welcome') { clearTimeout(inactivityTimerRef.current); return; }
     const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'];
     events.forEach(e => window.addEventListener(e, resetInactivityTimer, { passive: true }));
     resetInactivityTimer();
@@ -1372,13 +1556,53 @@ function App() {
       events.forEach(e => window.removeEventListener(e, resetInactivityTimer));
       clearTimeout(inactivityTimerRef.current);
     };
-  }, [stage]);
+  }, [screen]);
 
   useEffect(() => {
-    if (stage === 'welcome' || !name) return;
+    if (screen === 'welcome' || !name) return;
     const id = setInterval(() => heartbeatName(name), HEARTBEAT_MS);
     return () => clearInterval(id);
-  }, [stage, name]);
+  }, [screen, name]);
+
+  // beforeunload: show confirmation dialog when in room
+  useEffect(() => {
+    const guard = (e) => {
+      const sc = screenRef.current;
+      if (sc === 'host' || sc === 'cast') { e.preventDefault(); e.returnValue = ''; }
+    };
+    window.addEventListener('beforeunload', guard);
+    return () => window.removeEventListener('beforeunload', guard);
+  }, []);
+
+  // pagehide: actual cleanup (fires after user confirms dialog, or on iOS without dialog)
+  useEffect(() => {
+    const cleanup = () => {
+      const sc = screenRef.current;
+      const r  = roomRef.current;
+      const u  = uidRef.current;
+      const n  = currentNameRef.current;
+      const BASE = 'https://firestore.googleapis.com/v1/projects/nl-daubcard/databases/(default)/documents';
+
+      if (sc === 'host' && r) {
+        const writes = [{ delete: `projects/nl-daubcard/databases/(default)/documents/sessions/${r}` }];
+        if (n) writes.push({ delete: `projects/nl-daubcard/databases/(default)/documents/names/${encodeURIComponent(n.toLowerCase())}` });
+        navigator.sendBeacon(`${BASE}:commit`, new Blob([JSON.stringify({ writes })], { type: 'application/json' }));
+      } else if (sc === 'cast' && r && u) {
+        fetch(`${BASE}/sessions/${r}?updateMask.fieldPaths=players.${u}`, {
+          method: 'PATCH', keepalive: true,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: `projects/nl-daubcard/databases/(default)/documents/sessions/${r}`, fields: {} }),
+        }).catch(() => {});
+        if (n) {
+          navigator.sendBeacon(`${BASE}:commit`, new Blob([JSON.stringify({
+            writes: [{ delete: `projects/nl-daubcard/databases/(default)/documents/names/${encodeURIComponent(n.toLowerCase())}` }],
+          })], { type: 'application/json' }));
+        }
+      }
+    };
+    window.addEventListener('pagehide', cleanup);
+    return () => window.removeEventListener('pagehide', cleanup);
+  }, []);
 
   async function handlePickHost() {
     setGenerating(true);
@@ -1386,7 +1610,7 @@ function App() {
     try {
       const r = await generateUniqueRoom();
       setRoom(r);
-      setStage('host');
+      setScreen('host');
     } catch (err) {
       setGenError(err.message === 'ALL_ROOMS_IN_USE' ? t.allRoomsInUse : err.message);
     } finally {
@@ -1395,13 +1619,13 @@ function App() {
   }
 
   async function handleWelcome({ name: n }) {
-    if (!uid) { setName(n); setStage('role'); return; }
     setClaiming(true);
     setWelcomeError(null);
     try {
       await claimName(n, uid);
       setName(n);
-      setStage('role');
+      try { localStorage.setItem(ME_KEY, n); } catch {}
+      setScreen('home');
     } catch (err) {
       setWelcomeError(err?.code === 'name-taken' ? t.globalNameTaken : t.joinConnectionError);
     } finally {
@@ -1409,16 +1633,42 @@ function App() {
     }
   }
 
-  function handleJoin(r) { setRoom(r); setStage('cast'); }
-  function handleExit() { releaseName(currentNameRef.current); localStorage.removeItem(ME_KEY); setName(''); setRoom(''); setStage('welcome'); }
+  async function handleJoin(r) {
+    setJoinError(null);
+    const padded = String(r).padStart(2, '0');
+    try {
+      const snap = await sessionRef(padded).get();
+      if (!snap.exists) { setJoinError(t.joinRoomNotFound); return; }
+      setRoom(padded);
+      setScreen('cast');
+    } catch (_) {
+      setJoinError(t.joinConnectionError);
+    }
+  }
+  function handleExit() { setRoom(''); setScreen('home'); }
+
+  function handleBack() {
+    if (screen === 'home') { releaseName(currentNameRef.current); setScreen('welcome'); }
+    else if (screen === 'join') { setJoinError(null); setScreen('home'); }
+  }
+
+  if (!uid) {
+    return (
+      <LangContext.Provider value={{ lang, setLang, t }}>
+        <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '"Nunito", system-ui, sans-serif', color: '#7a7a7a', fontWeight: 700 }}>
+          {t.connecting}
+        </div>
+      </LangContext.Provider>
+    );
+  }
 
   return (
     <LangContext.Provider value={{ lang, setLang, t }}>
-      {stage === 'welcome' && <WelcomeScreen onContinue={handleWelcome} initialName={name} error={welcomeError} claiming={claiming} />}
-      {stage === 'role' && <RoleScreen name={name} onPick={(r) => r === 'host' ? handlePickHost() : setStage('join')} onBack={() => setStage('welcome')} generating={generating} genError={genError} />}
-      {stage === 'join' && <JoinScreen name={name} onJoin={handleJoin} onBack={() => setStage('role')} />}
-      {stage === 'host' && <HostScreen me={{ name, uid }} room={room} onExit={handleExit} />}
-      {stage === 'cast' && <CastScreen me={{ name, uid }} room={room} onExit={handleExit} />}
+      {screen === 'welcome' && <WelcomeScreen onContinue={handleWelcome} initialName={name} error={welcomeError} claiming={claiming} />}
+      {screen === 'home' && <HomeScreen name={name} onPick={(r) => r === 'host' ? handlePickHost() : setScreen('join')} onBack={handleBack} generating={generating} genError={genError} />}
+      {screen === 'join' && <JoinScreen onJoin={handleJoin} onBack={handleBack} error={joinError} />}
+      {screen === 'host' && <HostScreen me={{ name, uid }} room={room} onExit={handleExit} />}
+      {screen === 'cast' && <CastScreen me={{ name, uid }} room={room} onExit={handleExit} />}
     </LangContext.Provider>
   );
 }
