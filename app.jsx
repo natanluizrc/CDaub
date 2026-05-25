@@ -121,6 +121,18 @@ const TRANSLATIONS = {
     joinRoom: 'Join Room',
     createDesc: 'Create a new room and share the code with your friends.',
     joinDesc: 'Join an existing room using the 2-digit code.',
+    triviaPickCategory: '🎯 {name} got a line! Pick a category:',
+    triviaGeneral: '🎓 General Knowledge',
+    triviaPopCulture: '🎬 Pop Culture',
+    triviaBizarre: '🤯 Bizarre Facts',
+    triviaWaitingAnswer: 'Waiting for {name} to answer…',
+    triviaYourTurn: "It's your turn!",
+    triviaCorrect: 'Correct! 🎉',
+    triviaWrong: 'Wrong! 😅',
+    triviaTimeout: "Time's up! ⏰",
+    triviaClose: 'Continue',
+    triviaSkip: 'Skip',
+    triviaPoints: 'Trivia',
   },
   pt: {
     nameLabel: 'NOME',
@@ -193,6 +205,18 @@ const TRANSLATIONS = {
     joinRoom: 'Entrar na Sala',
     createDesc: 'Crie uma nova sala e compartilhe o código com seus amigos.',
     joinDesc: 'Entre em uma sala existente usando o código de 2 dígitos.',
+    triviaPickCategory: '🎯 {name} fez uma linha! Escolha uma categoria:',
+    triviaGeneral: '🎓 Conhecimentos Gerais',
+    triviaPopCulture: '🎬 Pop Culture',
+    triviaBizarre: '🤯 Perguntas Bizarras',
+    triviaWaitingAnswer: 'Aguardando {name} responder…',
+    triviaYourTurn: 'É a sua vez!',
+    triviaCorrect: 'Correto! 🎉',
+    triviaWrong: 'Errado! 😅',
+    triviaTimeout: 'Tempo esgotado! ⏰',
+    triviaClose: 'Continuar',
+    triviaSkip: 'Pular',
+    triviaPoints: 'Trivia',
   },
   es: {
     nameLabel: 'NOMBRE',
@@ -265,6 +289,18 @@ const TRANSLATIONS = {
     joinRoom: 'Entrar a la Sala',
     createDesc: 'Crea una nueva sala y comparte el código con tus amigos.',
     joinDesc: 'Únete a una sala existente usando el código de 2 dígitos.',
+    triviaPickCategory: '🎯 ¡{name} hizo una línea! Elige una categoría:',
+    triviaGeneral: '🎓 Cultura General',
+    triviaPopCulture: '🎬 Cultura Pop',
+    triviaBizarre: '🤯 Preguntas Bizarras',
+    triviaWaitingAnswer: 'Esperando respuesta de {name}…',
+    triviaYourTurn: '¡Es tu turno!',
+    triviaCorrect: '¡Correcto! 🎉',
+    triviaWrong: '¡Incorrecto! 😅',
+    triviaTimeout: '¡Tiempo agotado! ⏰',
+    triviaClose: 'Continuar',
+    triviaSkip: 'Omitir',
+    triviaPoints: 'Trivia',
   },
 };
 
@@ -328,6 +364,169 @@ function pickHostLine(exclude, lang) {
   const pool = lines.filter(x => x !== exclude);
   return pool[Math.floor(Math.random() * pool.length)] || lines[0];
 }
+
+// ---------- Trivia Question Bank ----------
+const TRIVIA_QUESTIONS = {
+  en: {
+    general: [
+      { q: 'Which is the only mammal that can truly fly?', opts: ['Flying squirrel', 'Bat', 'Platypus', 'Sugar glider'], ans: 1 },
+      { q: 'What color is octopus blood?', opts: ['Red', 'Blue', 'Green', 'Purple'], ans: 1 },
+      { q: 'Which country has MORE pyramids than Egypt?', opts: ['Mexico', 'Peru', 'Sudan', 'Libya'], ans: 2 },
+      { q: 'How many hearts does an octopus have?', opts: ['1', '2', '3', '5'], ans: 2 },
+      { q: 'Which animal has fingerprints nearly identical to humans?', opts: ['Chimpanzee', 'Gorilla', 'Koala', 'Orangutan'], ans: 2 },
+      { q: 'How long can a snail sleep for?', opts: ['1 week', '3 months', '3 years', '10 days'], ans: 2 },
+      { q: 'Most abundant metal in Earth\'s crust?', opts: ['Iron', 'Gold', 'Aluminium', 'Copper'], ans: 2 },
+      { q: 'Which animal kills the most humans per year?', opts: ['Shark', 'Lion', 'Mosquito', 'Crocodile'], ans: 2 },
+      { q: 'Roughly how many languages exist today?', opts: ['~1,500', '~3,000', '~7,000', '~12,000'], ans: 2 },
+      { q: 'What is the largest organ in the human body?', opts: ['Liver', 'Lungs', 'Skin', 'Stomach'], ans: 2 },
+      { q: 'What is the capital of Australia?', opts: ['Sydney', 'Melbourne', 'Canberra', 'Brisbane'], ans: 2 },
+      { q: 'Which insect can survive weeks without its head?', opts: ['Ant', 'Cockroach', 'Beetle', 'Fly'], ans: 1 },
+      { q: 'Antarctica is technically classified as a…', opts: ['Tundra', 'Jungle', 'Desert', 'Glacier'], ans: 2 },
+      { q: 'How long does sunlight take to reach Earth?', opts: ['8 seconds', '8 minutes', '8 hours', '8 days'], ans: 1 },
+      { q: 'Which country eats the most chocolate per person?', opts: ['USA', 'Belgium', 'Switzerland', 'Germany'], ans: 2 },
+    ],
+    popculture: [
+      { q: 'Which musician holds the most Grammy wins ever?', opts: ['Taylor Swift', 'Beyoncé', 'Jay-Z', 'Michael Jackson'], ans: 1 },
+      { q: 'How many seasons did Friends run?', opts: ['8', '10', '12', '7'], ans: 1 },
+      { q: 'Best-selling video game of all time?', opts: ['GTA V', 'Tetris', 'Minecraft', 'Mario Bros.'], ans: 2 },
+      { q: 'Highest-grossing film ever at the box office?', opts: ['Endgame', 'Avatar', 'Titanic', 'Star Wars'], ans: 1 },
+      { q: 'Who played the Joker in "The Dark Knight"?', opts: ['Jared Leto', 'Heath Ledger', 'Joaquin Phoenix', 'Jack Nicholson'], ans: 1 },
+      { q: 'What is Lady Gaga\'s real name?', opts: ['Stefani Germanotta', 'Gaga Ciccone', 'Maria Pop', 'Angela Jolie'], ans: 0 },
+      { q: 'What is Homer Simpson\'s middle name?', opts: ['James', 'Jay', 'John', 'Joseph'], ans: 1 },
+      { q: 'Romeo and Juliet is set in which Italian city?', opts: ['Florence', 'Rome', 'Venice', 'Verona'], ans: 3 },
+      { q: 'What was the Hulk\'s original color in the comics?', opts: ['Green', 'Gray', 'Blue', 'Red'], ans: 1 },
+      { q: 'How many Oscars did Titanic win?', opts: ['7', '9', '11', '14'], ans: 2 },
+      { q: 'What instrument did Freddie Mercury play?', opts: ['Guitar', 'Piano', 'Drums', 'Bass'], ans: 1 },
+      { q: 'How many Dragon Balls are there in Dragon Ball?', opts: ['5', '6', '7', '9'], ans: 2 },
+      { q: 'What is Batman\'s butler\'s name?', opts: ['James', 'Alfred', 'Gordon', 'Edwin'], ans: 1 },
+      { q: 'In which country does Squid Game take place?', opts: ['Japan', 'China', 'South Korea', 'Thailand'], ans: 2 },
+      { q: 'Which studio made Shrek?', opts: ['Pixar', 'DreamWorks', 'Disney', 'Universal'], ans: 1 },
+    ],
+    bizarre: [
+      { q: 'How many times its own weight can an ant lift?', opts: ['5×', '10×', '50×', '100×'], ans: 2 },
+      { q: 'Which is the only animal that cannot jump?', opts: ['Hippo', 'Elephant', 'Gorilla', 'Rhino'], ans: 1 },
+      { q: 'How many times does the average person blink per day?', opts: ['3,000', '8,000', '15,000', '40,000'], ans: 2 },
+      { q: 'Banana trees are technically what?', opts: ['Trees', 'Shrubs', 'Giant herbs', 'Ferns'], ans: 2 },
+      { q: 'The first-ever online purchase in history was from?', opts: ['Amazon', 'eBay', 'Pizza Hut', 'Walmart'], ans: 2 },
+      { q: 'Which civilization invented toilet paper?', opts: ['USA', 'France', 'China', 'Japan'], ans: 2 },
+      { q: 'Fastest animal on Earth (in a dive)?', opts: ['Cheetah', 'Peregrine falcon', 'Blue marlin', 'Dragonfly'], ans: 1 },
+      { q: 'What % of human DNA is identical to a banana\'s?', opts: ['15%', '30%', '50%', '60%'], ans: 3 },
+      { q: 'What produced the loudest sound ever recorded?', opts: ['Earthquake', 'Krakatoa eruption', 'Blue whale', 'Atomic bomb'], ans: 1 },
+      { q: 'Which has MORE teeth — a snail or a shark?', opts: ['Shark, by far', 'Equal', 'Snail, by far', 'Neither has teeth'], ans: 2 },
+      { q: 'Is the Great Wall of China visible from space?', opts: ['Yes, clearly', 'Yes, barely', 'No, it\'s a myth', 'Only from low orbit'], ans: 2 },
+      { q: 'What can a stressed octopus do?', opts: ['Turn white', 'Eat its own arms', 'Explode', 'Stop breathing'], ans: 1 },
+      { q: 'Naming a pig "Napoleon" is illegal in which country?', opts: ['Spain', 'France', 'Italy', 'Germany'], ans: 1 },
+      { q: 'Approx. what % of the ocean is still unexplored?', opts: ['20%', '40%', '60%', '80%'], ans: 3 },
+      { q: 'What is the original meaning of "OK"?', opts: ['Old English "okay"', '"Oll Korrect" — a misspelling joke', 'Native American word', 'Open Key acronym'], ans: 1 },
+    ],
+  },
+  pt: {
+    general: [
+      { q: 'Qual é o único mamífero que realmente voa?', opts: ['Esquilo-voador', 'Morcego', 'Ornitorrinco', 'Petauro-do-açúcar'], ans: 1 },
+      { q: 'De que cor é o sangue do polvo?', opts: ['Vermelho', 'Azul', 'Verde', 'Roxo'], ans: 1 },
+      { q: 'Qual país tem MAIS pirâmides que o Egito?', opts: ['México', 'Peru', 'Sudão', 'Líbia'], ans: 2 },
+      { q: 'Quantos corações tem um polvo?', opts: ['1', '2', '3', '5'], ans: 2 },
+      { q: 'Qual animal tem impressão digital quase igual à humana?', opts: ['Chimpanzé', 'Gorila', 'Coala', 'Orangotango'], ans: 2 },
+      { q: 'Por quanto tempo um caracol pode dormir?', opts: ['1 semana', '3 meses', '3 anos', '10 dias'], ans: 2 },
+      { q: 'Metal mais abundante na crosta terrestre?', opts: ['Ferro', 'Ouro', 'Alumínio', 'Cobre'], ans: 2 },
+      { q: 'Qual animal mata mais humanos por ano?', opts: ['Tubarão', 'Leão', 'Mosquito', 'Crocodilo'], ans: 2 },
+      { q: 'Quantas línguas existem no mundo hoje?', opts: ['~1.500', '~3.000', '~7.000', '~12.000'], ans: 2 },
+      { q: 'Qual é o maior órgão do corpo humano?', opts: ['Fígado', 'Pulmões', 'Pele', 'Estômago'], ans: 2 },
+      { q: 'Qual é a capital da Austrália?', opts: ['Sydney', 'Melbourne', 'Canberra', 'Brisbane'], ans: 2 },
+      { q: 'Qual inseto sobrevive semanas sem a cabeça?', opts: ['Formiga', 'Barata', 'Besouro', 'Mosca'], ans: 1 },
+      { q: 'A Antártida é classificada tecnicamente como…', opts: ['Tundra', 'Floresta', 'Deserto', 'Glaciar'], ans: 2 },
+      { q: 'Quanto tempo a luz do sol leva para chegar à Terra?', opts: ['8 segundos', '8 minutos', '8 horas', '8 dias'], ans: 1 },
+      { q: 'Qual país consome mais chocolate por pessoa?', opts: ['EUA', 'Bélgica', 'Suíça', 'Alemanha'], ans: 2 },
+    ],
+    popculture: [
+      { q: 'Quem tem mais Grammys na história?', opts: ['Taylor Swift', 'Beyoncé', 'Jay-Z', 'Michael Jackson'], ans: 1 },
+      { q: 'Quantas temporadas tem Friends?', opts: ['8', '10', '12', '7'], ans: 1 },
+      { q: 'Jogo mais vendido de todos os tempos?', opts: ['GTA V', 'Tetris', 'Minecraft', 'Mario Bros.'], ans: 2 },
+      { q: 'Maior bilheteria de todos os tempos?', opts: ['Vingadores: Ultimato', 'Avatar', 'Titanic', 'Star Wars'], ans: 1 },
+      { q: 'Quem fez o Coringa em "O Cavaleiro das Trevas"?', opts: ['Jared Leto', 'Heath Ledger', 'Joaquin Phoenix', 'Jack Nicholson'], ans: 1 },
+      { q: 'Qual o nome real de Lady Gaga?', opts: ['Stefani Germanotta', 'Gaga Ciccone', 'Maria Pop', 'Angela Jolie'], ans: 0 },
+      { q: 'Qual o nome do meio de Homer Simpson?', opts: ['James', 'Jay', 'John', 'Joseph'], ans: 1 },
+      { q: 'Romeu e Julieta se passa em qual cidade italiana?', opts: ['Florença', 'Roma', 'Veneza', 'Verona'], ans: 3 },
+      { q: 'Qual era a cor original do Hulk nos quadrinhos?', opts: ['Verde', 'Cinza', 'Azul', 'Vermelho'], ans: 1 },
+      { q: 'Quantos Oscars Titanic ganhou?', opts: ['7', '9', '11', '14'], ans: 2 },
+      { q: 'Qual instrumento Freddie Mercury tocava?', opts: ['Guitarra', 'Piano', 'Bateria', 'Baixo'], ans: 1 },
+      { q: 'Quantas esferas do dragão existem em Dragon Ball?', opts: ['5', '6', '7', '9'], ans: 2 },
+      { q: 'Qual o nome do mordomo do Batman?', opts: ['James', 'Alfred', 'Gordon', 'Edwin'], ans: 1 },
+      { q: 'Em qual país se passa Squid Game?', opts: ['Japão', 'China', 'Coreia do Sul', 'Tailândia'], ans: 2 },
+      { q: 'Qual estúdio fez o Shrek?', opts: ['Pixar', 'DreamWorks', 'Disney', 'Universal'], ans: 1 },
+    ],
+    bizarre: [
+      { q: 'Quantas vezes seu peso uma formiga consegue levantar?', opts: ['5×', '10×', '50×', '100×'], ans: 2 },
+      { q: 'Único animal que não consegue pular?', opts: ['Hipopótamo', 'Elefante', 'Gorila', 'Rinoceronte'], ans: 1 },
+      { q: 'Quantas piscadas por dia em média?', opts: ['3.000', '8.000', '15.000', '40.000'], ans: 2 },
+      { q: 'Bananeiras são tecnicamente o quê?', opts: ['Árvores', 'Arbustos', 'Ervas gigantes', 'Samambaias'], ans: 2 },
+      { q: 'A primeira compra online da história foi de quê?', opts: ['Amazon', 'eBay', 'Pizza Hut', 'Walmart'], ans: 2 },
+      { q: 'Qual civilização inventou o papel higiênico?', opts: ['EUA', 'França', 'China', 'Japão'], ans: 2 },
+      { q: 'Animal mais rápido do planeta (em mergulho)?', opts: ['Guepardo', 'Falcão-peregrino', 'Marlim azul', 'Libélula'], ans: 1 },
+      { q: 'Quanto do DNA humano é idêntico ao da banana?', opts: ['15%', '30%', '50%', '60%'], ans: 3 },
+      { q: 'O que gerou o som mais alto já registrado na Terra?', opts: ['Terremoto', 'Erupção do Krakatoa', 'Baleia-azul', 'Bomba atômica'], ans: 1 },
+      { q: 'Quem tem MAIS dentes — lesma ou tubarão?', opts: ['Tubarão, de longe', 'São iguais', 'Lesma, de longe', 'Nenhum tem dentes'], ans: 2 },
+      { q: 'A Grande Muralha da China é visível do espaço?', opts: ['Sim, claramente', 'Sim, mas mal', 'Não, é um mito', 'Só da órbita baixa'], ans: 2 },
+      { q: 'O que um polvo estressado pode fazer?', opts: ['Ficar branco', 'Comer os próprios tentáculos', 'Explodir', 'Parar de respirar'], ans: 1 },
+      { q: 'Em qual país é ilegal chamar um porco de "Napoleão"?', opts: ['Espanha', 'França', 'Itália', 'Alemanha'], ans: 1 },
+      { q: 'Que % do oceano ainda não foi explorado?', opts: ['20%', '40%', '60%', '80%'], ans: 3 },
+      { q: 'Qual o significado original de "OK"?', opts: ['Inglês antigo', 'Brincadeira com erro ortográfico', 'Palavra indígena', 'Acrônimo tecnológico'], ans: 1 },
+    ],
+  },
+  es: {
+    general: [
+      { q: '¿Cuál es el único mamífero que vuela de verdad?', opts: ['Ardilla voladora', 'Murciélago', 'Ornitorrinco', 'Petauro del azúcar'], ans: 1 },
+      { q: '¿De qué color es la sangre del pulpo?', opts: ['Rojo', 'Azul', 'Verde', 'Morado'], ans: 1 },
+      { q: '¿Qué país tiene MÁS pirámides que Egipto?', opts: ['México', 'Perú', 'Sudán', 'Libia'], ans: 2 },
+      { q: '¿Cuántos corazones tiene un pulpo?', opts: ['1', '2', '3', '5'], ans: 2 },
+      { q: '¿Qué animal tiene huellas casi iguales a las humanas?', opts: ['Chimpancé', 'Gorila', 'Koala', 'Orangután'], ans: 2 },
+      { q: '¿Cuánto tiempo puede dormir un caracol?', opts: ['1 semana', '3 meses', '3 años', '10 días'], ans: 2 },
+      { q: '¿Metal más abundante en la corteza terrestre?', opts: ['Hierro', 'Oro', 'Aluminio', 'Cobre'], ans: 2 },
+      { q: '¿Qué animal mata más humanos por año?', opts: ['Tiburón', 'León', 'Mosquito', 'Cocodrilo'], ans: 2 },
+      { q: '¿Cuántas lenguas existen en el mundo hoy?', opts: ['~1.500', '~3.000', '~7.000', '~12.000'], ans: 2 },
+      { q: '¿Cuál es el órgano más grande del cuerpo humano?', opts: ['Hígado', 'Pulmones', 'Piel', 'Estómago'], ans: 2 },
+      { q: '¿Cuál es la capital de Australia?', opts: ['Sídney', 'Melbourne', 'Canberra', 'Brisbane'], ans: 2 },
+      { q: '¿Qué insecto sobrevive semanas sin cabeza?', opts: ['Hormiga', 'Cucaracha', 'Escarabajo', 'Mosca'], ans: 1 },
+      { q: 'La Antártida se clasifica técnicamente como…', opts: ['Tundra', 'Selva', 'Desierto', 'Glaciar'], ans: 2 },
+      { q: '¿Cuánto tarda la luz del sol en llegar a la Tierra?', opts: ['8 segundos', '8 minutos', '8 horas', '8 días'], ans: 1 },
+      { q: '¿Qué país consume más chocolate per cápita?', opts: ['EE.UU.', 'Bélgica', 'Suiza', 'Alemania'], ans: 2 },
+    ],
+    popculture: [
+      { q: '¿Quién tiene más Grammys en la historia?', opts: ['Taylor Swift', 'Beyoncé', 'Jay-Z', 'Michael Jackson'], ans: 1 },
+      { q: '¿Cuántas temporadas tuvo Friends?', opts: ['8', '10', '12', '7'], ans: 1 },
+      { q: '¿Videojuego más vendido de todos los tiempos?', opts: ['GTA V', 'Tetris', 'Minecraft', 'Mario Bros.'], ans: 2 },
+      { q: '¿Mayor recaudación de taquilla de la historia?', opts: ['Endgame', 'Avatar', 'Titanic', 'Star Wars'], ans: 1 },
+      { q: '¿Quién interpretó al Joker en "El Caballero Oscuro"?', opts: ['Jared Leto', 'Heath Ledger', 'Joaquin Phoenix', 'Jack Nicholson'], ans: 1 },
+      { q: '¿Cuál es el nombre real de Lady Gaga?', opts: ['Stefani Germanotta', 'Gaga Ciccone', 'María Pop', 'Angela Jolie'], ans: 0 },
+      { q: '¿Segundo nombre de Homer Simpson?', opts: ['James', 'Jay', 'John', 'Joseph'], ans: 1 },
+      { q: '¿En qué ciudad italiana transcurre Romeo y Julieta?', opts: ['Florencia', 'Roma', 'Venecia', 'Verona'], ans: 3 },
+      { q: '¿Color original del Hulk en los cómics?', opts: ['Verde', 'Gris', 'Azul', 'Rojo'], ans: 1 },
+      { q: '¿Cuántos Oscars ganó Titanic?', opts: ['7', '9', '11', '14'], ans: 2 },
+      { q: '¿Qué instrumento tocaba Freddie Mercury?', opts: ['Guitarra', 'Piano', 'Batería', 'Bajo'], ans: 1 },
+      { q: '¿Cuántas esferas del dragón hay en Dragon Ball?', opts: ['5', '6', '7', '9'], ans: 2 },
+      { q: '¿Cómo se llama el mayordomo de Batman?', opts: ['James', 'Alfred', 'Gordon', 'Edwin'], ans: 1 },
+      { q: '¿En qué país transcurre El juego del calamar?', opts: ['Japón', 'China', 'Corea del Sur', 'Tailandia'], ans: 2 },
+      { q: '¿Qué estudio creó a Shrek?', opts: ['Pixar', 'DreamWorks', 'Disney', 'Universal'], ans: 1 },
+    ],
+    bizarre: [
+      { q: '¿Cuántas veces su peso puede levantar una hormiga?', opts: ['5×', '10×', '50×', '100×'], ans: 2 },
+      { q: '¿Único animal que no puede saltar?', opts: ['Hipopótamo', 'Elefante', 'Gorila', 'Rinoceronte'], ans: 1 },
+      { q: '¿Promedio de parpadeos al día?', opts: ['3.000', '8.000', '15.000', '40.000'], ans: 2 },
+      { q: 'Los bananeros son técnicamente…', opts: ['Árboles', 'Arbustos', 'Hierbas gigantes', 'Helechos'], ans: 2 },
+      { q: '¿La primera compra online de la historia fue de?', opts: ['Amazon', 'eBay', 'Pizza Hut', 'Walmart'], ans: 2 },
+      { q: '¿Qué civilización inventó el papel higiénico?', opts: ['EE.UU.', 'Francia', 'China', 'Japón'], ans: 2 },
+      { q: '¿Animal más rápido del planeta (en picada)?', opts: ['Guepardo', 'Halcón peregrino', 'Marlín azul', 'Libélula'], ans: 1 },
+      { q: '¿Qué % del ADN humano es igual al del plátano?', opts: ['15%', '30%', '50%', '60%'], ans: 3 },
+      { q: '¿Qué generó el sonido más fuerte jamás registrado?', opts: ['Terremoto', 'Erupción del Krakatoa', 'Ballena azul', 'Bomba atómica'], ans: 1 },
+      { q: '¿Quién tiene MÁS dientes — caracol o tiburón?', opts: ['Tiburón, de lejos', 'Iguales', 'Caracol, de lejos', 'Ninguno tiene'], ans: 2 },
+      { q: '¿La Gran Muralla China es visible desde el espacio?', opts: ['Sí, claramente', 'Sí, pero apenas', 'No, es un mito', 'Solo desde órbita baja'], ans: 2 },
+      { q: '¿Qué puede hacer un pulpo estresado?', opts: ['Volverse blanco', 'Comerse sus propios brazos', 'Explotar', 'Dejar de respirar'], ans: 1 },
+      { q: '¿En qué país es ilegal llamar a un cerdo "Napoleón"?', opts: ['España', 'Francia', 'Italia', 'Alemania'], ans: 1 },
+      { q: '¿Qué % del océano sigue sin explorar?', opts: ['20%', '40%', '60%', '80%'], ans: 3 },
+      { q: '¿Cuál es el significado original de "OK"?', opts: ['Inglés antiguo', 'Broma con error ortográfico', 'Palabra indígena', 'Acrónimo tecnológico'], ans: 1 },
+    ],
+  },
+};
 
 // ---------- Lang Context ----------
 const LangContext = createContext({ lang: 'en', setLang: () => {}, t: TRANSLATIONS.en });
@@ -701,6 +900,156 @@ function PendingApprovalModal({ pending, onApprove, onReject }) {
   );
 }
 
+// ---------- Trivia Modals ----------
+
+function TriviaPickModal({ trivia, room, lang }) {
+  const { t } = useLang();
+  const categories = [
+    { id: 'general',    label: t.triviaGeneral,    color: '#58cc02', shade: '#46a302' },
+    { id: 'popculture', label: t.triviaPopCulture,  color: '#1cb0f6', shade: '#0d8fcc' },
+    { id: 'bizarre',    label: t.triviaBizarre,     color: '#ff9600', shade: '#cc7700' },
+  ];
+  function pick(catId) {
+    const bank = (TRIVIA_QUESTIONS[lang] || TRIVIA_QUESTIONS.en)[catId];
+    const idx = Math.floor(Math.random() * bank.length);
+    sessionRef(room).update({
+      'trivia.state': 'question',
+      'trivia.category': catId,
+      'trivia.questionIdx': idx,
+      'trivia.startedAt': Date.now(),
+    });
+  }
+  function skip() {
+    sessionRef(room).update({ trivia: firebase.firestore.FieldValue.delete() });
+  }
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 88, background: 'rgba(31,41,55,0.6)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
+      <div style={{ width: '100%', maxWidth: 420, background: '#ffffff', border: '3px solid #ffc800', borderRadius: 24, boxShadow: '0 12px 0 #c79100, 0 24px 64px rgba(0,0,0,0.2)', overflow: 'hidden', animation: 'modalPop 280ms cubic-bezier(0.34,1.56,0.64,1) forwards' }}>
+        <div style={{ padding: '22px 24px 16px', textAlign: 'center', borderBottom: '2px solid #f3f3f3' }}>
+          <div style={{ fontSize: 32, marginBottom: 6 }}>🎯</div>
+          <div style={{ fontSize: 17, fontWeight: 900, color: '#3c3c3c' }}>{t.triviaPickCategory.replace('{name}', trivia.playerName)}</div>
+        </div>
+        <div style={{ padding: '16px 20px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {categories.map(cat => (
+            <button key={cat.id} onClick={() => pick(cat.id)} style={{ width: '100%', padding: '14px 16px', background: cat.color, color: '#ffffff', border: 'none', borderRadius: 14, boxShadow: `0 4px 0 ${cat.shade}`, fontFamily: 'inherit', fontWeight: 900, fontSize: 15, letterSpacing: '0.04em', cursor: 'pointer', transition: 'transform 60ms ease, box-shadow 60ms ease' }}>
+              {cat.label}
+            </button>
+          ))}
+          <button onClick={skip} style={{ background: 'none', border: 'none', fontFamily: 'inherit', fontSize: 13, fontWeight: 800, color: '#afafaf', cursor: 'pointer', marginTop: 4, padding: '4px 0' }}>{t.triviaSkip}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const OPTION_LABELS = ['A', 'B', 'C', 'D'];
+
+function TriviaActiveModal({ trivia, room, playerId, isHost, lang }) {
+  const { t } = useLang();
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [chosen, setChosen] = useState(null);
+  const isPlayer = !isHost && trivia.playerId === playerId;
+
+  const bank = (TRIVIA_QUESTIONS[lang] || TRIVIA_QUESTIONS.en)[trivia.category] || [];
+  const qData = bank[trivia.questionIdx] || bank[0];
+
+  useEffect(() => {
+    if (trivia.state !== 'question' || !trivia.startedAt) return;
+    const tick = () => {
+      const elapsed = (Date.now() - trivia.startedAt) / 1000;
+      const rem = Math.max(0, 60 - Math.floor(elapsed));
+      setTimeLeft(rem);
+      if (rem === 0 && isPlayer && !trivia.answer) {
+        sessionRef(room).update({ 'trivia.answer': 'timeout', 'trivia.state': 'answered' });
+      }
+    };
+    tick();
+    const id = setInterval(tick, 500);
+    return () => clearInterval(id);
+  }, [trivia.state, trivia.startedAt, trivia.answer]);
+
+  function submitAnswer(idx) {
+    if (!isPlayer || trivia.state !== 'question' || chosen !== null) return;
+    setChosen(idx);
+    const isCorrect = idx === qData.ans;
+    const update = { 'trivia.answer': String(idx), 'trivia.state': 'answered' };
+    if (isCorrect) update[`triviaScores.${playerId}`] = firebase.firestore.FieldValue.increment(1);
+    sessionRef(room).update(update);
+  }
+
+  function close() {
+    sessionRef(room).update({ trivia: firebase.firestore.FieldValue.delete() });
+  }
+
+  const answered = trivia.state === 'answered';
+  const answeredIdx = answered && trivia.answer !== 'timeout' ? parseInt(trivia.answer) : null;
+  const isCorrect = answeredIdx === qData.ans;
+  const timerColor = timeLeft > 20 ? '#58cc02' : timeLeft > 10 ? '#ff9600' : '#ff4b4b';
+
+  const categoryLabels = { general: t.triviaGeneral, popculture: t.triviaPopCulture, bizarre: t.triviaBizarre };
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 88, background: 'rgba(31,41,55,0.6)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
+      <div style={{ width: '100%', maxWidth: 460, background: '#ffffff', border: '3px solid #ffc800', borderRadius: 24, boxShadow: '0 12px 0 #c79100, 0 24px 64px rgba(0,0,0,0.2)', overflow: 'hidden', animation: 'modalPop 280ms cubic-bezier(0.34,1.56,0.64,1) forwards' }}>
+
+        {/* Header */}
+        <div style={{ padding: '16px 20px 12px', background: '#fffbea', borderBottom: '2px solid #f3f3f3', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 900, color: '#6b6b6b', letterSpacing: '0.18em' }}>{categoryLabels[trivia.category] || '🎯'}</div>
+            <div style={{ fontSize: 13, fontWeight: 800, color: '#3c3c3c', marginTop: 2 }}>
+              {answered ? (trivia.answer === 'timeout' ? t.triviaTimeout : isCorrect ? t.triviaCorrect : t.triviaWrong) : (isPlayer ? t.triviaYourTurn : t.triviaWaitingAnswer.replace('{name}', trivia.playerName))}
+            </div>
+          </div>
+          {!answered && (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 44 }}>
+              <div style={{ fontSize: 22, fontWeight: 900, color: timerColor, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{timeLeft}</div>
+              <div style={{ fontSize: 9, fontWeight: 900, color: '#afafaf', letterSpacing: '0.12em' }}>SEG</div>
+            </div>
+          )}
+        </div>
+
+        {/* Question */}
+        <div style={{ padding: '18px 22px 14px' }}>
+          <div style={{ fontSize: 16, fontWeight: 900, color: '#3c3c3c', lineHeight: 1.45, marginBottom: 16 }}>{qData.q}</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {qData.opts.map((opt, i) => {
+              let bg = '#fafafa', border = '2px solid #e5e5e5', color = '#3c3c3c', shadow = '0 2px 0 #e5e5e5';
+              if (answered) {
+                if (i === qData.ans) { bg = '#e7f8d4'; border = '2px solid #58cc02'; color = '#46a302'; shadow = '0 2px 0 #58cc02'; }
+                else if (i === answeredIdx && !isCorrect) { bg = '#fff0f0'; border = '2px solid #ff4b4b'; color = '#ff4b4b'; shadow = '0 2px 0 #ff4b4b'; }
+                else { bg = '#fafafa'; color = '#afafaf'; border = '2px solid #ececec'; }
+              }
+              const clickable = isPlayer && !answered && chosen === null;
+              return (
+                <button key={i} onClick={() => clickable && submitAnswer(i)} disabled={!clickable}
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '11px 14px', background: bg, border, borderRadius: 14, boxShadow: shadow, fontFamily: 'inherit', cursor: clickable ? 'pointer' : 'default', transition: 'all 120ms ease', textAlign: 'left' }}>
+                  <span style={{ width: 26, height: 26, borderRadius: 8, background: answered && i === qData.ans ? '#58cc02' : answered && i === answeredIdx && !isCorrect ? '#ff4b4b' : '#ececec', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900, color: answered && (i === qData.ans || i === answeredIdx) ? '#fff' : '#6b6b6b', flexShrink: 0 }}>{OPTION_LABELS[i]}</span>
+                  <span style={{ fontSize: 14, fontWeight: 800, color, lineHeight: 1.3 }}>{opt}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Footer */}
+        {answered && isHost && (
+          <div style={{ padding: '4px 20px 18px' }}>
+            <button onClick={close} style={{ width: '100%', padding: '13px 0', background: '#58cc02', border: 'none', borderRadius: 14, boxShadow: '0 4px 0 #46a302', fontFamily: 'inherit', fontWeight: 900, fontSize: 15, color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}>{t.triviaClose}</button>
+          </div>
+        )}
+        {answered && !isHost && (
+          <div style={{ padding: '4px 20px 18px', textAlign: 'center', fontSize: 13, fontWeight: 700, color: '#afafaf' }}>⏳ Aguardando o host continuar…</div>
+        )}
+        {!answered && isHost && (
+          <div style={{ padding: '4px 20px 14px', textAlign: 'center' }}>
+            <button onClick={() => sessionRef(room).update({ trivia: firebase.firestore.FieldValue.delete() })} style={{ background: 'none', border: 'none', fontFamily: 'inherit', fontSize: 12, fontWeight: 800, color: '#afafaf', cursor: 'pointer' }}>{t.triviaSkip}</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ---------- HOST Screen ----------
 const TOTAL = 72, COLS = 12, ROWS = 6;
 
@@ -755,7 +1104,7 @@ function HostScreen({ me, room, onExit }) {
   const drawnRef = useRef([]);
   const prevPlayerWinsRef = useRef(null);
   const cells = useMemo(() => Array.from({ length: TOTAL }, (_, i) => ({ n: i + 1, r: Math.floor(i / COLS), c: i % COLS })), []);
-  const leaderboard = useMemo(() => Object.values((session?.players) || {}).map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), bingo: p.bingo })).sort((a, b) => b.hits - a.hits).map((p, i) => ({ ...p, color: i === 0 ? '#ffc800' : i === 1 ? '#afafaf' : i === 2 ? '#cd7f32' : '#6b6b6b' })), [session]);
+  const leaderboard = useMemo(() => Object.values((session?.players) || {}).map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), bingo: p.bingo, triviaScore: (session?.triviaScores || {})[p.id] || 0 })).sort((a, b) => b.hits - a.hits).map((p, i) => ({ ...p, color: i === 0 ? '#ffc800' : i === 1 ? '#afafaf' : i === 2 ? '#cd7f32' : '#6b6b6b' })), [session]);
 
 
   useEffect(() => {
@@ -802,6 +1151,9 @@ function HostScreen({ me, room, onExit }) {
         setConfetti(true);
         setTimeout(() => setConfetti(false), 2200);
         setWinnerQueue(q => [...q, { type: p.bingo ? 'bingo' : 'line', name: p.name }]);
+        if (!p.bingo && !session.trivia) {
+          sessionRef(room).update({ trivia: { state: 'picking', playerId: p.id, playerName: p.name } });
+        }
       }
     }
     prevPlayerWinsRef.current = next;
@@ -958,7 +1310,7 @@ function HostScreen({ me, room, onExit }) {
         </div>
 
         {/* Draw button */}
-        <DrawButton onClick={drawNext} disabled={left === 0} rolling={rolling} done={!!session.winner} height='10vh' margin='clamp(6px, 1vw, 12px)' />
+        <DrawButton onClick={drawNext} disabled={left === 0 || !!session.trivia} rolling={rolling} done={!!session.winner} height='10vh' margin='clamp(6px, 1vw, 12px)' />
 
         {confetti && <GameConfetti />}
 
@@ -974,6 +1326,8 @@ function HostScreen({ me, room, onExit }) {
         {winnerQueue[0]?.type === 'bingo'  && <WinNotif  name={winnerQueue[0].name} onClose={() => { setWinnerQueue(q => q.slice(1)); setShowLeaderboard(true); }} />}
         {showLeaderboard && <LeaderboardModal players={leaderboard} onClose={() => setShowLeaderboard(false)} totalCalled={drawn.length} room={room} />}
         {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); sessionRef(room).delete(); onExit(); }} room={room} />}
+        {session.trivia?.state === 'picking' && <TriviaPickModal trivia={session.trivia} room={room} lang={lang} />}
+        {(session.trivia?.state === 'question' || session.trivia?.state === 'answered') && <TriviaActiveModal trivia={session.trivia} room={room} playerId={me.uid} isHost lang={lang} />}
       </div>
     </div>
   );
@@ -1041,6 +1395,12 @@ function LeaderboardModal({ players, onClose, totalCalled, room }) {
                   <span style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', lineHeight: 1 }}>{p.hits}</span>
                   <span style={{ fontSize: 10, fontWeight: 800, color: '#6b6b6b', letterSpacing: '0.1em', marginTop: 2 }}>{t.hits}</span>
                 </div>
+                {p.triviaScore > 0 && (
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', minWidth: 40 }}>
+                    <span style={{ fontSize: 20, fontWeight: 900, color: '#ffc800', lineHeight: 1 }}>{p.triviaScore}</span>
+                    <span style={{ fontSize: 10, fontWeight: 800, color: '#6b6b6b', letterSpacing: '0.1em', marginTop: 2 }}>{t.triviaPoints}</span>
+                  </div>
+                )}
               </div>
             );
           })}
@@ -1348,7 +1708,7 @@ function CastScreen({ me, room, onExit }) {
   ];
   const tempStage = tempStages[daubProgress < 0.5 ? 0 : daubProgress < 0.7 ? 1 : 2];
   const allPlayers = Object.values(session.players || {});
-  const leaderboard = allPlayers.map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), bingo: p.bingo })).sort((a, b) => b.hits - a.hits).map((p, i) => ({ ...p, color: i === 0 ? '#ffc800' : i === 1 ? '#afafaf' : i === 2 ? '#cd7f32' : '#6b6b6b' }));
+  const leaderboard = allPlayers.map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), bingo: p.bingo, triviaScore: (session?.triviaScores || {})[p.id] || 0 })).sort((a, b) => b.hits - a.hits).map((p, i) => ({ ...p, color: i === 0 ? '#ffc800' : i === 1 ? '#afafaf' : i === 2 ? '#cd7f32' : '#6b6b6b' }));
 
   return (
     <div style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#f7fafc', fontFamily: '"Nunito", system-ui, sans-serif', color: '#3c3c3c', display: 'flex', justifyContent: 'center', padding: '3vh clamp(14px, 3vw, 24px)', boxSizing: 'border-box' }}>
@@ -1409,6 +1769,7 @@ function CastScreen({ me, room, onExit }) {
         </div>
 
         {calloutQueue[0] && <CastCallout n={calloutQueue[0].n} msg={calloutQueue[0].msg} onClose={() => setCalloutQueue(q => q.slice(1))} />}
+        {session.trivia?.playerId === playerId && (session.trivia.state === 'question' || session.trivia.state === 'answered') && <TriviaActiveModal trivia={session.trivia} room={room} playerId={playerId} isHost={false} lang={lang} />}
         {(castConfetti || localBingo) && <GameConfetti />}
         {showInfo && <LeaderboardModal players={leaderboard} onClose={() => setShowInfo(false)} totalCalled={drawn.length} room={room} />}
         {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => {
