@@ -51,6 +51,7 @@ function trackUser(uid) {
 // ---------- Sound FX ----------
 function playFx(type) {
   try {
+    const buzz = (p) => { try { if (navigator.vibrate) navigator.vibrate(p); } catch(e) {} };
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const play = (freq, start, dur, vol = 0.25, wave = 'sine') => {
       const o = ctx.createOscillator(), g = ctx.createGain();
@@ -63,31 +64,35 @@ function playFx(type) {
       o.stop(ctx.currentTime + start + dur + 0.05);
     };
     if (type === 'ad') {
-      // Fanfara comercial ascendente
+      buzz([150, 80, 150, 80, 150]);
       play(523, 0,    0.12, 0.22, 'sawtooth');
       play(659, 0.12, 0.12, 0.22, 'sawtooth');
       play(784, 0.24, 0.12, 0.22, 'sawtooth');
       play(1047,0.36, 0.30, 0.28, 'sawtooth');
     } else if (type === 'triviaReady') {
-      // DUN DUN DUN — suspense de game show
+      buzz([100, 50, 100, 50, 300]);
       play(220, 0,    0.18, 0.30, 'square');
       play(293, 0.22, 0.18, 0.30, 'square');
       play(440, 0.44, 0.40, 0.35, 'square');
     } else if (type === 'triviaStart') {
-      // Sinal de largada — temporizador iniciando
+      buzz([50]);
       play(880, 0,    0.07, 0.20, 'sine');
       play(660, 0.08, 0.07, 0.20, 'sine');
     } else if (type === 'triviaCorrect') {
-      // Acerto — ding ding ding ascendente
+      buzz([50, 30, 50, 30, 200]);
       play(523, 0,    0.10, 0.28, 'sine');
       play(659, 0.11, 0.10, 0.28, 'sine');
       play(784, 0.22, 0.10, 0.28, 'sine');
       play(1047,0.33, 0.28, 0.32, 'sine');
     } else if (type === 'triviaWrong') {
-      // Wah wah wah — errinho clássico
+      buzz([400]);
       play(440, 0,    0.22, 0.28, 'sawtooth');
       play(349, 0.24, 0.22, 0.28, 'sawtooth');
       play(294, 0.48, 0.35, 0.28, 'sawtooth');
+    } else if (type === 'number') {
+      buzz([60]);
+      play(660, 0,    0.07, 0.20, 'sine');
+      play(880, 0.08, 0.18, 0.22, 'sine');
     }
   } catch (e) {}
 }
@@ -165,9 +170,6 @@ const TRANSLATIONS = {
     joinRoom: 'Join Room',
     createDesc: 'Create a new room and share the code with your friends.',
     joinDesc: 'Join an existing room using the 2-digit code.',
-    triviaGeneral: '🎓 General Knowledge',
-    triviaPopCulture: '🎬 Pop Culture',
-    triviaBizarre: '🤯 Bizarre Facts',
     triviaStartQuestion: 'Start Question →',
     triviaGuestWaiting: 'Host is preparing the question…',
     triviaWaitingAnswer: 'Waiting for {name} to answer…',
@@ -178,6 +180,8 @@ const TRANSLATIONS = {
     triviaTimeout: "Time's up! ⏰",
     triviaClose: 'Continue',
     triviaPoints: 'Trivia',
+    triviaPodiumTitle: 'TRIVIA RANKING',
+    triviaPodiumSubtitle: 'Who got the most right?',
   },
   pt: {
     nameLabel: 'NOME',
@@ -250,9 +254,6 @@ const TRANSLATIONS = {
     joinRoom: 'Entrar na Sala',
     createDesc: 'Crie uma nova sala e compartilhe o código com seus amigos.',
     joinDesc: 'Entre em uma sala existente usando o código de 2 dígitos.',
-    triviaGeneral: '🎓 Conhecimentos Gerais',
-    triviaPopCulture: '🎬 Pop Culture',
-    triviaBizarre: '🤯 Perguntas Bizarras',
     triviaStartQuestion: 'Iniciar Pergunta →',
     triviaGuestWaiting: 'O host está preparando a pergunta…',
     triviaWaitingAnswer: 'Aguardando {name} responder…',
@@ -263,6 +264,8 @@ const TRANSLATIONS = {
     triviaTimeout: 'Tempo esgotado! ⏰',
     triviaClose: 'Continuar',
     triviaPoints: 'Trivia',
+    triviaPodiumTitle: 'RANKING DE TRIVIA',
+    triviaPodiumSubtitle: 'Quem mais acertou?',
   },
   es: {
     nameLabel: 'NOMBRE',
@@ -335,9 +338,6 @@ const TRANSLATIONS = {
     joinRoom: 'Entrar a la Sala',
     createDesc: 'Crea una nueva sala y comparte el código con tus amigos.',
     joinDesc: 'Únete a una sala existente usando el código de 2 dígitos.',
-    triviaGeneral: '🎓 Cultura General',
-    triviaPopCulture: '🎬 Cultura Pop',
-    triviaBizarre: '🤯 Preguntas Bizarras',
     triviaStartQuestion: 'Iniciar Pregunta →',
     triviaGuestWaiting: 'El host está preparando la pregunta…',
     triviaWaitingAnswer: 'Esperando respuesta de {name}…',
@@ -348,6 +348,8 @@ const TRANSLATIONS = {
     triviaTimeout: '¡Tiempo agotado! ⏰',
     triviaClose: 'Continuar',
     triviaPoints: 'Trivia',
+    triviaPodiumTitle: 'RANKING DE TRIVIA',
+    triviaPodiumSubtitle: '¿Quién acertó más?',
   },
 };
 
@@ -414,210 +416,207 @@ function pickHostLine(exclude, lang) {
 
 // ---------- Trivia Question Bank ----------
 const TRIVIA_QUESTIONS = {
-  en: {
-    general: [
-      { q: 'Which is the only mammal that can truly fly?', opts: ['Flying squirrel', 'Bat', 'Platypus', 'Sugar glider'], ans: 1 },
-      { q: 'What color is octopus blood?', opts: ['Red', 'Blue', 'Green', 'Purple'], ans: 1 },
-      { q: 'Which country has MORE pyramids than Egypt?', opts: ['Mexico', 'Peru', 'Sudan', 'Libya'], ans: 2 },
-      { q: 'How many hearts does an octopus have?', opts: ['1', '2', '3', '5'], ans: 2 },
-      { q: 'Which animal has fingerprints nearly identical to humans?', opts: ['Chimpanzee', 'Gorilla', 'Koala', 'Orangutan'], ans: 2 },
-      { q: 'How long can a snail sleep for?', opts: ['1 week', '3 months', '3 years', '10 days'], ans: 2 },
-      { q: 'Most abundant metal in Earth\'s crust?', opts: ['Iron', 'Gold', 'Aluminium', 'Copper'], ans: 2 },
-      { q: 'Which animal kills the most humans per year?', opts: ['Shark', 'Lion', 'Mosquito', 'Crocodile'], ans: 2 },
-      { q: 'Roughly how many languages exist today?', opts: ['~1,500', '~3,000', '~7,000', '~12,000'], ans: 2 },
-      { q: 'What is the largest organ in the human body?', opts: ['Liver', 'Lungs', 'Skin', 'Stomach'], ans: 2 },
-      { q: 'What is the capital of Australia?', opts: ['Sydney', 'Melbourne', 'Canberra', 'Brisbane'], ans: 2 },
-      { q: 'Which insect can survive weeks without its head?', opts: ['Ant', 'Cockroach', 'Beetle', 'Fly'], ans: 1 },
-      { q: 'Antarctica is technically classified as a…', opts: ['Tundra', 'Jungle', 'Desert', 'Glacier'], ans: 2 },
-      { q: 'How long does sunlight take to reach Earth?', opts: ['8 seconds', '8 minutes', '8 hours', '8 days'], ans: 1 },
-      { q: 'Which country eats the most chocolate per person?', opts: ['USA', 'Belgium', 'Switzerland', 'Germany'], ans: 2 },
-    ],
-    popculture: [
-      { q: 'Which musician holds the most Grammy wins ever?', opts: ['Taylor Swift', 'Beyoncé', 'Jay-Z', 'Michael Jackson'], ans: 1 },
-      { q: 'How many seasons did Friends run?', opts: ['8', '10', '12', '7'], ans: 1 },
-      { q: 'Best-selling video game of all time?', opts: ['GTA V', 'Tetris', 'Minecraft', 'Mario Bros.'], ans: 2 },
-      { q: 'Highest-grossing film ever at the box office?', opts: ['Endgame', 'Avatar', 'Titanic', 'Star Wars'], ans: 1 },
-      { q: 'Who played the Joker in "The Dark Knight"?', opts: ['Jared Leto', 'Heath Ledger', 'Joaquin Phoenix', 'Jack Nicholson'], ans: 1 },
-      { q: 'What is Lady Gaga\'s real name?', opts: ['Stefani Germanotta', 'Gaga Ciccone', 'Maria Pop', 'Angela Jolie'], ans: 0 },
-      { q: 'What is Homer Simpson\'s middle name?', opts: ['James', 'Jay', 'John', 'Joseph'], ans: 1 },
-      { q: 'Romeo and Juliet is set in which Italian city?', opts: ['Florence', 'Rome', 'Venice', 'Verona'], ans: 3 },
-      { q: 'What was the Hulk\'s original color in the comics?', opts: ['Green', 'Gray', 'Blue', 'Red'], ans: 1 },
-      { q: 'How many Oscars did Titanic win?', opts: ['7', '9', '11', '14'], ans: 2 },
-      { q: 'What instrument did Freddie Mercury play?', opts: ['Guitar', 'Piano', 'Drums', 'Bass'], ans: 1 },
-      { q: 'How many Dragon Balls are there in Dragon Ball?', opts: ['5', '6', '7', '9'], ans: 2 },
-      { q: 'What is Batman\'s butler\'s name?', opts: ['James', 'Alfred', 'Gordon', 'Edwin'], ans: 1 },
-      { q: 'In which country does Squid Game take place?', opts: ['Japan', 'China', 'South Korea', 'Thailand'], ans: 2 },
-      { q: 'Which studio made Shrek?', opts: ['Pixar', 'DreamWorks', 'Disney', 'Universal'], ans: 1 },
-    ],
-    bizarre: [
-      { q: 'How many times its own weight can an ant lift?', opts: ['5×', '10×', '50×', '100×'], ans: 2 },
-      { q: 'Which is the only animal that cannot jump?', opts: ['Hippo', 'Elephant', 'Gorilla', 'Rhino'], ans: 1 },
-      { q: 'How many times does the average person blink per day?', opts: ['3,000', '8,000', '15,000', '40,000'], ans: 2 },
-      { q: 'Banana trees are technically what?', opts: ['Trees', 'Shrubs', 'Giant herbs', 'Ferns'], ans: 2 },
-      { q: 'The first-ever online purchase in history was from?', opts: ['Amazon', 'eBay', 'Pizza Hut', 'Walmart'], ans: 2 },
-      { q: 'Which civilization invented toilet paper?', opts: ['USA', 'France', 'China', 'Japan'], ans: 2 },
-      { q: 'Fastest animal on Earth (in a dive)?', opts: ['Cheetah', 'Peregrine falcon', 'Blue marlin', 'Dragonfly'], ans: 1 },
-      { q: 'What % of human DNA is identical to a banana\'s?', opts: ['15%', '30%', '50%', '60%'], ans: 3 },
-      { q: 'What produced the loudest sound ever recorded?', opts: ['Earthquake', 'Krakatoa eruption', 'Blue whale', 'Atomic bomb'], ans: 1 },
-      { q: 'Which has MORE teeth — a snail or a shark?', opts: ['Shark, by far', 'Equal', 'Snail, by far', 'Neither has teeth'], ans: 2 },
-      { q: 'Is the Great Wall of China visible from space?', opts: ['Yes, clearly', 'Yes, barely', 'No, it\'s a myth', 'Only from low orbit'], ans: 2 },
-      { q: 'What can a stressed octopus do?', opts: ['Turn white', 'Eat its own arms', 'Explode', 'Stop breathing'], ans: 1 },
-      { q: 'Naming a pig "Napoleon" is illegal in which country?', opts: ['Spain', 'France', 'Italy', 'Germany'], ans: 1 },
-      { q: 'Approx. what % of the ocean is still unexplored?', opts: ['20%', '40%', '60%', '80%'], ans: 3 },
-      { q: 'What is the original meaning of "OK"?', opts: ['Old English "okay"', '"Oll Korrect" — a misspelling joke', 'Native American word', 'Open Key acronym'], ans: 1 },
-    ],
-  },
-  pt: {
-    general: [
-      { q: 'Qual é o único mamífero que realmente voa?', opts: ['Esquilo-voador', 'Morcego', 'Ornitorrinco', 'Petauro-do-açúcar'], ans: 1 },
-      { q: 'De que cor é o sangue do polvo?', opts: ['Vermelho', 'Azul', 'Verde', 'Roxo'], ans: 1 },
-      { q: 'Qual país tem MAIS pirâmides que o Egito?', opts: ['México', 'Peru', 'Sudão', 'Líbia'], ans: 2 },
-      { q: 'Quantos corações tem um polvo?', opts: ['1', '2', '3', '5'], ans: 2 },
-      { q: 'Qual animal tem impressão digital quase igual à humana?', opts: ['Chimpanzé', 'Gorila', 'Coala', 'Orangotango'], ans: 2 },
-      { q: 'Por quanto tempo um caracol pode dormir?', opts: ['1 semana', '3 meses', '3 anos', '10 dias'], ans: 2 },
-      { q: 'Metal mais abundante na crosta terrestre?', opts: ['Ferro', 'Ouro', 'Alumínio', 'Cobre'], ans: 2 },
-      { q: 'Qual animal mata mais humanos por ano?', opts: ['Tubarão', 'Leão', 'Mosquito', 'Crocodilo'], ans: 2 },
-      { q: 'Quantas línguas existem no mundo hoje?', opts: ['~1.500', '~3.000', '~7.000', '~12.000'], ans: 2 },
-      { q: 'Qual é o maior órgão do corpo humano?', opts: ['Fígado', 'Pulmões', 'Pele', 'Estômago'], ans: 2 },
-      { q: 'Qual é a capital da Austrália?', opts: ['Sydney', 'Melbourne', 'Canberra', 'Brisbane'], ans: 2 },
-      { q: 'Qual inseto sobrevive semanas sem a cabeça?', opts: ['Formiga', 'Barata', 'Besouro', 'Mosca'], ans: 1 },
-      { q: 'A Antártida é classificada tecnicamente como…', opts: ['Tundra', 'Floresta', 'Deserto', 'Glaciar'], ans: 2 },
-      { q: 'Quanto tempo a luz do sol leva para chegar à Terra?', opts: ['8 segundos', '8 minutos', '8 horas', '8 dias'], ans: 1 },
-      { q: 'Qual país consome mais chocolate por pessoa?', opts: ['EUA', 'Bélgica', 'Suíça', 'Alemanha'], ans: 2 },
-    ],
-    popculture: [
-      { q: 'Quem tem mais Grammys na história?', opts: ['Taylor Swift', 'Beyoncé', 'Jay-Z', 'Michael Jackson'], ans: 1 },
-      { q: 'Quantas temporadas tem Friends?', opts: ['8', '10', '12', '7'], ans: 1 },
-      { q: 'Jogo mais vendido de todos os tempos?', opts: ['GTA V', 'Tetris', 'Minecraft', 'Mario Bros.'], ans: 2 },
-      { q: 'Maior bilheteria de todos os tempos?', opts: ['Vingadores: Ultimato', 'Avatar', 'Titanic', 'Star Wars'], ans: 1 },
-      { q: 'Quem fez o Coringa em "O Cavaleiro das Trevas"?', opts: ['Jared Leto', 'Heath Ledger', 'Joaquin Phoenix', 'Jack Nicholson'], ans: 1 },
-      { q: 'Qual o nome real de Lady Gaga?', opts: ['Stefani Germanotta', 'Gaga Ciccone', 'Maria Pop', 'Angela Jolie'], ans: 0 },
-      { q: 'Qual o nome do meio de Homer Simpson?', opts: ['James', 'Jay', 'John', 'Joseph'], ans: 1 },
-      { q: 'Romeu e Julieta se passa em qual cidade italiana?', opts: ['Florença', 'Roma', 'Veneza', 'Verona'], ans: 3 },
-      { q: 'Qual era a cor original do Hulk nos quadrinhos?', opts: ['Verde', 'Cinza', 'Azul', 'Vermelho'], ans: 1 },
-      { q: 'Quantos Oscars Titanic ganhou?', opts: ['7', '9', '11', '14'], ans: 2 },
-      { q: 'Qual instrumento Freddie Mercury tocava?', opts: ['Guitarra', 'Piano', 'Bateria', 'Baixo'], ans: 1 },
-      { q: 'Quantas esferas do dragão existem em Dragon Ball?', opts: ['5', '6', '7', '9'], ans: 2 },
-      { q: 'Qual o nome do mordomo do Batman?', opts: ['James', 'Alfred', 'Gordon', 'Edwin'], ans: 1 },
-      { q: 'Em qual país se passa Squid Game?', opts: ['Japão', 'China', 'Coreia do Sul', 'Tailândia'], ans: 2 },
-      { q: 'Qual estúdio fez o Shrek?', opts: ['Pixar', 'DreamWorks', 'Disney', 'Universal'], ans: 1 },
-    ],
-    bizarre: [
-      { q: 'Quantas vezes seu peso uma formiga consegue levantar?', opts: ['5×', '10×', '50×', '100×'], ans: 2 },
-      { q: 'Único animal que não consegue pular?', opts: ['Hipopótamo', 'Elefante', 'Gorila', 'Rinoceronte'], ans: 1 },
-      { q: 'Quantas piscadas por dia em média?', opts: ['3.000', '8.000', '15.000', '40.000'], ans: 2 },
-      { q: 'Bananeiras são tecnicamente o quê?', opts: ['Árvores', 'Arbustos', 'Ervas gigantes', 'Samambaias'], ans: 2 },
-      { q: 'A primeira compra online da história foi de quê?', opts: ['Amazon', 'eBay', 'Pizza Hut', 'Walmart'], ans: 2 },
-      { q: 'Qual civilização inventou o papel higiênico?', opts: ['EUA', 'França', 'China', 'Japão'], ans: 2 },
-      { q: 'Animal mais rápido do planeta (em mergulho)?', opts: ['Guepardo', 'Falcão-peregrino', 'Marlim azul', 'Libélula'], ans: 1 },
-      { q: 'Quanto do DNA humano é idêntico ao da banana?', opts: ['15%', '30%', '50%', '60%'], ans: 3 },
-      { q: 'O que gerou o som mais alto já registrado na Terra?', opts: ['Terremoto', 'Erupção do Krakatoa', 'Baleia-azul', 'Bomba atômica'], ans: 1 },
-      { q: 'Quem tem MAIS dentes — lesma ou tubarão?', opts: ['Tubarão, de longe', 'São iguais', 'Lesma, de longe', 'Nenhum tem dentes'], ans: 2 },
-      { q: 'A Grande Muralha da China é visível do espaço?', opts: ['Sim, claramente', 'Sim, mas mal', 'Não, é um mito', 'Só da órbita baixa'], ans: 2 },
-      { q: 'O que um polvo estressado pode fazer?', opts: ['Ficar branco', 'Comer os próprios tentáculos', 'Explodir', 'Parar de respirar'], ans: 1 },
-      { q: 'Em qual país é ilegal chamar um porco de "Napoleão"?', opts: ['Espanha', 'França', 'Itália', 'Alemanha'], ans: 1 },
-      { q: 'Que % do oceano ainda não foi explorado?', opts: ['20%', '40%', '60%', '80%'], ans: 3 },
-      { q: 'Qual o significado original de "OK"?', opts: ['Inglês antigo', 'Brincadeira com erro ortográfico', 'Palavra indígena', 'Acrônimo tecnológico'], ans: 1 },
-    ],
-  },
-  es: {
-    general: [
-      { q: '¿Cuál es el único mamífero que vuela de verdad?', opts: ['Ardilla voladora', 'Murciélago', 'Ornitorrinco', 'Petauro del azúcar'], ans: 1 },
-      { q: '¿De qué color es la sangre del pulpo?', opts: ['Rojo', 'Azul', 'Verde', 'Morado'], ans: 1 },
-      { q: '¿Qué país tiene MÁS pirámides que Egipto?', opts: ['México', 'Perú', 'Sudán', 'Libia'], ans: 2 },
-      { q: '¿Cuántos corazones tiene un pulpo?', opts: ['1', '2', '3', '5'], ans: 2 },
-      { q: '¿Qué animal tiene huellas casi iguales a las humanas?', opts: ['Chimpancé', 'Gorila', 'Koala', 'Orangután'], ans: 2 },
-      { q: '¿Cuánto tiempo puede dormir un caracol?', opts: ['1 semana', '3 meses', '3 años', '10 días'], ans: 2 },
-      { q: '¿Metal más abundante en la corteza terrestre?', opts: ['Hierro', 'Oro', 'Aluminio', 'Cobre'], ans: 2 },
-      { q: '¿Qué animal mata más humanos por año?', opts: ['Tiburón', 'León', 'Mosquito', 'Cocodrilo'], ans: 2 },
-      { q: '¿Cuántas lenguas existen en el mundo hoy?', opts: ['~1.500', '~3.000', '~7.000', '~12.000'], ans: 2 },
-      { q: '¿Cuál es el órgano más grande del cuerpo humano?', opts: ['Hígado', 'Pulmones', 'Piel', 'Estómago'], ans: 2 },
-      { q: '¿Cuál es la capital de Australia?', opts: ['Sídney', 'Melbourne', 'Canberra', 'Brisbane'], ans: 2 },
-      { q: '¿Qué insecto sobrevive semanas sin cabeza?', opts: ['Hormiga', 'Cucaracha', 'Escarabajo', 'Mosca'], ans: 1 },
-      { q: 'La Antártida se clasifica técnicamente como…', opts: ['Tundra', 'Selva', 'Desierto', 'Glaciar'], ans: 2 },
-      { q: '¿Cuánto tarda la luz del sol en llegar a la Tierra?', opts: ['8 segundos', '8 minutos', '8 horas', '8 días'], ans: 1 },
-      { q: '¿Qué país consume más chocolate per cápita?', opts: ['EE.UU.', 'Bélgica', 'Suiza', 'Alemania'], ans: 2 },
-    ],
-    popculture: [
-      { q: '¿Quién tiene más Grammys en la historia?', opts: ['Taylor Swift', 'Beyoncé', 'Jay-Z', 'Michael Jackson'], ans: 1 },
-      { q: '¿Cuántas temporadas tuvo Friends?', opts: ['8', '10', '12', '7'], ans: 1 },
-      { q: '¿Videojuego más vendido de todos los tiempos?', opts: ['GTA V', 'Tetris', 'Minecraft', 'Mario Bros.'], ans: 2 },
-      { q: '¿Mayor recaudación de taquilla de la historia?', opts: ['Endgame', 'Avatar', 'Titanic', 'Star Wars'], ans: 1 },
-      { q: '¿Quién interpretó al Joker en "El Caballero Oscuro"?', opts: ['Jared Leto', 'Heath Ledger', 'Joaquin Phoenix', 'Jack Nicholson'], ans: 1 },
-      { q: '¿Cuál es el nombre real de Lady Gaga?', opts: ['Stefani Germanotta', 'Gaga Ciccone', 'María Pop', 'Angela Jolie'], ans: 0 },
-      { q: '¿Segundo nombre de Homer Simpson?', opts: ['James', 'Jay', 'John', 'Joseph'], ans: 1 },
-      { q: '¿En qué ciudad italiana transcurre Romeo y Julieta?', opts: ['Florencia', 'Roma', 'Venecia', 'Verona'], ans: 3 },
-      { q: '¿Color original del Hulk en los cómics?', opts: ['Verde', 'Gris', 'Azul', 'Rojo'], ans: 1 },
-      { q: '¿Cuántos Oscars ganó Titanic?', opts: ['7', '9', '11', '14'], ans: 2 },
-      { q: '¿Qué instrumento tocaba Freddie Mercury?', opts: ['Guitarra', 'Piano', 'Batería', 'Bajo'], ans: 1 },
-      { q: '¿Cuántas esferas del dragón hay en Dragon Ball?', opts: ['5', '6', '7', '9'], ans: 2 },
-      { q: '¿Cómo se llama el mayordomo de Batman?', opts: ['James', 'Alfred', 'Gordon', 'Edwin'], ans: 1 },
-      { q: '¿En qué país transcurre El juego del calamar?', opts: ['Japón', 'China', 'Corea del Sur', 'Tailandia'], ans: 2 },
-      { q: '¿Qué estudio creó a Shrek?', opts: ['Pixar', 'DreamWorks', 'Disney', 'Universal'], ans: 1 },
-    ],
-    bizarre: [
-      { q: '¿Cuántas veces su peso puede levantar una hormiga?', opts: ['5×', '10×', '50×', '100×'], ans: 2 },
-      { q: '¿Único animal que no puede saltar?', opts: ['Hipopótamo', 'Elefante', 'Gorila', 'Rinoceronte'], ans: 1 },
-      { q: '¿Promedio de parpadeos al día?', opts: ['3.000', '8.000', '15.000', '40.000'], ans: 2 },
-      { q: 'Los bananeros son técnicamente…', opts: ['Árboles', 'Arbustos', 'Hierbas gigantes', 'Helechos'], ans: 2 },
-      { q: '¿La primera compra online de la historia fue de?', opts: ['Amazon', 'eBay', 'Pizza Hut', 'Walmart'], ans: 2 },
-      { q: '¿Qué civilización inventó el papel higiénico?', opts: ['EE.UU.', 'Francia', 'China', 'Japón'], ans: 2 },
-      { q: '¿Animal más rápido del planeta (en picada)?', opts: ['Guepardo', 'Halcón peregrino', 'Marlín azul', 'Libélula'], ans: 1 },
-      { q: '¿Qué % del ADN humano es igual al del plátano?', opts: ['15%', '30%', '50%', '60%'], ans: 3 },
-      { q: '¿Qué generó el sonido más fuerte jamás registrado?', opts: ['Terremoto', 'Erupción del Krakatoa', 'Ballena azul', 'Bomba atómica'], ans: 1 },
-      { q: '¿Quién tiene MÁS dientes — caracol o tiburón?', opts: ['Tiburón, de lejos', 'Iguales', 'Caracol, de lejos', 'Ninguno tiene'], ans: 2 },
-      { q: '¿La Gran Muralla China es visible desde el espacio?', opts: ['Sí, claramente', 'Sí, pero apenas', 'No, es un mito', 'Solo desde órbita baja'], ans: 2 },
-      { q: '¿Qué puede hacer un pulpo estresado?', opts: ['Volverse blanco', 'Comerse sus propios brazos', 'Explotar', 'Dejar de respirar'], ans: 1 },
-      { q: '¿En qué país es ilegal llamar a un cerdo "Napoleón"?', opts: ['España', 'Francia', 'Italia', 'Alemania'], ans: 1 },
-      { q: '¿Qué % del océano sigue sin explorar?', opts: ['20%', '40%', '60%', '80%'], ans: 3 },
-      { q: '¿Cuál es el significado original de "OK"?', opts: ['Inglés antiguo', 'Broma con error ortográfico', 'Palabra indígena', 'Acrónimo tecnológico'], ans: 1 },
-    ],
-  },
+  en: [
+      { q: "What color is the 'black box' on commercial aircraft?", opts: ['Black', 'Blue', 'Orange', 'Fluorescent green'], ans: 2 },
+      { q: 'In which country was dictator Adolf Hitler born?', opts: ['Germany', 'Austria', 'Poland', 'Hungary'], ans: 1 },
+      { q: 'Which of these animals is NOT a bird?', opts: ['Penguin', 'Ostrich', 'Bat', 'Emu'], ans: 2 },
+      { q: 'How long does a day on Venus last?', opts: ['24 hours', '10 hours', 'Longer than a year on Venus', '30 days'], ans: 2 },
+      { q: 'Which country has the most time zones in the world?', opts: ['Russia', 'USA', 'China', 'France'], ans: 3 },
+      { q: "Where is the 'Sea of Tranquility'?", opts: ['In the Indian Ocean', 'On the Moon', 'In Antarctica', 'In Egypt'], ans: 1 },
+      { q: 'What is the natural color of a female peacock?', opts: ['Bright blue', 'Metallic green', 'Gray or brown', 'White'], ans: 2 },
+      { q: 'What happens if you put a grape in the microwave?', opts: ['It turns into a raisin', 'It explodes into plasma', "It doesn't heat up", 'It melts'], ans: 1 },
+      { q: 'What was the original color of the Statue of Liberty?', opts: ['Green', 'Gold', 'Copper (like a coin)', 'White'], ans: 2 },
+      { q: 'How many stomachs does a cow have?', opts: ['1', '2', '3', '4'], ans: 0 },
+      { q: 'Which of these is NOT one of the Three Musketeers?', opts: ['Athos', 'Porthos', "D'Artagnan", 'Aramis'], ans: 2 },
+      { q: 'Where did the original French Fries come from?', opts: ['France', 'Belgium', 'USA', 'England'], ans: 1 },
+      { q: 'What is the only animal that cannot jump?', opts: ['Rhinoceros', 'Elephant', 'Hippopotamus', 'Sloth'], ans: 1 },
+      { q: 'What grows on a cashew tree?', opts: ['Only the cashew fruit', 'Cashew fruit and the nut', 'Only the nut', 'Cashew fruit and mango'], ans: 1 },
+      { q: "What does 'Avatar' mean originally in Sanskrit?", opts: ['Profile', 'Descent of a god', 'Blue warrior', 'Soul'], ans: 1 },
+      { q: 'How many hearts does an earthworm have?', opts: ['1', '2', '5', 'None'], ans: 2 },
+      { q: 'What is the capital of Morocco?', opts: ['Casablanca', 'Marrakech', 'Rabat', 'Cairo'], ans: 2 },
+      { q: "What is 'Pneumonoultramicroscopicsilicovolcanoconiosis'?", opts: ['A volcano', 'A lung disease', 'A type of soil', 'A dinosaur'], ans: 1 },
+      { q: 'Which historical figure survived 638 assassination attempts?', opts: ['Winston Churchill', 'Fidel Castro', 'Queen Elizabeth II', 'Stalin'], ans: 1 },
+      { q: 'The Panama hat is originally from which country?', opts: ['Panama', 'Ecuador', 'Mexico', 'Brazil'], ans: 1 },
+      { q: 'Which metal is liquid at room temperature?', opts: ['Lead', 'Mercury', 'Aluminum', 'Copper'], ans: 1 },
+      { q: 'Who painted the ceiling of the Sistine Chapel?', opts: ['Leonardo da Vinci', 'Michelangelo', 'Donatello', 'Raphael'], ans: 1 },
+      { q: 'Which of these animals has pink milk?', opts: ['Elephant', 'Hippopotamus', 'Pig', 'Whale'], ans: 1 },
+      { q: 'How many teeth does a mosquito have?', opts: ['None', '2', '32', '47'], ans: 3 },
+      { q: 'Where was sushi invented?', opts: ['Japan', 'China', 'Korea', 'Vietnam'], ans: 1 },
+      { q: 'What is the largest island in the world?', opts: ['Australia', 'Greenland', 'Madagascar', 'Iceland'], ans: 1 },
+      { q: 'Who invented the bra?', opts: ['Leonardo da Vinci', 'Mary Phelps Jacob', 'Coco Chanel', 'Isaac Newton'], ans: 1 },
+      { q: 'What is the fastest animal in the world on land?', opts: ['Cheetah', 'Antelope', 'Lion', 'Horse'], ans: 0 },
+      { q: "What is the 'Midnight Sun'?", opts: ['An eclipse', 'A polar phenomenon', 'A shooting star', 'A desert'], ans: 1 },
+      { q: 'Which of these is NOT one of the Seven Dwarfs?', opts: ['Sleepy', 'Grumpy', 'Glutton', 'Doc'], ans: 2 },
+      { q: 'What ingredient is essential to make a meringue?', opts: ['Egg yolk', 'Egg white', 'Condensed milk', 'Flour'], ans: 1 },
+      { q: "In which city is the original 'Manneken Pis' statue?", opts: ['Paris', 'Brussels', 'Berlin', 'Amsterdam'], ans: 1 },
+      { q: 'What is the tallest mountain in the world from base to top?', opts: ['Everest', 'Mauna Kea', 'K2', 'Mount Fuji'], ans: 1 },
+      { q: "Who wrote 'Don Quixote'?", opts: ['Shakespeare', 'Machado de Assis', 'Miguel de Cervantes', 'Dante Alighieri'], ans: 2 },
+      { q: "Which chemical element has the symbol 'Au'?", opts: ['Silver', 'Gold', 'Copper', 'Aluminum'], ans: 1 },
+      { q: "How many years did the Hundred Years' War last?", opts: ['100', '99', '116', '150'], ans: 2 },
+      { q: "What is 'Thyme'?", opts: ['A bird', 'An herb', 'A fish', 'A mineral'], ans: 1 },
+      { q: 'What is the largest animal that has ever lived on Earth?', opts: ['Megalodon', 'Blue whale', 'Tyrannosaurus Rex', 'Mammoth'], ans: 1 },
+      { q: "Which city is known as the 'Eternal City'?", opts: ['Athens', 'Rome', 'Jerusalem', 'Cairo'], ans: 1 },
+      { q: 'How many colors does a rainbow have?', opts: ['5', '6', '7', '8'], ans: 2 },
+      { q: 'Who discovered penicillin?', opts: ['Albert Einstein', 'Alexander Fleming', 'Marie Curie', 'Louis Pasteur'], ans: 1 },
+      { q: 'Which of these countries does NOT have an army?', opts: ['Costa Rica', 'Brazil', 'Israel', 'North Korea'], ans: 0 },
+      { q: 'What is the official language of Angola?', opts: ['French', 'English', 'Portuguese', 'Spanish'], ans: 2 },
+      { q: "Who is the author of 'The Little Prince'?", opts: ['Monteiro Lobato', 'Saint-Exupéry', 'Ziraldo', 'J.K. Rowling'], ans: 1 },
+      { q: 'In what year did man first walk on the Moon?', opts: ['1965', '1969', '1972', '1959'], ans: 1 },
+      { q: 'What is the longest bone in the human body?', opts: ['Radius', 'Femur', 'Tibia', 'Rib'], ans: 1 },
+      { q: "What does 'Entomology' study?", opts: ['Insects', 'Fish', 'Birds', 'Reptiles'], ans: 0 },
+      { q: 'What is the name of the phobia of spiders?', opts: ['Claustrophobia', 'Arachnophobia', 'Acrophobia', 'Agoraphobia'], ans: 1 },
+      { q: "Which planet is known as the 'Red Planet'?", opts: ['Jupiter', 'Mars', 'Venus', 'Saturn'], ans: 1 },
+      { q: 'Where was navigator Christopher Columbus born?', opts: ['Spain', 'Portugal', 'Italy', 'France'], ans: 2 },
+  ],
+  pt: [
+      { q: "Qual é a cor da 'caixa-preta' dos aviões comerciais?", opts: ['Preta', 'Azul', 'Laranja', 'Verde fluorescente'], ans: 2 },
+      { q: 'Em qual país nasceu o ditador Adolf Hitler?', opts: ['Alemanha', 'Áustria', 'Polônia', 'Hungria'], ans: 1 },
+      { q: 'Qual destes animais NÃO é um pássaro?', opts: ['Pinguim', 'Avestruz', 'Morcego', 'Emu'], ans: 2 },
+      { q: 'Quanto tempo dura um dia em Vênus?', opts: ['24 horas', '10 horas', 'Mais que um ano em Vênus', '30 dias'], ans: 2 },
+      { q: 'Qual é o país com mais fusos horários no mundo?', opts: ['Rússia', 'EUA', 'China', 'França'], ans: 3 },
+      { q: "Onde fica o 'Mar da Tranquilidade'?", opts: ['No Oceano Índico', 'Na Lua', 'Na Antártida', 'No Egito'], ans: 1 },
+      { q: 'Qual é a cor natural da fêmea do pavão?', opts: ['Azul brilhante', 'Verde metálico', 'Cinza ou marrom', 'Branca'], ans: 2 },
+      { q: 'O que acontece se você colocar uma uva no micro-ondas?', opts: ['Ela vira passa', 'Ela explode em plasma', 'Ela não esquenta', 'Ela derrete'], ans: 1 },
+      { q: 'Qual era a cor original da Estátua da Liberdade?', opts: ['Verde', 'Dourada', 'Cobre (tipo uma moeda)', 'Branca'], ans: 2 },
+      { q: 'Quantos estômagos tem uma vaca?', opts: ['1', '2', '3', '4'], ans: 0 },
+      { q: 'Qual destes nomes NÃO faz parte dos três mosqueteiros?', opts: ['Athos', 'Porthos', "D'Artagnan", 'Aramis'], ans: 2 },
+      { q: 'De onde veio a batata frita original (French Fries)?', opts: ['França', 'Bélgica', 'EUA', 'Inglaterra'], ans: 1 },
+      { q: 'Qual é o único animal que não consegue pular?', opts: ['Rinoceronte', 'Elefante', 'Hipopótamo', 'Preguiça'], ans: 1 },
+      { q: "Qual fruto dá em uma árvore chamada 'Cajueiro'?", opts: ['Apenas o Caju', 'Caju e a Castanha', 'Apenas a Castanha', 'Caju e Manga'], ans: 1 },
+      { q: "O que o termo 'Avatar' significa originalmente no sânscrito?", opts: ['Perfil', 'Descida de um deus', 'Guerreiro azul', 'Alma'], ans: 1 },
+      { q: 'Quantos corações tem uma minhoca?', opts: ['1', '2', '5', 'Nenhum'], ans: 2 },
+      { q: 'Qual a capital do Marrocos?', opts: ['Casablanca', 'Marraquexe', 'Rabat', 'Cairo'], ans: 2 },
+      { q: "O que é um 'Pneumoultramicroscopicsilicovolcanoconiótico'?", opts: ['Um vulcão', 'Uma doença pulmonar', 'Um tipo de solo', 'Um dinossauro'], ans: 1 },
+      { q: 'Qual personagem histórico sobreviveu a 638 tentativas de assassinato?', opts: ['Winston Churchill', 'Fidel Castro', 'Rainha Elizabeth II', 'Stalin'], ans: 1 },
+      { q: "O 'Panamá' (chapéu) é originário de qual país?", opts: ['Panamá', 'Equador', 'México', 'Brasil'], ans: 1 },
+      { q: 'Qual é o metal que é líquido em temperatura ambiente?', opts: ['Chumbo', 'Mercúrio', 'Alumínio', 'Cobre'], ans: 1 },
+      { q: 'Quem pintou o teto da Capela Sistina?', opts: ['Leonardo da Vinci', 'Michelangelo', 'Donatello', 'Rafael'], ans: 1 },
+      { q: 'Qual destes animais tem leite cor-de-rosa?', opts: ['Elefante', 'Hipopótamo', 'Porco', 'Baleia'], ans: 1 },
+      { q: 'Quantos dentes tem um mosquito?', opts: ['Nenhum', '2', '32', '47'], ans: 3 },
+      { q: 'Onde o sushi foi inventado?', opts: ['Japão', 'China', 'Coreia', 'Vietnã'], ans: 1 },
+      { q: 'Qual a maior ilha do mundo?', opts: ['Austrália', 'Groenlândia', 'Madagascar', 'Islândia'], ans: 1 },
+      { q: 'Quem inventou o sutiã?', opts: ['Leonardo da Vinci', 'Mary Phelps Jacob', 'Coco Chanel', 'Isaac Newton'], ans: 1 },
+      { q: 'Qual o animal mais rápido do mundo (em terra)?', opts: ['Guepardo', 'Antílope', 'Leão', 'Cavalo'], ans: 0 },
+      { q: "O que é o 'Sol da Meia-Noite'?", opts: ['Um eclipse', 'Um fenômeno nos polos', 'Uma estrela cadente', 'Um deserto'], ans: 1 },
+      { q: 'Qual destes NÃO é um dos sete anões?', opts: ['Soneca', 'Dunga', 'Guloso', 'Mestre'], ans: 2 },
+      { q: 'Qual ingrediente é essencial para fazer um merengue?', opts: ['Gema de ovo', 'Clara de ovo', 'Leite condensado', 'Farinha'], ans: 1 },
+      { q: "Em qual cidade fica a estátua original do 'Manneken Pis'?", opts: ['Paris', 'Bruxelas', 'Berlim', 'Amsterdã'], ans: 1 },
+      { q: 'Qual é a montanha mais alta do mundo (da base ao topo)?', opts: ['Everest', 'Mauna Kea', 'K2', 'Monte Fuji'], ans: 1 },
+      { q: "Quem escreveu 'Dom Quixote'?", opts: ['Shakespeare', 'Machado de Assis', 'Miguel de Cervantes', 'Dante Alighieri'], ans: 2 },
+      { q: "Qual elemento químico tem o símbolo 'Au'?", opts: ['Prata', 'Ouro', 'Cobre', 'Alumínio'], ans: 1 },
+      { q: 'Quantos anos durou a Guerra dos Cem Anos?', opts: ['100', '99', '116', '150'], ans: 2 },
+      { q: "O que é um 'Tomilho'?", opts: ['Um pássaro', 'Uma erva', 'Um peixe', 'Um mineral'], ans: 1 },
+      { q: 'Qual o maior animal que já existiu na Terra?', opts: ['Megalodonte', 'Baleia-azul', 'Tiranossauro Rex', 'Mamute'], ans: 1 },
+      { q: "Qual cidade é conhecida como a 'Cidade Eterna'?", opts: ['Atenas', 'Roma', 'Jerusalém', 'Cairo'], ans: 1 },
+      { q: 'Quantas cores tem o arco-íris?', opts: ['5', '6', '7', '8'], ans: 2 },
+      { q: 'Quem descobriu a penicilina?', opts: ['Albert Einstein', 'Alexander Fleming', 'Marie Curie', 'Louis Pasteur'], ans: 1 },
+      { q: 'Qual destes países NÃO possui exército?', opts: ['Costa Rica', 'Brasil', 'Israel', 'Coreia do Norte'], ans: 0 },
+      { q: 'Qual a língua oficial de Angola?', opts: ['Francês', 'Inglês', 'Português', 'Espanhol'], ans: 2 },
+      { q: "Quem é o autor de 'O Pequeno Príncipe'?", opts: ['Monteiro Lobato', 'Saint-Exupéry', 'Ziraldo', 'J.K. Rowling'], ans: 1 },
+      { q: 'Em que ano o homem pisou na Lua pela primeira vez?', opts: ['1965', '1969', '1972', '1959'], ans: 1 },
+      { q: 'Qual é o osso mais longo do corpo humano?', opts: ['Rádio', 'Fêmur', 'Tíbia', 'Costela'], ans: 1 },
+      { q: "O que estuda a 'Entomologia'?", opts: ['Insetos', 'Peixes', 'Aves', 'Répteis'], ans: 0 },
+      { q: 'Qual o nome da fobia de aranhas?', opts: ['Claustrofobia', 'Aracnofobia', 'Acrofobia', 'Agorafobia'], ans: 1 },
+      { q: "Qual planeta é conhecido como o 'Planeta Vermelho'?", opts: ['Júpiter', 'Marte', 'Vênus', 'Saturno'], ans: 1 },
+      { q: 'Onde nasceu o navegador Cristóvão Colombo?', opts: ['Espanha', 'Portugal', 'Itália', 'França'], ans: 2 },
+  ],
+  es: [
+      { q: "¿De qué color es la 'caja negra' de los aviones comerciales?", opts: ['Negra', 'Azul', 'Naranja', 'Verde fluorescente'], ans: 2 },
+      { q: '¿En qué país nació el dictador Adolf Hitler?', opts: ['Alemania', 'Austria', 'Polonia', 'Hungría'], ans: 1 },
+      { q: '¿Cuál de estos animales NO es un pájaro?', opts: ['Pingüino', 'Avestruz', 'Murciélago', 'Emú'], ans: 2 },
+      { q: '¿Cuánto dura un día en Venus?', opts: ['24 horas', '10 horas', 'Más que un año en Venus', '30 días'], ans: 2 },
+      { q: '¿Qué país tiene más husos horarios en el mundo?', opts: ['Rusia', 'EE.UU.', 'China', 'Francia'], ans: 3 },
+      { q: "¿Dónde está el 'Mar de la Tranquilidad'?", opts: ['En el Océano Índico', 'En la Luna', 'En la Antártida', 'En Egipto'], ans: 1 },
+      { q: '¿Cuál es el color natural de la pava real?', opts: ['Azul brillante', 'Verde metálico', 'Gris o marrón', 'Blanca'], ans: 2 },
+      { q: '¿Qué pasa si metes una uva al microondas?', opts: ['Se convierte en pasa', 'Explota en plasma', 'No se calienta', 'Se derrite'], ans: 1 },
+      { q: '¿Cuál era el color original de la Estatua de la Libertad?', opts: ['Verde', 'Dorada', 'Cobre (como una moneda)', 'Blanca'], ans: 2 },
+      { q: '¿Cuántos estómagos tiene una vaca?', opts: ['1', '2', '3', '4'], ans: 0 },
+      { q: '¿Cuál de estos NO es uno de los tres mosqueteros?', opts: ['Athos', 'Porthos', "D'Artagnan", 'Aramis'], ans: 2 },
+      { q: '¿De dónde vienen las papas fritas originales (French Fries)?', opts: ['Francia', 'Bélgica', 'EE.UU.', 'Inglaterra'], ans: 1 },
+      { q: '¿Cuál es el único animal que no puede saltar?', opts: ['Rinoceronte', 'Elefante', 'Hipopótamo', 'Perezoso'], ans: 1 },
+      { q: '¿Qué fruto da el árbol del anacardo?', opts: ['Solo el marañón', 'El marañón y la nuez', 'Solo la nuez', 'Marañón y mango'], ans: 1 },
+      { q: "¿Qué significa el término 'Avatar' en sánscrito?", opts: ['Perfil', 'Descenso de un dios', 'Guerrero azul', 'Alma'], ans: 1 },
+      { q: '¿Cuántos corazones tiene una lombriz?', opts: ['1', '2', '5', 'Ninguno'], ans: 2 },
+      { q: '¿Cuál es la capital de Marruecos?', opts: ['Casablanca', 'Marrakech', 'Rabat', 'El Cairo'], ans: 2 },
+      { q: "¿Qué es la 'Pneumonoultramicroscopicsilicovolcanoconiosis'?", opts: ['Un volcán', 'Una enfermedad pulmonar', 'Un tipo de suelo', 'Un dinosaurio'], ans: 1 },
+      { q: '¿Qué personaje histórico sobrevivió 638 intentos de asesinato?', opts: ['Winston Churchill', 'Fidel Castro', 'Reina Isabel II', 'Stalin'], ans: 1 },
+      { q: '¿El sombrero Panamá es originario de qué país?', opts: ['Panamá', 'Ecuador', 'México', 'Brasil'], ans: 1 },
+      { q: '¿Cuál es el metal líquido a temperatura ambiente?', opts: ['Plomo', 'Mercurio', 'Aluminio', 'Cobre'], ans: 1 },
+      { q: '¿Quién pintó el techo de la Capilla Sixtina?', opts: ['Leonardo da Vinci', 'Miguel Ángel', 'Donatello', 'Rafael'], ans: 1 },
+      { q: '¿Cuál de estos animales tiene leche rosada?', opts: ['Elefante', 'Hipopótamo', 'Cerdo', 'Ballena'], ans: 1 },
+      { q: '¿Cuántos dientes tiene un mosquito?', opts: ['Ninguno', '2', '32', '47'], ans: 3 },
+      { q: '¿Dónde fue inventado el sushi?', opts: ['Japón', 'China', 'Corea', 'Vietnam'], ans: 1 },
+      { q: '¿Cuál es la isla más grande del mundo?', opts: ['Australia', 'Groenlandia', 'Madagascar', 'Islandia'], ans: 1 },
+      { q: '¿Quién inventó el sostén?', opts: ['Leonardo da Vinci', 'Mary Phelps Jacob', 'Coco Chanel', 'Isaac Newton'], ans: 1 },
+      { q: '¿Cuál es el animal más rápido del mundo en tierra?', opts: ['Guepardo', 'Antílope', 'León', 'Caballo'], ans: 0 },
+      { q: "¿Qué es el 'Sol de Medianoche'?", opts: ['Un eclipse', 'Un fenómeno polar', 'Una estrella fugaz', 'Un desierto'], ans: 1 },
+      { q: '¿Cuál de estos NO es uno de los siete enanitos?', opts: ['Dormilón', 'Gruñón', 'Glotón', 'Sabio'], ans: 2 },
+      { q: '¿Qué ingrediente es esencial para un merengue?', opts: ['Yema de huevo', 'Clara de huevo', 'Leche condensada', 'Harina'], ans: 1 },
+      { q: "¿En qué ciudad está la estatua original del 'Manneken Pis'?", opts: ['París', 'Bruselas', 'Berlín', 'Ámsterdam'], ans: 1 },
+      { q: '¿Cuál es la montaña más alta del mundo de la base a la cima?', opts: ['Everest', 'Mauna Kea', 'K2', 'Monte Fuji'], ans: 1 },
+      { q: "¿Quién escribió 'Don Quijote'?", opts: ['Shakespeare', 'Machado de Assis', 'Miguel de Cervantes', 'Dante Alighieri'], ans: 2 },
+      { q: "¿Qué elemento químico tiene el símbolo 'Au'?", opts: ['Plata', 'Oro', 'Cobre', 'Aluminio'], ans: 1 },
+      { q: '¿Cuántos años duró la Guerra de los Cien Años?', opts: ['100', '99', '116', '150'], ans: 2 },
+      { q: "¿Qué es el 'Tomillo'?", opts: ['Un pájaro', 'Una hierba', 'Un pez', 'Un mineral'], ans: 1 },
+      { q: '¿Cuál es el animal más grande que ha existido en la Tierra?', opts: ['Megalodón', 'Ballena azul', 'Tiranosaurio Rex', 'Mamut'], ans: 1 },
+      { q: "¿Qué ciudad es conocida como la 'Ciudad Eterna'?", opts: ['Atenas', 'Roma', 'Jerusalén', 'El Cairo'], ans: 1 },
+      { q: '¿Cuántos colores tiene el arcoíris?', opts: ['5', '6', '7', '8'], ans: 2 },
+      { q: '¿Quién descubrió la penicilina?', opts: ['Albert Einstein', 'Alexander Fleming', 'Marie Curie', 'Louis Pasteur'], ans: 1 },
+      { q: '¿Cuál de estos países NO tiene ejército?', opts: ['Costa Rica', 'Brasil', 'Israel', 'Corea del Norte'], ans: 0 },
+      { q: '¿Cuál es el idioma oficial de Angola?', opts: ['Francés', 'Inglés', 'Portugués', 'Español'], ans: 2 },
+      { q: "¿Quién es el autor de 'El Principito'?", opts: ['Monteiro Lobato', 'Saint-Exupéry', 'Ziraldo', 'J.K. Rowling'], ans: 1 },
+      { q: '¿En qué año pisó el hombre la Luna por primera vez?', opts: ['1965', '1969', '1972', '1959'], ans: 1 },
+      { q: '¿Cuál es el hueso más largo del cuerpo humano?', opts: ['Radio', 'Fémur', 'Tibia', 'Costilla'], ans: 1 },
+      { q: "¿Qué estudia la 'Entomología'?", opts: ['Insectos', 'Peces', 'Aves', 'Reptiles'], ans: 0 },
+      { q: '¿Cómo se llama la fobia a las arañas?', opts: ['Claustrofobia', 'Aracnofobia', 'Acrofobia', 'Agorafobia'], ans: 1 },
+      { q: "¿Qué planeta es conocido como el 'Planeta Rojo'?", opts: ['Júpiter', 'Marte', 'Venus', 'Saturno'], ans: 1 },
+      { q: '¿Dónde nació el navegante Cristóbal Colón?', opts: ['España', 'Portugal', 'Italia', 'Francia'], ans: 2 },
+  ],
 };
 
 // ---------- Fake Ads ----------
 const FAKE_ADS = {
   pt: [
-    { title: 'CREDICERTO — SEU OSVALDO™', tagline: 'Crédito na hora. Sem consulta ao SPC. Com visita à sua casa.', review: 'Paguei em 6 semanas com juros de 25% ao mês. Recomendo muito.', reviewer: 'Cliente anônimo, muito anônimo', cta: 'BECO DA MATRIZ, S/Nº · PERGUNTE PELO OSVALDO', fine: 'Taxa sujeita ao humor do Seu Osvaldo. Atraso resulta em visita dos assessores Marcão e Gigante. Empresa sem CNPJ.' },
-    { title: 'VOLKSWAGEN FUSCA. 1993.', tagline: 'Ele voltou. E o Brasil nunca esteve tão pronto.', review: 'Comprei na concessionária. Chorei de emoção. Motor era de 1974.', reviewer: 'Sérgio M., engenheiro, SP', cta: 'VOLKSWAGEN. VOCÊ CONHECE.', fine: 'Motor 1600cc. Freio a tambor nas 4 rodas. Sem air bag. Sem ar-condicionado. Sem direção hidráulica. Mas voltou.' },
-    { title: 'VITALMED PLUS™', tagline: 'Cobertura completa para sua saúde e de toda a família.', review: 'Paguei 8 anos. Fui usar. Era pré-existente.', reviewer: 'Marcos T., ex-segurado', cta: 'A PARTIR DE R$289/MÊS · CARÊNCIA 24 MESES', fine: 'Cobertura completa exceto: pronto-socorro, internação, cirurgia, exames, especialistas, doenças pré-existentes e adquiridas após a contratação.' },
-    { title: 'CHARLES STUDIO — TRICOLOGIA AVANÇADA™', tagline: 'Corte preciso. Acabamento impecável. Zero desperdício.', review: 'Fui com esperança. Voltei com paz de espírito.', reviewer: 'Raimundo G., cliente desde 2019', cta: 'AGENDE: (11) 9****-**** · ATÉ 3X SEM JUROS', fine: 'Especializado em clientes sem fio. Charles não se responsabiliza por expectativas não alinhadas com a realidade capilar do cliente.' },
-    { title: 'DEP. WALDOMIRO AZEVEDO · 30 ANOS PELO POVO', tagline: 'Meu mandato, sua estrada. Sua escola. Minha foto.', review: 'Asfaltou minha rua na véspera da eleição. Tá com buraco de novo. A placa tá inteira.', reviewer: 'Seu Genival, eleitor fiel', cta: 'VOTE: 40.040 · WALDOMIRO É TRABALHADOR', fine: 'Obras sujeitas a calendário eleitoral. Bens declarados não coincidem com bens observáveis. Campanha financiada por colaboradores que preferem não se identificar.' },
-    { title: 'MINISTÉRIO NOVA GRAÇA — PR. EZEQUIEL', tagline: 'Deus tem um plano para sua vida. E o plano aceita Pix.', review: 'Semeei R$300. Não colhi nada. Mas o pastor comprou um carro lindo.', reviewer: 'Irmã Conceição, fiel há 12 anos', cta: 'CULTO TODO DOMINGO · PIX: pastor@ezequiel', fine: 'Bênçãos sujeitas à vontade divina e ao valor da semente. Milagres sem prazo de garantia. Igreja não emite nota fiscal.' },
-    { title: 'BRISAVILLE INCORPORADORA™', tagline: 'Vista panorâmica. Lazer completo. Planta flexível. Chaves: consulte-nos.', review: 'Comprei na planta em 2018. Ainda estou consultando.', reviewer: 'Adriana F., futura moradora', cta: 'STAND DE VENDAS ABERTO · UNIDADES LIMITADAS', fine: 'Imagens meramente ilustrativas. Prazo de entrega sujeito a condições climáticas, fornecedores e disponibilidade da prefeitura.' },
-    { title: 'BENZEDEIRA DONA NOÊMIA™', tagline: 'Quebranto, mau-olhado e dívida no cartão. Ela resolve tudo.', review: 'Cheguei com três males. Saí com dois. A dívida ela disse que é karma.', reviewer: 'Cléia S., cliente recorrente', cta: 'ATENDIMENTO: TERÇA E QUINTA · ATRÁS DA FARMÁCIA', fine: 'Resultados sujeitos à fé do cliente e à fase da lua. Dona Noêmia não aceita plano de saúde. Dívidas podem exigir sessões adicionais.' },
-    { title: 'SORRIPLENO ODONTOLOGIA™', tagline: 'Seu sorriso merece o melhor que o plano permite.', review: 'Fui por um canal. Saí com extração. O convênio cobriu a anestesia.', reviewer: 'Claudinho R., ex-paciente', cta: 'CREDENCIADA A TODOS OS CONVÊNIOS · AGENDE JÁ', fine: 'Cobertura sujeita a análise do convênio. Pode variar conforme plano, dente e humor da operadora. Particular a partir de R$180.' },
-    { title: 'CARTOMANTE DONA FÁTIMA™', tagline: 'O futuro não tem segredos. Mas tem taxa de consulta.', review: 'Ela acertou meu passado, errou meu futuro e acertou meu CPF de alguma forma.', reviewer: 'Marcos B., curioso', cta: 'CONSULTA: R$80 · WHATSAPP: (11) 9****-****', fine: 'Previsões válidas por 30 dias ou até o próximo imprevisto. Dona Fátima não se responsabiliza por decisões baseadas nas cartas.' },
-    { title: 'INSTITUTO APROVAÇÃO™', tagline: 'Sua vaga no serviço público começa aqui.', review: 'Passei na prova em 2021. Aguardando nomeação. Segue o jogo.', reviewer: 'Erivaldo S., aprovado em espera', cta: 'MATRÍCULA ABERTA · 36× DE R$89,90', fine: 'Aprovação não garante nomeação. Nomeação não garante posse. Concurso pode ser suspenso ou esquecido pela administração a qualquer momento.' },
-    { title: 'CRISPOP CINEMA™', tagline: 'A experiência completa do cinema no conforto da sua casa.', review: 'Coloquei no micro. Em 3 minutos eu, os vizinhos e o síndico nos reunimos.', reviewer: 'Patrícia M., moradora do 4º andar', cta: 'MANTEIGA REAL · SABOR INTENSO · LEVE 3 PAGUE 2', fine: 'Fabricante não se responsabiliza por alarmes de incêndio, reuniões de condomínio ou evacuações decorrentes do uso do produto.' },
+    { title: 'ARMAZÉM PARAÍBA', tagline: 'O carnê que não se acaba nem que a moléstia queira.', cta: 'FIADO SÓ AMANHÃ · TRAGA O CPF E A CORAGEM', fine: 'Juros calculados pelo tempo de espera da chuva. O móvel é de compensado, mas a dívida é de carvalho. A montagem exige a paciência de um monge beneditino no deserto.' },
+    { title: 'BRISANET', tagline: "Uma internet tão 'viva' que se esconde quando a trovoada aponta no horizonte.", cta: 'ASSINE JÁ · SE O VENTO DA SERRA DEIXAR', fine: 'Velocidade garantida até a primeira pipa de menino enganchar no fio. Se cair o sinal, reze um terço que o suporte só chega na próxima lua cheia.' },
+    { title: 'POSTO SÃO LUIZ', tagline: 'Onde a conveniência é um luxo e a gasolina tem preço de perfume francês.', cta: 'PARE PARA UM CAFÉ · SAIA COM O TANQUE CHEIO E A ALMA VAZIA', fine: 'Não nos responsabilizamos por motores que começam a soluçar na subida da Serra. O preço da aditivada é inversamente proporcional à sua paciência.' },
+    { title: 'REAL BUS', tagline: 'A geladeira ambulante da BR-230.', cta: 'COMPRE SUA PASSAGEM · REZE POR UM LUGAR NA JANELA', fine: 'Traga seu capote, pois o motorista acredita que estamos atravessando a Sibéria. Parada estratégica no Ingá para o sustento do bucho com pão com ovo.' },
+    { title: 'CAGEPA', tagline: 'A arte de cobrar pelo que o cano só conhece por boato.', cta: 'ECONOMIZE ÁGUA · A GENTE JÁ ECONOMIZA POR VOCÊ', fine: 'Se sair lama, é brinde; se sair ar, é consumo premium. Taxa de esgoto cobrada com rigor britânico, mesmo que você more num oitão sem calçada.' },
+    { title: 'SÃO BRAZ', tagline: 'O café que faz o cabra ver o futuro e o cuscuz que sustenta o juízo.', cta: 'LEVE O MILHO E O CAFÉ · GARANTA A SOBREVIVÊNCIA NO SÍTIO', fine: 'O fabricante não se responsabiliza por palpitações rítmicas de xaxado após a terceira xícara. O milho é tão legítimo que, se plantar o pacote, nasce uma roça.' },
+    { title: 'ENERGISA', tagline: 'Uma luz que custa um olho da cara e a alma de quem paga.', cta: 'PAGUE O BOLETO NO DIA · EVITE O CORTE E O APERREIO', fine: 'A taxa de iluminação é para você enxergar o valor do rombo no escuro. Bandeira tarifária sujeita ao apetite dos acionistas e à posição de Marte.' },
+    { title: 'UNIMED JP', tagline: 'A saúde de ferro pra quem tem a paciência de um monge.', cta: 'AGENDE SUA CONSULTA PARA O PRÓXIMO SEMESTRE', fine: 'Atendimento em tempo real (no tempo da eternidade). Se a carência não lhe matar, o protocolo lhe cura. Café da recepção liberado mediante carimbo.' },
+    { title: 'ALPARGATAS', tagline: 'O solado que já percorreu o mundo, mas gosta mesmo é do chão de barro.', cta: 'COMPRE A LEGÍTIMA · AQUELA QUE JÁ VEM COM O CHEIRO DA VITÓRIA', fine: 'A tira que tora no meio da rua é consertada com prego por conta e risco do cliente. Não aceitamos reclamações se o cachorro comer o pé esquerdo.' },
+    { title: 'UNIFACISA', tagline: 'A ciência no topo da serra, onde o vento faz a curva e o diploma tem grife.', cta: 'VESTIBULAR ABERTO · MENSALIDADE QUE VALE UM BEZERRO DE RAÇA', fine: 'Aprovação depende de estudo e fôlego para encarar o vento cortante do estacionamento. Wi-Fi que voa, mas tem medo de parede de concreto.' },
+    { title: 'REDE COMPRAS', tagline: "A feira do povo onde o 'preço baixo' é uma peleja de sorte.", cta: 'CORRA PARA O ENCARTE · ENQUANTO O CAIXA NÃO DÁ O PREGO', fine: 'Cuidado com o carrinho desgovernado na Quarta da Verdura. A validade dos produtos em promoção é baseada na fé e na pressa do consumidor.' },
+    { title: 'MANAÍRA SHOPPING', tagline: 'A cidade de vidro onde a gente entra rico e sai pedindo esmola na saída.', cta: 'VENHA PASSEAR NO AR-CONDICIONADO · ESTACIONAMENTO PREÇO DE OURO', fine: 'Labirinto projetado para você nunca mais achar a saída nem o carro. A administração não se responsabiliza por divórcios causados por faturas de cartão.' },
   ],
   en: [
-    { title: 'QUICKCASH — MR. OSVALDO\'S™', tagline: 'Cash in minutes. No credit check. With a home visit.', review: 'Paid it off in 6 weeks at 25% monthly interest. Highly recommend.', reviewer: 'Anonymous client, very anonymous', cta: 'BACK ALLEY, NO NUMBER · ASK FOR OSVALDO', fine: 'Rate subject to Mr. Osvaldo\'s mood. Late payment results in a visit from associates Marcão and Gigante. Business unregistered.' },
-    { title: 'VOLKSWAGEN BEETLE. 1993.', tagline: 'It\'s back. And the world has never been more ready.', review: 'Bought it at the dealership. Cried with joy. Engine was from 1974.', reviewer: 'Sergio M., engineer', cta: 'VOLKSWAGEN. YOU KNOW IT.', fine: '1600cc engine. Drum brakes on all 4 wheels. No airbag. No A/C. No power steering. But it\'s back.' },
-    { title: 'VITALMED PLUS™', tagline: 'Complete coverage for you and your entire family.', review: 'Paid for 8 years. Tried to use it. Pre-existing condition.', reviewer: 'Mark T., former member', cta: 'FROM $89/MONTH · 24-MONTH WAITING PERIOD', fine: 'Complete coverage excludes: emergency room, hospitalization, surgery, exams, specialists, pre-existing conditions and conditions acquired after enrollment.' },
-    { title: 'CHARLES STUDIO — ADVANCED TRICHOLOGY™', tagline: 'Precise cut. Impeccable finish. Zero waste.', review: 'Went in with hope. Left with peace of mind.', reviewer: 'Raymond G., client since 2019', cta: 'BOOK NOW: (11) 9****-**** · UP TO 3 INSTALLMENTS', fine: 'Specialized in wireless clients. Charles is not responsible for expectations misaligned with the client\'s hair reality.' },
-    { title: 'REP. WALDOMIRO AZEVEDO · 30 YEARS FOR THE PEOPLE', tagline: 'My term, your road. Your school. My photo.', review: 'Paved my street the day before the election. Full of potholes again. The sign is intact.', reviewer: 'Mr. Genival, loyal voter', cta: 'VOTE: 40.040 · WALDOMIRO IS A HARD WORKER', fine: 'Works subject to electoral calendar. Declared assets don\'t match observable assets. Campaign funded by contributors who prefer anonymity.' },
-    { title: 'NEW GRACE MINISTRIES — PASTOR EZEKIEL', tagline: 'God has a plan for your life. And the plan accepts Pix.', review: 'I sowed $300. Reaped nothing. But the pastor bought a beautiful car.', reviewer: 'Sister Conceição, faithful for 12 years', cta: 'SERVICE EVERY SUNDAY · PIX: pastor@ezequiel', fine: 'Blessings subject to divine will and seed amount. Miracles carry no warranty. Church does not issue receipts.' },
-    { title: 'BRISAVILLE DEVELOPERS™', tagline: 'Panoramic view. Full amenities. Flexible floor plan. Keys: inquire within.', review: 'Bought off-plan in 2018. Still inquiring.', reviewer: 'Adriana F., future resident', cta: 'SALES OFFICE OPEN · LIMITED UNITS', fine: 'Images for illustrative purposes only. Delivery subject to weather, suppliers and city hall availability.' },
-    { title: 'FAITH HEALER MISS NOÊMIA™', tagline: 'Evil eye, bad luck and credit card debt. She handles it all.', review: 'Came in with three problems. Left with two. She said the debt is karma.', reviewer: 'Cléia S., returning client', cta: 'TUESDAY & THURSDAY · BEHIND THE PHARMACY', fine: 'Results subject to client\'s faith and moon phase. Miss Noêmia does not accept health insurance. Debts may require additional sessions.' },
-    { title: 'SORRIPLENO DENTAL™', tagline: 'Your smile deserves the best your plan allows.', review: 'Went in for a root canal. Left with an extraction. Insurance covered the local anesthesia.', reviewer: 'Claudinho R., former patient', cta: 'ALL PLANS ACCEPTED · BOOK NOW', fine: 'Coverage subject to plan analysis. May vary by plan, tooth and insurer\'s mood. Private rates from $60.' },
-    { title: 'PSYCHIC DONA FÁTIMA™', tagline: 'The future has no secrets. But it has a consultation fee.', review: 'She got my past right, my future wrong, and somehow knew my social security number.', reviewer: 'Mark B., curious', cta: 'READING: $30 · WHATSAPP: (11) 9****-****', fine: 'Predictions valid for 30 days or until the next unforeseen event. Dona Fátima not responsible for decisions based on the cards.' },
-    { title: 'CIVIL SERVICE PREP INSTITUTE™', tagline: 'Your government job starts here.', review: 'Passed the exam in 2021. Still waiting for appointment. Hanging in there.', reviewer: 'Erivaldo S., exam passer', cta: 'ENROLLMENT OPEN · 36 INSTALLMENTS OF $29.90', fine: 'Passing the exam does not guarantee appointment. Appointment does not guarantee start date. Exam may be suspended or forgotten at any time.' },
-    { title: 'CRISPOP CINEMA™', tagline: 'The complete movie theater experience in the comfort of your home.', review: 'Put it in the microwave. 3 minutes later me, the neighbors and the super were all gathered.', reviewer: 'Patricia M., 4th floor resident', cta: 'REAL BUTTER · INTENSE FLAVOR · BUY 3 GET 1 FREE', fine: 'Manufacturer not responsible for fire alarms, condo meetings or emergency evacuations resulting from product use.' },
+    { title: 'ARMAZÉM PARAÍBA', tagline: "The installment plan that outlives the furniture.", cta: 'BUY ON CREDIT · BRING YOUR ID AND YOUR COURAGE', fine: 'Interest rates calculated by the wait for rain. The furniture is plywood, but the debt is solid oak. Assembly requires the patience of a desert monk.' },
+    { title: 'BRISANET', tagline: "Internet so 'alive' it hides whenever thunder rolls in.", cta: 'SIGN UP NOW · IF THE HILLTOP WIND ALLOWS', fine: "Speed guaranteed until the first kite string snags the cable. If the signal drops, say a prayer — support arrives on the next full moon." },
+    { title: 'POSTO SÃO LUIZ', tagline: 'Where convenience is a luxury and gas costs like French perfume.', cta: 'STOP FOR A COFFEE · LEAVE WITH A FULL TANK AND AN EMPTY WALLET', fine: 'Not responsible for engines hiccuping on the hill climb. The premium price is inversely proportional to your patience.' },
+    { title: 'REAL BUS', tagline: 'The rolling freezer of BR-230.', cta: 'BUY YOUR TICKET · PRAY FOR A WINDOW SEAT', fine: "Bring a jacket — the driver believes we're crossing Siberia. Mandatory stop in Ingá for a fried egg sandwich." },
+    { title: 'CAGEPA', tagline: "The art of charging for water the pipes have only heard rumors about.", cta: 'SAVE WATER · WE ARE ALREADY SAVING IT FOR YOU', fine: 'If mud comes out, it is a bonus. If air comes out, it is premium consumption. Sewage fee charged with British precision even on a dirt road.' },
+    { title: 'SÃO BRAZ', tagline: 'The coffee that makes you see the future and the cuscuz that keeps you sane.', cta: 'TAKE THE CORN AND THE COFFEE · SECURE YOUR COUNTRYSIDE SURVIVAL', fine: 'Manufacturer not liable for xaxado-rhythm palpitations after the third cup. The corn is so authentic that if you plant the bag, a whole field grows.' },
+    { title: 'ENERGISA', tagline: 'Light that costs an arm and the soul of whoever pays.', cta: 'PAY THE BILL ON TIME · AVOID THE CUT AND THE HEADACHE', fine: 'The lighting fee is so you can see the hole in your budget in the dark. Tariff flag subject to shareholder appetite and the position of Mars.' },
+    { title: 'UNIMED JP', tagline: 'Iron health for those with the patience of a monk.', cta: 'SCHEDULE YOUR APPOINTMENT FOR NEXT SEMESTER', fine: "Real-time care (on eternity's schedule). If the waiting period doesn't get you, the protocol will cure you. Reception coffee requires an official stamp." },
+    { title: 'ALPARGATAS', tagline: "The sole that's traveled the world but loves mud floors most.", cta: 'BUY THE REAL THING · THE ONE THAT COMES WITH THE SMELL OF VICTORY', fine: "The strap that snaps in the street is repaired with a nail at the client's own risk. No complaints if the dog eats the left shoe." },
+    { title: 'UNIFACISA', tagline: 'Science at the top of the mountain where the wind turns corners and the diploma has prestige.', cta: 'ENROLLMENT OPEN · TUITION WORTH A THOROUGHBRED CALF', fine: 'Approval requires study and stamina to face the biting wind in the parking lot. Wi-Fi flies but is afraid of concrete walls.' },
+    { title: 'REDE COMPRAS', tagline: "The people's fair where 'low price' is a game of luck.", cta: 'RUN TO THE FLYER · BEFORE THE REGISTER GIVES UP', fine: "Watch out for runaway carts on 'Veggie Wednesday'. Expiration dates on promo items are based on faith and consumer urgency." },
+    { title: 'MANAÍRA SHOPPING', tagline: 'The glass city where you walk in rich and leave begging at the exit.', cta: 'COME ENJOY THE AIR CONDITIONING · PARKING AT GOLD PRICES', fine: 'A labyrinth designed so you never find the exit or your car again. Management not responsible for divorces caused by credit card statements.' },
   ],
   es: [
-    { title: 'CREDICERTO — SU OSVALDO™', tagline: 'Crédito al instante. Sin consulta al Veraz. Con visita a su casa.', review: 'Pagué en 6 semanas con interés del 25% mensual. Lo recomiendo mucho.', reviewer: 'Cliente anónimo, muy anónimo', cta: 'CALLEJÓN CENTRAL S/N · PREGUNTE POR OSVALDO', fine: 'Tasa sujeta al humor del Sr. Osvaldo. El atraso resulta en visita de los asesores Marcão y Gigante. Empresa sin CUIT.' },
-    { title: 'VOLKSWAGEN FUSCA. 1993.', tagline: 'Volvió. Y el mundo nunca estuvo tan listo.', review: 'Lo compré en la concesionaria. Lloré de emoción. El motor era de 1974.', reviewer: 'Sergio M., ingeniero', cta: 'VOLKSWAGEN. USTED LO CONOCE.', fine: 'Motor 1600cc. Frenos de tambor en las 4 ruedas. Sin airbag. Sin aire acondicionado. Sin dirección asistida. Pero volvió.' },
-    { title: 'VITALMED PLUS™', tagline: 'Cobertura completa para su salud y la de toda la familia.', review: 'Pagué 8 años. Lo fui a usar. Era preexistente.', reviewer: 'Marcos T., ex-asegurado', cta: 'DESDE $89/MES · CARENCIA 24 MESES', fine: 'Cobertura completa excluye: guardia, internación, cirugía, estudios, especialistas, enfermedades preexistentes y adquiridas tras la contratación.' },
-    { title: 'CHARLES STUDIO — TRICOLOGÍA AVANZADA™', tagline: 'Corte preciso. Acabado impecable. Cero desperdicio.', review: 'Fui con esperanza. Volví con paz interior.', reviewer: 'Raimundo G., cliente desde 2019', cta: 'TURNO: (11) 9****-**** · HASTA 3 CUOTAS', fine: 'Especializado en clientes sin hilos. Charles no se responsabiliza por expectativas no alineadas con la realidad capilar del cliente.' },
-    { title: 'DIP. WALDOMIRO AZEVEDO · 30 AÑOS POR EL PUEBLO', tagline: 'Mi mandato, su calle. Su escuela. Mi foto.', review: 'Asfaltó mi calle la víspera de las elecciones. Llena de baches. El cartel está intacto.', reviewer: 'Don Genival, votante fiel', cta: 'VOTE: 40.040 · WALDOMIRO ES TRABAJADOR', fine: 'Obras sujetas a calendario electoral. Bienes declarados no coinciden con bienes observables. Campaña financiada por colaboradores que prefieren el anonimato.' },
-    { title: 'MINISTERIO NUEVA GRACIA — PASTOR EZEQUIEL', tagline: 'Dios tiene un plan para su vida. Y el plan aceita transferencia.', review: 'Sembré $300. No cosechué nada. Pero el pastor compró un auto precioso.', reviewer: 'Hermana Concepción, fiel hace 12 años', cta: 'CULTO TODOS LOS DOMINGOS · TRANSFERENCIA: pastor@ezequiel', fine: 'Bendiciones sujetas a la voluntad divina y al monto de la semilla. Los milagros no tienen garantía. La iglesia no emite comprobante.' },
-    { title: 'BRISAVILLE DESARROLLADORA™', tagline: 'Vista panorámica. Amenities completos. Planta flexible. Llaves: consulte.', review: 'Compré en pozo en 2018. Sigo consultando.', reviewer: 'Adriana F., futura residente', cta: 'SALA DE VENTAS ABIERTA · UNIDADES LIMITADAS', fine: 'Imágenes meramente ilustrativas. Plazo de entrega sujeto a condiciones climáticas, proveedores y disponibilidad municipal.' },
-    { title: 'SANADORA DOÑA NOÊMIA™', tagline: 'Mal de ojo, envidia y deuda en la tarjeta. Ella lo resuelve todo.', review: 'Llegué con tres males. Salí con dos. La deuda dijo que es karma.', reviewer: 'Cléia S., clienta recurrente', cta: 'MARTES Y JUEVES · DETRÁS DE LA FARMACIA', fine: 'Resultados sujetos a la fe del cliente y la fase lunar. Doña Noêmia no acepta obra social. Las deudas pueden requerir sesiones adicionales.' },
-    { title: 'SORRIPLENO ODONTOLOGÍA™', tagline: 'Su sonrisa merece lo mejor que la obra social permite.', review: 'Fui por un conducto. Salí con una extracción. La obra social cubrió la anestesia local.', reviewer: 'Claudinho R., ex-paciente', cta: 'TODAS LAS OBRAS SOCIALES · PIDA TURNO', fine: 'Cobertura sujeta a análisis de la obra social. Puede variar según plan, diente y humor de la aseguradora. Privado desde $60.' },
-    { title: 'CARTOMANTE DOÑA FÁTIMA™', tagline: 'El futuro no tiene secretos. Pero tiene precio de consulta.', review: 'Acertó mi pasado, erró mi futuro y de algún modo supo mi CUIL.', reviewer: 'Marcos B., curioso', cta: 'CONSULTA: $30 · WHATSAPP: (11) 9****-****', fine: 'Predicciones válidas por 30 días o hasta el próximo imprevisto. Doña Fátima no se responsabiliza por decisiones basadas en las cartas.' },
-    { title: 'INSTITUTO APROBACIÓN™', tagline: 'Su cargo en el sector público empieza aquí.', review: 'Aprobé el examen en 2021. Esperando nombramiento. Sigo esperando.', reviewer: 'Erivaldo S., aprobado en espera', cta: 'INSCRIPCIÓN ABIERTA · 36 CUOTAS DE $29,90', fine: 'Aprobar el examen no garantiza nombramiento. El nombramiento no garantiza inicio. El concurso puede suspenderse u olvidarse en cualquier momento.' },
-    { title: 'CRISPOP CINEMA™', tagline: 'La experiencia completa del cine en la comodidad de su hogar.', review: 'Lo puse en el microondas. A los 3 minutos yo, los vecinos y el encargado ya estábamos reunidos.', reviewer: 'Patricia M., residente del 4º piso', cta: 'MANTECA REAL · SABOR INTENSO · LLEVE 3 PAGUE 2', fine: 'El fabricante no se responsabiliza por alarmas de incendio, reuniones de consorcio o evacuaciones derivadas del uso del producto.' },
+    { title: 'ARMAZÉM PARAÍBA', tagline: "El carnê que no termina ni aunque la desgracia quiera.", cta: 'FIADO SOLO MAÑANA · TRAE EL CPF Y EL CORAJE', fine: 'Intereses calculados según el tiempo que tarde la lluvia. El mueble es de aglomerado, pero la deuda es de roble. El montaje exige la paciencia de un monje en el desierto.' },
+    { title: 'BRISANET', tagline: "Internet tan 'viva' que se esconde cuando el trueno asoma en el horizonte.", cta: 'CONTRATA YA · SI EL VIENTO DE LA SIERRA LO PERMITE', fine: 'Velocidad garantizada hasta que el primer barrilete enrede el cable. Si se va la señal, reza un rosario — el soporte llega en la próxima luna llena.' },
+    { title: 'POSTO SÃO LUIZ', tagline: 'Donde la comodidad es un lujo y la gasolina tiene precio de perfume francés.', cta: 'PARA UN CAFÉ · SAL CON EL TANQUE LLENO Y EL ALMA VACÍA', fine: 'No nos responsabilizamos por motores que empiezan a hipar en la cuesta. El precio del premium es inversamente proporcional a tu paciencia.' },
+    { title: 'REAL BUS', tagline: 'El refrigerador ambulante de la BR-230.', cta: 'COMPRA TU PASAJE · REZA POR UN ASIENTO JUNTO A LA VENTANA', fine: 'Trae tu abrigo, el conductor cree que atravesamos Siberia. Parada estratégica en Ingá para reponer fuerzas con pan con huevo.' },
+    { title: 'CAGEPA', tagline: 'El arte de cobrar por lo que el caño solo conoce de rumores.', cta: 'AHORRA AGUA · NOSOTROS YA LO HACEMOS POR TI', fine: 'Si sale barro, es regalo; si sale aire, es consumo premium. La tasa de alcantarillado se cobra con rigor británico aunque vivas en un callejón sin pavimento.' },
+    { title: 'SÃO BRAZ', tagline: 'El café que hace ver el futuro y el cuscuz que mantiene el juicio.', cta: 'LLEVA EL MAÍZ Y EL CAFÉ · ASEGURA LA SUPERVIVENCIA EN EL CAMPO', fine: 'El fabricante no se responsabiliza por palpitaciones al ritmo de xaxado después de la tercera taza. El maíz es tan legítimo que si plantas el paquete, crece un campo entero.' },
+    { title: 'ENERGISA', tagline: 'Una luz que cuesta un ojo de la cara y el alma de quien paga.', cta: 'PAGA EL RECIBO HOY · EVITA EL CORTE Y EL DOLOR DE CABEZA', fine: 'La tasa de iluminación es para que veas el agujero en tu bolsillo a oscuras. La bandera tarifaria depende del apetito de los accionistas y la posición de Marte.' },
+    { title: 'UNIMED JP', tagline: 'Salud de hierro para quien tiene la paciencia de un monje.', cta: 'AGENDA TU CONSULTA PARA EL PRÓXIMO SEMESTRE', fine: 'Atención en tiempo real (en el tiempo de la eternidad). Si la carencia no te mata, el protocolo te cura. El café de recepción requiere sello oficial.' },
+    { title: 'ALPARGATAS', tagline: 'La suela que recorrió el mundo, pero ama el piso de barro.', cta: 'COMPRA LA LEGÍTIMA · LA QUE YA VIENE CON OLOR A VICTORIA', fine: 'La correa que se rompe en la calle se arregla con un clavo por cuenta del cliente. No aceptamos quejas si el perro se comió el zapato izquierdo.' },
+    { title: 'UNIFACISA', tagline: 'La ciencia en la cima de la sierra donde el viento dobla y el diploma tiene distinción.', cta: 'INSCRIPCIONES ABIERTAS · MENSUALIDAD QUE VALE UN BECERRO DE RAZA', fine: 'La aprobación requiere estudio y aguante para enfrentar el viento helado del estacionamiento. El Wi-Fi vuela, pero le tiene miedo a las paredes de concreto.' },
+    { title: 'REDE COMPRAS', tagline: "La feria del pueblo donde el 'precio bajo' es un juego de azar.", cta: 'CORRE AL FOLLETO · ANTES DE QUE LA CAJA SE RINDA', fine: 'Cuidado con el carrito descontrolado el Miércoles de Verduras. La fecha de vencimiento de los productos en oferta se basa en la fe y la prisa del consumidor.' },
+    { title: 'MANAÍRA SHOPPING', tagline: 'La ciudad de vidrio donde entras rico y sales pidiendo limosna en la salida.', cta: 'VEN A DISFRUTAR EL AIRE ACONDICIONADO · ESTACIONAMIENTO A PRECIO DE ORO', fine: 'Laberinto diseñado para que nunca encuentres la salida ni tu auto. La administración no se responsabiliza por divorcios causados por estados de cuenta.' },
   ],
 };
 
@@ -727,7 +726,7 @@ function BigCta({ children, onClick, disabled, pulse, variant = 'green' }) {
         fontFamily: 'inherit', fontWeight: 900, fontSize: 'clamp(15px, 2vw, 20px)',
         letterSpacing: '0.06em', textTransform: 'uppercase',
         cursor: disabled ? 'not-allowed' : 'pointer',
-        position: 'relative', overflow: 'hidden',
+        position: 'relative',
       }}
     >
       {pulse && !disabled && <div style={{ position: 'absolute', inset: 0, borderRadius: 'inherit', animation: `${variant === 'blue' ? 'buttonPulseBlue' : 'buttonPulse'} 1.8s ease-out infinite`, pointerEvents: 'none' }} />}
@@ -969,34 +968,20 @@ function GameConfetti() {
 }
 
 // ---------- Fake Ad Modal ----------
-function FakeAdModal({ ad, lang, onClose }) {
-  const DURATION = 15;
-  const [secs, setSecs] = useState(DURATION);
-  useEffect(() => {
-    playFx('ad');
-    const id = setInterval(() => setSecs(s => {
-      if (s <= 1) { onClose(); return 0; }
-      return s - 1;
-    }), 1000);
-    return () => clearInterval(id);
-  }, []);
-  const header = lang === 'pt' ? '📺 INTERVALO COMERCIAL' : lang === 'es' ? '📺 PAUSA COMERCIAL' : '📺 COMMERCIAL BREAK';
+function FakeAdModal({ ad, lang, onClose, isHost = false }) {
+  useEffect(() => { playFx('ad'); }, []);
+  const header = lang === 'pt' ? 'OFERECIMENTO:' : lang === 'es' ? 'PRESENTADO POR:' : 'BROUGHT TO YOU BY:';
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 96, background: '#100800', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 250ms ease forwards' }}>
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 5, background: '#2a1800' }}>
-        <div style={{ height: '100%', background: '#ff9600', width: `${(secs / DURATION) * 100}%`, transition: 'width 1s linear' }} />
-      </div>
+      {isHost && (
+        <button onClick={onClose} style={{ position: 'absolute', top: 18, right: 18, width: 44, height: 44, background: 'rgba(255,150,0,0.15)', border: '2px solid rgba(255,150,0,0.4)', borderRadius: 14, fontSize: 20, fontWeight: 900, color: '#ff9600', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1 }}>✕</button>
+      )}
       <div style={{ maxWidth: 520, width: '100%', textAlign: 'center' }}>
         <div style={{ fontSize: 11, fontWeight: 900, color: '#ff9600', letterSpacing: '0.28em', marginBottom: 20 }}>{header}</div>
         <div style={{ fontSize: 'clamp(18px, 3.5vw, 26px)', fontWeight: 900, color: '#ffffff', letterSpacing: '0.05em', lineHeight: 1.2, marginBottom: 12, textTransform: 'uppercase' }}>{ad.title}</div>
-        <div style={{ fontSize: 'clamp(13px, 1.8vw, 16px)', fontWeight: 700, color: '#ffe0a0', fontStyle: 'italic', marginBottom: 20, lineHeight: 1.5 }}>"{ad.tagline}"</div>
-        <div style={{ background: 'rgba(255,150,0,0.08)', border: '1px solid rgba(255,150,0,0.25)', borderRadius: 14, padding: '12px 16px', marginBottom: 18, textAlign: 'left' }}>
-          <div style={{ fontSize: 13, color: '#ffc800', marginBottom: 4 }}>★★★★★</div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: '#e0d0b0', lineHeight: 1.4, fontStyle: 'italic' }}>"{ad.review}"</div>
-          <div style={{ fontSize: 11, color: '#7a6a50', marginTop: 6 }}>— {ad.reviewer}</div>
-        </div>
+        <div style={{ fontSize: 'clamp(15px, 2.2vw, 18px)', fontWeight: 700, color: '#ffe0a0', fontStyle: 'italic', marginBottom: 24, lineHeight: 1.5 }}>"{ad.tagline}"</div>
         <div style={{ fontSize: 'clamp(15px, 2.2vw, 20px)', fontWeight: 900, color: '#ffc800', letterSpacing: '0.1em', marginBottom: 8 }}>{ad.cta}</div>
-        <div style={{ fontSize: 10, color: '#3a3020', lineHeight: 1.5, maxWidth: 400, margin: '0 auto' }}>*{ad.fine}</div>
+        <div style={{ fontSize: 'clamp(12px, 1.5vw, 14px)', color: '#cc3300', lineHeight: 1.5, maxWidth: 400, margin: '0 auto' }}>*{ad.fine}</div>
       </div>
     </div>
   );
@@ -1008,7 +993,7 @@ function PendingApprovalModal({ pending, onApprove, onReject }) {
   const { t } = useLang();
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'rgba(31,41,55,0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
-      <div style={{ width: '100%', maxWidth: 420, background: '#ffffff', border: '3px solid #1cb0f6', borderRadius: 24, boxShadow: '0 12px 0 #0d8fcc, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', animation: 'modalPop 280ms cubic-bezier(0.34,1.56,0.64,1) forwards' }}>
+      <div style={{ width: '100%', maxWidth: 420, background: '#ffffff', border: '3px solid #ff9600', borderRadius: 24, boxShadow: '0 12px 0 #cc7700, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', animation: 'modalPop 280ms cubic-bezier(0.34,1.56,0.64,1) forwards' }}>
         <div style={{ padding: '24px 24px 8px', borderBottom: '2px solid #f3f3f3' }}>
           <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c' }}>🚪 {t.waitingForApprovalTitle}</div>
         </div>
@@ -1039,7 +1024,7 @@ function TriviaActiveModal({ trivia, room, playerId, isHost, lang }) {
   const isReady = trivia.state === 'ready';
   const answered = trivia.state === 'answered';
 
-  const bank = (TRIVIA_QUESTIONS[lang] || TRIVIA_QUESTIONS.en)[trivia.category] || [];
+  const bank = TRIVIA_QUESTIONS[lang] || TRIVIA_QUESTIONS.en;
   const qData = bank[trivia.questionIdx] || bank[0];
 
   useEffect(() => {
@@ -1078,7 +1063,7 @@ function TriviaActiveModal({ trivia, room, playerId, isHost, lang }) {
     if (trivia.state === 'ready') playFx('triviaReady');
     else if (trivia.state === 'question') playFx('triviaStart');
     else if (trivia.state === 'answered') {
-      const b = (TRIVIA_QUESTIONS[lang] || TRIVIA_QUESTIONS.en)[trivia.category] || [];
+      const b = TRIVIA_QUESTIONS[lang] || TRIVIA_QUESTIONS.en;
       const q = b[trivia.questionIdx] || b[0];
       playFx(trivia.answer !== 'timeout' && parseInt(trivia.answer) === q?.ans ? 'triviaCorrect' : 'triviaWrong');
     }
@@ -1087,8 +1072,6 @@ function TriviaActiveModal({ trivia, room, playerId, isHost, lang }) {
   const answeredIdx = answered && trivia.answer !== 'timeout' ? parseInt(trivia.answer) : null;
   const isCorrect = answeredIdx === qData?.ans;
   const timerColor = timeLeft > 20 ? '#58cc02' : timeLeft > 10 ? '#ff9600' : '#ff4b4b';
-  const categoryLabels = { general: t.triviaGeneral, popculture: t.triviaPopCulture, bizarre: t.triviaBizarre };
-
   if (isReady) {
     return (
       <div style={{ position: 'fixed', inset: 0, zIndex: 88, background: 'rgba(31,41,55,0.6)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
@@ -1116,9 +1099,7 @@ function TriviaActiveModal({ trivia, room, playerId, isHost, lang }) {
 
         {/* Header */}
         <div style={{ padding: '12px 20px', background: '#fffbea', borderBottom: '2px solid #f3f3f3', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
-            <span style={{ fontSize: 11, fontWeight: 900, color: '#6b6b6b', letterSpacing: '0.12em', whiteSpace: 'nowrap' }}>{categoryLabels[trivia.category]}</span>
-            <span style={{ color: '#e5e5e5' }}>·</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
             <span style={{ fontSize: 12, fontWeight: 900, color: '#3c3c3c', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {answered ? (trivia.answer === 'timeout' ? t.triviaTimeout : isCorrect ? t.triviaCorrect : t.triviaWrong) : (isPlayer ? t.triviaYourTurn : t.triviaWaitingAnswer.replace('{name}', trivia.playerName))}
             </span>
@@ -1216,6 +1197,7 @@ function HostScreen({ me, room, onExit }) {
   const [currentAd, setCurrentAd] = useState(null);
   const [winnerQueue, setWinnerQueue] = useState([]);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [showTriviaPodium, setShowTriviaPodium] = useState(false);
   const [showExit, setShowExit] = useState(false);
   const [showPending, setShowPending] = useState(false);
   const prevPendingCount = useRef(0);
@@ -1226,6 +1208,7 @@ function HostScreen({ me, room, onExit }) {
   const drawnRef = useRef([]);
   const prevPlayerWinsRef = useRef(null);
   const lastAdTickRef = useRef(0);
+  const currentAdTickRef = useRef(0);
   const cells = useMemo(() => Array.from({ length: TOTAL }, (_, i) => ({ n: i + 1, r: Math.floor(i / COLS), c: i % COLS })), []);
   const leaderboard = useMemo(() => Object.values((session?.players) || {}).map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), bingo: p.bingo, triviaScore: (session?.triviaScores || {})[p.id] || 0 })).sort((a, b) => b.hits - a.hits).map((p, i) => ({ ...p, color: i === 0 ? '#ffc800' : i === 1 ? '#afafaf' : i === 2 ? '#cd7f32' : '#6b6b6b' })), [session]);
 
@@ -1238,9 +1221,10 @@ function HostScreen({ me, room, onExit }) {
           setSession(snap.data());
           drawnRef.current = snap.data().drawn || [];
           const d = snap.data().drawn || [];
-          const adTick = Math.floor(d.length / 15);
+          const adTick = Math.floor(d.length / 5);
           if (adTick > 0 && adTick > lastAdTickRef.current) {
             lastAdTickRef.current = adTick;
+            currentAdTickRef.current = adTick;
             const ads = FAKE_ADS[lang] || FAKE_ADS.en;
             setCurrentAd(ads[(adTick - 1) % ads.length]);
             setShowAd(true);
@@ -1282,15 +1266,12 @@ function HostScreen({ me, room, onExit }) {
         setWinnerQueue(q => [...q, { type: p.bingo ? 'bingo' : 'line', name: p.name }]);
         if (!p.bingo && !session.trivia) {
           const usedTrivia = session.usedTrivia || [];
-          const categories = ['general', 'popculture', 'bizarre'];
-          const cat = categories[Math.floor(Math.random() * categories.length)];
-          const bank = (TRIVIA_QUESTIONS[lang] || TRIVIA_QUESTIONS.en)[cat];
-          const usedInCat = usedTrivia.filter(u => u.category === cat).map(u => u.idx);
-          const avail = bank.map((_, i) => i).filter(i => !usedInCat.includes(i));
+          const bank = TRIVIA_QUESTIONS[lang] || TRIVIA_QUESTIONS.en;
+          const avail = bank.map((_, i) => i).filter(i => !usedTrivia.includes(i));
           const idx = avail.length > 0 ? avail[Math.floor(Math.random() * avail.length)] : Math.floor(Math.random() * bank.length);
           sessionRef(room).update({
-            trivia: { state: 'ready', playerId: p.id, playerName: p.name, category: cat, questionIdx: idx },
-            usedTrivia: firebase.firestore.FieldValue.arrayUnion({ category: cat, idx }),
+            trivia: { state: 'ready', playerId: p.id, playerName: p.name, questionIdx: idx },
+            usedTrivia: firebase.firestore.FieldValue.arrayUnion(idx),
           });
         }
       }
@@ -1453,7 +1434,7 @@ function HostScreen({ me, room, onExit }) {
 
         {showPending && pendingList.length > 0 && <PendingApprovalModal pending={pendingList} onApprove={handleApprove} onReject={handleReject} />}
         {!showPending && pendingList.length > 0 && (
-          <button onClick={() => setShowPending(true)} style={{ position: 'fixed', bottom: 20, right: 20, zIndex: 80, background: '#1cb0f6', color: '#fff', border: 'none', borderRadius: 99, padding: '10px 16px', fontFamily: 'inherit', fontWeight: 900, fontSize: 14, cursor: 'pointer', boxShadow: '0 4px 0 #0d8fcc' }}>
+          <button onClick={() => setShowPending(true)} style={{ position: 'fixed', bottom: 20, right: 20, zIndex: 80, background: '#ff9600', color: '#fff', border: 'none', borderRadius: 99, padding: '10px 16px', fontFamily: 'inherit', fontWeight: 900, fontSize: 14, cursor: 'pointer', boxShadow: '0 4px 0 #cc7700' }}>
             🚪 {pendingList.length}
           </button>
         )}
@@ -1461,10 +1442,17 @@ function HostScreen({ me, room, onExit }) {
         {winnerQueue[0]?.type === 'number' && <HostCallout n={winnerQueue[0].n} msg={winnerQueue[0].msg} onClose={() => setWinnerQueue(q => q.slice(1))} />}
         {winnerQueue[0]?.type === 'line'   && <LineNotif name={winnerQueue[0].name} onClose={() => setWinnerQueue(q => q.slice(1))} />}
         {winnerQueue[0]?.type === 'bingo'  && <WinNotif  name={winnerQueue[0].name} onClose={() => { setWinnerQueue(q => q.slice(1)); setShowLeaderboard(true); }} />}
-        {showLeaderboard && <LeaderboardModal players={leaderboard} onClose={() => setShowLeaderboard(false)} totalCalled={drawn.length} room={room} />}
+        {showLeaderboard && <LeaderboardModal players={leaderboard} onClose={() => {
+          setShowLeaderboard(false);
+          if (session.winner) {
+            const hasTriviaScores = Object.values(session?.triviaScores || {}).some(s => s > 0);
+            if (hasTriviaScores) { setShowTriviaPodium(true); } else { sessionRef(room).delete(); onExit(); }
+          }
+        }} totalCalled={drawn.length} room={room} />}
+        {showTriviaPodium && <TriviaPodiumModal players={leaderboard} onClose={() => { setShowTriviaPodium(false); sessionRef(room).delete(); onExit(); }} />}
         {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); sessionRef(room).delete(); onExit(); }} room={room} />}
         {session.trivia && (session.trivia.state === 'ready' || session.trivia.state === 'question' || session.trivia.state === 'answered') && <TriviaActiveModal trivia={session.trivia} room={room} playerId={me.uid} isHost lang={lang} />}
-        {showAd && currentAd && <FakeAdModal ad={currentAd} lang={lang} onClose={() => setShowAd(false)} />}
+        {showAd && currentAd && <FakeAdModal ad={currentAd} lang={lang} isHost onClose={() => { sessionRef(room).update({ adClosedTick: currentAdTickRef.current }); setShowAd(false); }} />}
       </div>
     </div>
   );
@@ -1532,15 +1520,44 @@ function LeaderboardModal({ players, onClose, totalCalled, room }) {
                   <span style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', lineHeight: 1 }}>{p.hits}</span>
                   <span style={{ fontSize: 10, fontWeight: 800, color: '#6b6b6b', letterSpacing: '0.1em', marginTop: 2 }}>{t.hits}</span>
                 </div>
-                {p.triviaScore > 0 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', minWidth: 40 }}>
-                    <span style={{ fontSize: 20, fontWeight: 900, color: '#ffc800', lineHeight: 1 }}>{p.triviaScore}</span>
-                    <span style={{ fontSize: 10, fontWeight: 800, color: '#6b6b6b', letterSpacing: '0.1em', marginTop: 2 }}>{t.triviaPoints}</span>
-                  </div>
-                )}
               </div>
             );
           })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TriviaPodiumModal({ players, onClose }) {
+  const { t } = useLang();
+  const MEDAL = ['🥇', '🥈', '🥉'];
+  const COLORS = ['#ffc800', '#afafaf', '#cd7f32'];
+  const ranked = [...players]
+    .filter(p => p.triviaScore > 0)
+    .sort((a, b) => b.triviaScore - a.triviaScore)
+    .slice(0, 3);
+  return (
+    <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 70, background: 'rgba(31, 41, 55, 0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 24, boxShadow: '0 12px 0 #d6d6d6, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', position: 'relative', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
+        <button onClick={onClose} style={{ position: 'absolute', top: 14, right: 14, width: 36, height: 36, background: '#f3f3f3', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 900, color: '#6b6b6b', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>✕</button>
+        <div style={{ padding: '32px 28px 16px' }}>
+          <div style={{ fontSize: 48, lineHeight: 1, marginBottom: 8 }}>🧠</div>
+          <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c' }}>{t.triviaPodiumTitle}</div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: '#6b6b6b', marginTop: 4 }}>{t.triviaPodiumSubtitle}</div>
+        </div>
+        <div style={{ padding: '8px 20px 28px', display: 'flex', flexDirection: 'column', gap: 8, borderTop: '2px solid #f3f3f3' }}>
+          {ranked.map((p, i) => (
+            <div key={p.name} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', background: '#ffffff', border: `2px solid ${COLORS[i]}55`, borderRadius: 16, boxShadow: `0 2px 0 ${COLORS[i]}33` }}>
+              <div style={{ width: 28, textAlign: 'center', fontSize: 22 }}>{MEDAL[i]}</div>
+              <div style={{ width: 40, height: 40, background: COLORS[i] + '22', border: `2px solid ${COLORS[i]}`, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>{p.avatar}</div>
+              <div style={{ flex: 1, fontSize: 15, fontWeight: 900, color: '#3c3c3c', textAlign: 'left' }}>{p.name}</div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', minWidth: 40 }}>
+                <span style={{ fontSize: 22, fontWeight: 900, color: COLORS[i], lineHeight: 1 }}>{p.triviaScore}</span>
+                <span style={{ fontSize: 10, fontWeight: 800, color: '#6b6b6b', letterSpacing: '0.1em', marginTop: 2 }}>{t.triviaPoints}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -1686,6 +1703,7 @@ function CastScreen({ me, room, onExit }) {
   useEffect(() => {
     if (!session?.lastDrawn || session.lastDrawn === prevLastDrawnRef.current) return;
     prevLastDrawnRef.current = session.lastDrawn;
+    playFx('number');
     const msg = pickHostLine(hostMsgRef.current, lang);
     hostMsgRef.current = msg;
     setCalloutQueue(q => [...q, { n: session.lastDrawn, msg }]);
@@ -1705,7 +1723,7 @@ function CastScreen({ me, room, onExit }) {
 
   useEffect(() => {
     if (!session?.drawn) return;
-    const adTick = Math.floor(session.drawn.length / 15);
+    const adTick = Math.floor(session.drawn.length / 5);
     if (adTick > 0 && adTick > lastAdTickRef.current) {
       lastAdTickRef.current = adTick;
       const ads = FAKE_ADS[lang] || FAKE_ADS.en;
@@ -1713,6 +1731,10 @@ function CastScreen({ me, room, onExit }) {
       setShowAd(true);
     }
   }, [session?.drawn?.length]);
+
+  useEffect(() => {
+    if (session?.adClosedTick >= lastAdTickRef.current) setShowAd(false);
+  }, [session?.adClosedTick]);
 
   if (isRejected) return (
     <ScreenShell>
@@ -1857,6 +1879,8 @@ function CastScreen({ me, room, onExit }) {
   const tempStage = tempStages[daubProgress < 0.5 ? 0 : daubProgress < 0.7 ? 1 : 2];
   const allPlayers = Object.values(session.players || {});
   const leaderboard = allPlayers.map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), bingo: p.bingo, triviaScore: (session?.triviaScores || {})[p.id] || 0 })).sort((a, b) => b.hits - a.hits).map((p, i) => ({ ...p, color: i === 0 ? '#ffc800' : i === 1 ? '#afafaf' : i === 2 ? '#cd7f32' : '#6b6b6b' }));
+  const myRank = Math.max(1, leaderboard.findIndex(p => p.name === me.name) + 1);
+  const FREE_CELL = { bg: '#3c3c3c', border: '2px solid #222222', shadow: '0 2px 0 #222222', fg: '#ffffff' };
 
   return (
     <div style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#f7fafc', fontFamily: '"Nunito", system-ui, sans-serif', color: '#3c3c3c', display: 'flex', justifyContent: 'center', padding: '3vh clamp(14px, 3vw, 24px)', boxSizing: 'border-box' }}>
@@ -1896,14 +1920,18 @@ function CastScreen({ me, room, onExit }) {
             const isCalled = !isFree && drawnSet.has(val);
             const isLatest = !isFree && val === lastDrawn;
             let bg = '#fafafa', fg = '#3c3c3c', border = '2px solid #ececec', shadow = '0 2px 0 #ececec';
-            if (isFree) { bg = '#fafafa'; fg = '#afafaf'; border = '2px solid #ececec'; shadow = '0 2px 0 #ececec'; }
+            if (isFree) { bg = FREE_CELL.bg; fg = FREE_CELL.fg; border = FREE_CELL.border; shadow = FREE_CELL.shadow; }
             else if (isDaubed) { bg = '#1cb0f6'; fg = '#ffffff'; border = '2px solid #0d8fcc'; shadow = '0 3px 0 #0d8fcc'; }
             else if (isLatest) { bg = '#e7f8d4'; fg = '#46a302'; border = '2px solid #58cc02'; shadow = '0 3px 0 #58cc02, 0 0 0 3px rgba(88,204,2,0.2)'; }
             else if (isCalled) { bg = '#ffffff'; fg = '#3c3c3c'; border = '2px dashed #58cc02'; shadow = '0 2px 0 #e5e5e5'; }
             return (
               <button key={`${r}-${c}`} data-cell={val} disabled
-                style={{ background: bg, color: fg, border, borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', fontSize: isFree ? 'clamp(16px, 4vw, 24px)' : 'clamp(12px, 3.5vw, 18px)', fontWeight: 900, letterSpacing: '0.02em', cursor: 'default', opacity: 1, transition: 'all 200ms cubic-bezier(0.34, 1.56, 0.64, 1)', padding: 0, minWidth: 0, minHeight: 0 }}>
-                {isFree ? <span style={{ fontSize: 'clamp(9px, 1.9vw, 13px)', fontWeight: 900, color: '#6b6b6b', letterSpacing: '0.08em', animation: tempStage.anim, lineHeight: 1 }}>{tempStage.word}</span> : String(val).padStart(2, '0')}
+                style={{ background: bg, color: fg, border, borderRadius: 'clamp(8px, 1.2vw, 14px)', boxShadow: shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', fontSize: 'clamp(12px, 3.5vw, 18px)', fontWeight: 900, letterSpacing: '0.02em', cursor: 'default', opacity: 1, transition: 'background 200ms ease, color 200ms ease, border 200ms ease', padding: 0, minWidth: 0, minHeight: 0, position: 'relative', overflow: 'hidden' }}>
+                {isFree ? (
+                  <span style={{ fontWeight: 900, lineHeight: 1, letterSpacing: '-0.02em', fontSize: 'clamp(14px, 3.5vw, 22px)', color: FREE_CELL.fg }}>
+                    {myRank}<sup style={{ fontSize: '0.5em', verticalAlign: 'super' }}>°</sup>
+                  </span>
+                ) : String(val).padStart(2, '0')}
               </button>
             );
           }))}
@@ -1947,15 +1975,24 @@ function CastCallout({ n, msg, onClose }) {
 
 
 // ---------- Room generation ----------
+const SESSION_TTL_MS = 4 * 60 * 60 * 1000; // sessions older than 4h are stale
+
 async function generateUniqueRoom() {
   const snap = await db().collection("sessions").get();
+  const now = Date.now();
   const taken = new Set(
-    snap.docs.map(d => parseInt(d.id, 10)).filter(n => n >= 1 && n <= 99)
+    snap.docs
+      .filter(d => {
+        const data = d.data();
+        return data.createdAt && (now - data.createdAt) < SESSION_TTL_MS;
+      })
+      .map(d => parseInt(d.id, 10))
+      .filter(n => n >= 1 && n <= 99)
   );
   const available = [];
   for (let i = 1; i <= 99; i++) if (!taken.has(i)) available.push(i);
   if (!available.length) throw new Error('ALL_ROOMS_IN_USE');
-  return String(available[Math.floor(Math.random() * available.length)]);
+  return String(available[Math.floor(Math.random() * available.length)]).padStart(2, '0');
 }
 
 // ---------- Root App ----------
