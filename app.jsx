@@ -970,7 +970,7 @@ function GameConfetti() {
 
 // ---------- Fake Ad Modal ----------
 function FakeAdModal({ ad, lang, onClose }) {
-  const DURATION = 8;
+  const DURATION = 15;
   const [secs, setSecs] = useState(DURATION);
   useEffect(() => {
     playFx('ad');
@@ -1238,7 +1238,7 @@ function HostScreen({ me, room, onExit }) {
           setSession(snap.data());
           drawnRef.current = snap.data().drawn || [];
           const d = snap.data().drawn || [];
-          const adTick = Math.floor(d.length / 18);
+          const adTick = Math.floor(d.length / 15);
           if (adTick > 0 && adTick > lastAdTickRef.current) {
             lastAdTickRef.current = adTick;
             const ads = FAKE_ADS[lang] || FAKE_ADS.en;
@@ -1705,7 +1705,7 @@ function CastScreen({ me, room, onExit }) {
 
   useEffect(() => {
     if (!session?.drawn) return;
-    const adTick = Math.floor(session.drawn.length / 18);
+    const adTick = Math.floor(session.drawn.length / 15);
     if (adTick > 0 && adTick > lastAdTickRef.current) {
       lastAdTickRef.current = adTick;
       const ads = FAKE_ADS[lang] || FAKE_ADS.en;
