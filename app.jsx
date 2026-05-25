@@ -48,6 +48,50 @@ function trackUser(uid) {
   }).catch(() => {});
 }
 
+// ---------- Sound FX ----------
+function playFx(type) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const play = (freq, start, dur, vol = 0.25, wave = 'sine') => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = wave; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.001, ctx.currentTime + start);
+      g.gain.linearRampToValueAtTime(vol, ctx.currentTime + start + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + dur);
+      o.start(ctx.currentTime + start);
+      o.stop(ctx.currentTime + start + dur + 0.05);
+    };
+    if (type === 'ad') {
+      // Fanfara comercial ascendente
+      play(523, 0,    0.12, 0.22, 'sawtooth');
+      play(659, 0.12, 0.12, 0.22, 'sawtooth');
+      play(784, 0.24, 0.12, 0.22, 'sawtooth');
+      play(1047,0.36, 0.30, 0.28, 'sawtooth');
+    } else if (type === 'triviaReady') {
+      // DUN DUN DUN — suspense de game show
+      play(220, 0,    0.18, 0.30, 'square');
+      play(293, 0.22, 0.18, 0.30, 'square');
+      play(440, 0.44, 0.40, 0.35, 'square');
+    } else if (type === 'triviaStart') {
+      // Sinal de largada — temporizador iniciando
+      play(880, 0,    0.07, 0.20, 'sine');
+      play(660, 0.08, 0.07, 0.20, 'sine');
+    } else if (type === 'triviaCorrect') {
+      // Acerto — ding ding ding ascendente
+      play(523, 0,    0.10, 0.28, 'sine');
+      play(659, 0.11, 0.10, 0.28, 'sine');
+      play(784, 0.22, 0.10, 0.28, 'sine');
+      play(1047,0.33, 0.28, 0.32, 'sine');
+    } else if (type === 'triviaWrong') {
+      // Wah wah wah — errinho clássico
+      play(440, 0,    0.22, 0.28, 'sawtooth');
+      play(349, 0.24, 0.22, 0.28, 'sawtooth');
+      play(294, 0.48, 0.35, 0.28, 'sawtooth');
+    }
+  } catch (e) {}
+}
+
 // ---------- Translations ----------
 const TRANSLATIONS = {
   en: {
@@ -121,17 +165,18 @@ const TRANSLATIONS = {
     joinRoom: 'Join Room',
     createDesc: 'Create a new room and share the code with your friends.',
     joinDesc: 'Join an existing room using the 2-digit code.',
-    triviaPickCategory: '🎯 {name} got a line! Pick a category:',
     triviaGeneral: '🎓 General Knowledge',
     triviaPopCulture: '🎬 Pop Culture',
     triviaBizarre: '🤯 Bizarre Facts',
+    triviaStartQuestion: 'Start Question →',
+    triviaGuestWaiting: 'Host is preparing the question…',
     triviaWaitingAnswer: 'Waiting for {name} to answer…',
+    triviaWaitingContinue: 'Waiting for host to continue…',
     triviaYourTurn: "It's your turn!",
     triviaCorrect: 'Correct! 🎉',
     triviaWrong: 'Wrong! 😅',
     triviaTimeout: "Time's up! ⏰",
     triviaClose: 'Continue',
-    triviaSkip: 'Skip',
     triviaPoints: 'Trivia',
   },
   pt: {
@@ -205,17 +250,18 @@ const TRANSLATIONS = {
     joinRoom: 'Entrar na Sala',
     createDesc: 'Crie uma nova sala e compartilhe o código com seus amigos.',
     joinDesc: 'Entre em uma sala existente usando o código de 2 dígitos.',
-    triviaPickCategory: '🎯 {name} fez uma linha! Escolha uma categoria:',
     triviaGeneral: '🎓 Conhecimentos Gerais',
     triviaPopCulture: '🎬 Pop Culture',
     triviaBizarre: '🤯 Perguntas Bizarras',
+    triviaStartQuestion: 'Iniciar Pergunta →',
+    triviaGuestWaiting: 'O host está preparando a pergunta…',
     triviaWaitingAnswer: 'Aguardando {name} responder…',
+    triviaWaitingContinue: 'Aguardando o host continuar…',
     triviaYourTurn: 'É a sua vez!',
     triviaCorrect: 'Correto! 🎉',
     triviaWrong: 'Errado! 😅',
     triviaTimeout: 'Tempo esgotado! ⏰',
     triviaClose: 'Continuar',
-    triviaSkip: 'Pular',
     triviaPoints: 'Trivia',
   },
   es: {
@@ -289,17 +335,18 @@ const TRANSLATIONS = {
     joinRoom: 'Entrar a la Sala',
     createDesc: 'Crea una nueva sala y comparte el código con tus amigos.',
     joinDesc: 'Únete a una sala existente usando el código de 2 dígitos.',
-    triviaPickCategory: '🎯 ¡{name} hizo una línea! Elige una categoría:',
     triviaGeneral: '🎓 Cultura General',
     triviaPopCulture: '🎬 Cultura Pop',
     triviaBizarre: '🤯 Preguntas Bizarras',
+    triviaStartQuestion: 'Iniciar Pregunta →',
+    triviaGuestWaiting: 'El host está preparando la pregunta…',
     triviaWaitingAnswer: 'Esperando respuesta de {name}…',
+    triviaWaitingContinue: 'Esperando que el host continúe…',
     triviaYourTurn: '¡Es tu turno!',
     triviaCorrect: '¡Correcto! 🎉',
     triviaWrong: '¡Incorrecto! 😅',
     triviaTimeout: '¡Tiempo agotado! ⏰',
     triviaClose: 'Continuar',
-    triviaSkip: 'Omitir',
     triviaPoints: 'Trivia',
   },
 };
@@ -526,6 +573,52 @@ const TRIVIA_QUESTIONS = {
       { q: '¿Cuál es el significado original de "OK"?', opts: ['Inglés antiguo', 'Broma con error ortográfico', 'Palabra indígena', 'Acrónimo tecnológico'], ans: 1 },
     ],
   },
+};
+
+// ---------- Fake Ads ----------
+const FAKE_ADS = {
+  pt: [
+    { title: 'CREME ANTI-CALVÍCIE DR. WALDOMIRO™', tagline: 'Antes: careca. Depois: ainda careca, mas realizado.', review: 'Meu cabelo não voltou mas ganhei 3 amigos na farmácia.', reviewer: 'Raimundo G., 58 anos', cta: 'LIGUE JÁ! 0800-721-CABELO', fine: '18× de R$29,90. Produto não destinado a calvícies severas, moderadas ou leves.' },
+    { title: 'TAPETE AUTOLIMPANTE MIRACLEAN™', tagline: 'Chega de esfregar! Basta encarar firmemente por 40 minutos.', review: 'O tapete não limpou mas entrei em meditação profunda.', reviewer: 'Cleusa M., dona de casa', cta: 'APENAS HOJE: de R$980 por R$979,99', fine: 'Aprovado por 4 cientistas* (*nenhum conhece o produto). Promoção válida enquanto durar o estoque de 1 unidade.' },
+    { title: 'ACADEMIA SOFÁ SHAPE™', tagline: 'Perca peso sem sair do sofá! Tecnologia NASA.*', review: 'Não emagreci nada mas aprendi a não me importar com isso.', reviewer: 'Fabiano D., 29 anos', cta: '12× de R$47,00 · LIGUE: 0800-SOFA', fine: 'A NASA nunca ouviu falar desse produto. Resultados não são individuais nem coletivos.' },
+    { title: 'COLCHÃO SONO ETERNO®', tagline: 'Dorme em 3 segundos. Acorda em 3 dias.', review: 'Cheguei atrasado 47 vezes mas meu chefe também comprou um.', reviewer: 'Edivaldo C., gerente comercial', cta: 'FRETE GRÁTIS* · COMPRE AGORA', fine: 'Frete R$89,90. Instalação R$120,00. Retirada do colchão antigo R$200,00. Total de gratuidades: R$0,00.' },
+    { title: 'PNEU INFLÁVEL PARA CARRO IMAGINÁRIO', tagline: 'Compatível com 100% dos veículos que você não tem.', review: 'Comprei pra um carro inexistente. Encaixou perfeitamente.', reviewer: 'Josefino T., desempregado', cta: '12× de R$3,50 · LIGUE: 0800-CARRO', fine: 'Produto testado em 0 carros reais. Vendedor não se responsabiliza por carros inexistentes que continuarem inexistentes.' },
+    { title: 'CURSO: FALE INGLÊS EM 7 MINUTOS™', tagline: 'Método revolucionário do Prof. Gilberto. Garantido!*', review: 'Aprendi "hello" e "sorry". Suficiente pra minha vida social.', reviewer: 'Sueli B., 44 anos, RH', cta: '36× de R$12,90 SEM JUROS*', fine: 'Tem juros, muitos juros. Garantia de aprendizado não inclui o idioma inglês.' },
+    { title: 'DESODORANTE REUNIÃO DE SEGUNDA™', tagline: 'Para manter distância de todo mundo com elegância.', review: 'Apliquei às 8h. Às 8:05 tinha uma mesa inteira só pra mim.', reviewer: 'Cláudio S., analista', cta: 'COMPRE 1 LEVE 1*', fine: 'O segundo não funciona. Empresa não se responsabiliza por demissões involuntárias decorrentes do produto.' },
+    { title: 'ÓCULOS DE SOL PARA GALINHA™', tagline: 'Porque ela também merece proteção UV.', review: 'Minha galinha parou de me olhar com julgamento. Milagre.', reviewer: 'Aparecida F., interior de SP', cta: 'FRETE GRÁTIS PARA GALINHAS*', fine: 'A galinha deve apresentar CPF válido. Empresa não entrega em galinheiros irregulares.' },
+    { title: 'SANDUICHEIRA QUE DOBRA ROUPAS™', tagline: 'Tecnologia japonesa desenvolvida no interior do Paraguai.', review: 'Não dobrou nenhuma roupa. O sanduíche ficou incrível.', reviewer: 'Benedito L., 51 anos', cta: 'LIGUE AGORA: 0800-PANES', fine: '12× sem juros* (*com juros). Função de dobrar roupas é decorativa e aspiracional.' },
+    { title: 'PERFUME PETRICHOR ULTRA™', tagline: 'O cheiro de chuva na terra seca. Engarrafado na segunda-feira.', review: 'Usei num casamento. Fui o único convidado da cerimônia.', reviewer: 'Toninho A., 34 anos', cta: '3× de R$29,90 · PEÇA JÁ', fine: 'Não contém chuva real. Cheiro pode variar dependendo do seu nariz.' },
+    { title: 'CHINELO ORTOPÉDICO PROF. JAIR™', tagline: 'Anda, corre ou flutua — tudo com mais dor.', review: 'Meus joelhos pioraram mas meu caráter se fortaleceu muito.', reviewer: 'Maria das Dores S., 67 anos', cta: '6× de R$39,90 · FRETE GRÁTIS*', fine: 'Frete grátis apenas para Cuiabá. Produto não indicado para ortopedia real.' },
+    { title: 'ASPIRADOR POWERCLEAN 3000™', tagline: 'Aspira absolutamente tudo! Exceto o que está no chão.', review: 'Aspirou meu controle, meu gato e minha carteira. O chão continua igual.', reviewer: 'Gilmar P., engenheiro', cta: 'OFERTA ÚNICA: 48× de R$89,00', fine: 'Aprovado por 2 engenheiros de software que nunca usaram aspirador. Gato pode ou não ser devolvido.' },
+  ],
+  en: [
+    { title: "DR. MAXWELL'S HAIR REGROWTH CREAM™", tagline: 'Before: bald. After: still bald, but confident.', review: "My hair didn't come back but I made 3 friends at the pharmacy.", reviewer: 'Raymond G., 58 years old', cta: 'CALL NOW: 1-800-HAIR-PLZ', fine: '18 easy payments of $9.90. Results not guaranteed. Or guaranteed not to work.' },
+    { title: 'MIRACLEAN™ SELF-CLEANING RUG', tagline: 'No more scrubbing! Just stare at it firmly for 40 minutes.', review: "The rug didn't clean itself but I achieved deep meditation.", reviewer: 'Cathy M., homemaker', cta: 'TODAY ONLY: was $980, now $979.99', fine: 'Endorsed by 4 scientists (*none of whom have seen the product). Offer valid while 1 unit lasts.' },
+    { title: 'SOFA SHAPE™ HOME FITNESS', tagline: 'Lose weight without leaving your couch! NASA technology.*', review: 'Lost zero pounds but gained total inner peace.', reviewer: 'Frank D., 31 years old', cta: '12 payments of $19.90 · CALL: 1-800-SOFA', fine: 'NASA has never heard of this product. Results are not individual, collective, or real.' },
+    { title: 'ETERNAL SLEEP MATTRESS®', tagline: 'Asleep in 3 seconds. Awake in 3 days.', review: 'Late 47 times this month but my boss bought one too.', reviewer: 'Ed C., sales manager', cta: 'FREE SHIPPING* · ORDER NOW', fine: '$89 shipping fee applies. Installation $120. Removing old mattress $200. Total savings: $0.' },
+    { title: 'INFLATABLE TIRE FOR IMAGINARY CARS', tagline: "Compatible with 100% of vehicles you don't own.", review: "Bought it for a car that doesn't exist. Fit perfectly.", reviewer: 'Joe T., unemployed', cta: '12 payments of $1.50 · CALL: 1-800-FAKECAR', fine: 'Tested on 0 real cars. Seller not responsible for imaginary cars that remain imaginary.' },
+    { title: 'SPEAK ENGLISH IN 7 MINUTES™', tagline: "Prof. Gilbert's revolutionary method. Guaranteed!*", review: 'Learned "hello" and "sorry". Enough for my social life.', reviewer: 'Susan B., 44 years old, HR', cta: '36 payments of $4.90 NO INTEREST*', fine: 'Lots of interest actually. Learning guarantee does not include the English language.' },
+    { title: 'MONDAY MEETING DEODORANT™', tagline: 'Keep everyone at a respectful distance, elegantly.', review: 'Applied at 8am. By 8:05 I had an entire table to myself.', reviewer: 'Carl S., analyst', cta: 'BUY 1 GET 1*', fine: "Second one doesn't work. Company not responsible for involuntary terminations caused by product." },
+    { title: 'SUNGLASSES FOR CHICKENS™', tagline: 'Because she deserves UV protection too.', review: "My hen stopped judging me. It's a miracle.", reviewer: 'Alice F., rural area', cta: 'FREE SHIPPING FOR CHICKENS*', fine: 'Chicken must provide valid tax ID. Company does not deliver to unlicensed coops.' },
+    { title: 'THE SANDWICH PRESS THAT FOLDS CLOTHES™', tagline: 'Japanese technology developed in rural Paraguay.', review: 'Folded zero clothes. The sandwich was incredible.', reviewer: 'Ben L., 51 years old', cta: 'CALL NOW: 1-800-PANINI', fine: '12 payments, no interest* (*with interest). Clothes-folding feature is decorative and aspirational.' },
+    { title: 'PETRICHOR ULTRA™ PERFUME', tagline: 'The smell of rain on dry earth. Bottled on a Monday.', review: 'Wore it to a wedding. I was the only guest at the ceremony.', reviewer: 'Tony A., 34 years old', cta: '3 payments of $9.90 · ORDER NOW', fine: "Contains no actual rain. Smell may vary based on your nose." },
+    { title: "PROF. JOHNNY'S ORTHOPEDIC FLIP-FLOP™", tagline: 'Walk, run or hover — with significantly more pain.', review: 'My knees got worse but my character grew tremendously.', reviewer: 'Mary Aches S., 67 years old', cta: '6 payments of $12.90 · FREE SHIPPING*', fine: 'Free shipping to Alaska only. Product not recommended for actual orthopedic use.' },
+    { title: 'POWERCLEAN 3000™ VACUUM', tagline: "Sucks up absolutely everything! Except what's on the floor.", review: 'Vacuumed my remote, my cat, and my wallet. Floor unchanged.', reviewer: 'Gil P., engineer', cta: 'SPECIAL OFFER: 48 payments of $29.00', fine: "Endorsed by 2 software engineers who've never used a vacuum. Cat may or may not be returned." },
+  ],
+  es: [
+    { title: 'CREMA ANTICAÍDA DEL DR. WALDO™', tagline: 'Antes: calvo. Después: todavía calvo, pero realizado.', review: 'Mi cabello no volvió pero hice 3 amigos en la farmacia.', reviewer: 'Raimundo G., 58 años', cta: '¡LLAMA YA! 0800-721-CABELLO', fine: '18 cuotas de $9,90. Resultado no garantizado. O garantizado de no funcionar.' },
+    { title: 'ALFOMBRA AUTOLIMPIANTE MIRACLEAN™', tagline: '¡No más restregar! Basta mirarla fijamente 40 minutos.', review: 'La alfombra no se limpió pero alcancé meditación profunda.', reviewer: 'Claudia M., ama de casa', cta: 'SOLO HOY: de $980 a $979,99', fine: 'Aprobada por 4 científicos (*ninguno conoce el producto). Oferta válida mientras dure 1 unidad.' },
+    { title: 'ACADEMIA SOFÁ SHAPE™', tagline: '¡Pierde peso sin levantarte del sofá! Tecnología NASA.*', review: 'No adelgacé nada pero aprendí a no importarme nada.', reviewer: 'Fabio D., 29 años', cta: '12 cuotas de $19,90 · LLAMA: 0800-SOFA', fine: 'La NASA nunca oyó hablar de este producto. Resultados no son individuales ni colectivos.' },
+    { title: 'COLCHÓN SUEÑO ETERNO®', tagline: 'Duermes en 3 segundos. Despiertas en 3 días.', review: 'Llegué tarde 47 veces pero mi jefe también compró uno.', reviewer: 'Eduardo C., gerente comercial', cta: 'ENVÍO GRATIS* · ¡COMPRA YA!', fine: 'Flete $89,90. Instalación $120,00. Retiro de colchón antiguo $200,00. Total de gratuidades: $0,00.' },
+    { title: 'NEUMÁTICO INFLABLE PARA AUTO IMAGINARIO', tagline: 'Compatible con el 100% de vehículos que no tienes.', review: 'Lo compré para un auto inexistente. Quedó perfecto.', reviewer: 'José T., desempleado', cta: '12 cuotas de $3,50 · LLAMA: 0800-AUTO', fine: 'Probado en 0 autos reales. Vendedor no se responsabiliza por autos inexistentes que continúen inexistentes.' },
+    { title: 'HABLA INGLÉS EN 7 MINUTOS™', tagline: 'Método revolucionario del Prof. Gilberto. ¡Garantizado!*', review: 'Aprendí "hello" y "sorry". Suficiente para mi vida social.', reviewer: 'Susana B., 44 años, RRHH', cta: '36 cuotas de $12,90 SIN INTERÉS*', fine: 'Con mucho interés. La garantía de aprendizaje no incluye el idioma inglés.' },
+    { title: 'DESODORANTE REUNIÓN DE LUNES™', tagline: 'Mantén distancia de todos con elegancia.', review: 'Lo apliqué a las 8h. A las 8:05 tenía una mesa entera para mí.', reviewer: 'Carlos S., analista', cta: 'COMPRA 1 LLEVA 1*', fine: 'El segundo no funciona. Empresa no se responsabiliza por despidos involuntarios causados por el producto.' },
+    { title: 'GAFAS DE SOL PARA GALLINAS™', tagline: 'Porque ella también merece protección UV.', review: 'Mi gallina dejó de juzgarme. Es un milagro.', reviewer: 'Aparecida F., zona rural', cta: 'ENVÍO GRATIS PARA GALLINAS*', fine: 'La gallina debe presentar DNI válido. Empresa no entrega en gallineros irregulares.' },
+    { title: 'SANDWICHERA QUE DOBLA ROPA™', tagline: 'Tecnología japonesa desarrollada en el interior de Paraguay.', review: 'No dobló ninguna ropa. El sándwich quedó increíble.', reviewer: 'Beto L., 51 años', cta: '¡LLAMA YA! 0800-PANINI', fine: '12 cuotas sin interés* (*con interés). La función de doblar ropa es decorativa y aspiracional.' },
+    { title: 'PERFUME PETRICHOR ULTRA™', tagline: 'El olor a lluvia en tierra seca. Embotellado un lunes.', review: 'Lo usé en una boda. Fui el único invitado a la ceremonia.', reviewer: 'Antonio A., 34 años', cta: '3 cuotas de $9,90 · ¡PIDE YA!', fine: 'No contiene lluvia real. El olor puede variar según tu nariz.' },
+    { title: 'OJOTA ORTOPÉDICA DEL PROF. JAIR™', tagline: 'Camina, corre o flota — con significativamente más dolor.', review: 'Mis rodillas empeoraron pero mi carácter creció muchísimo.', reviewer: 'María Dolores S., 67 años', cta: '6 cuotas de $39,90 · ENVÍO GRATIS*', fine: 'Envío gratis solo a la Patagonia. Producto no recomendado para uso ortopédico real.' },
+    { title: 'ASPIRADORA POWERCLEAN 3000™', tagline: '¡Aspira absolutamente todo! Excepto lo que está en el piso.', review: 'Aspiró mi control remoto, mi gato y mi billetera. El piso sigue igual.', reviewer: 'Gilmar P., ingeniero', cta: 'OFERTA ÚNICA: 48 cuotas de $89,00', fine: 'Aprobada por 2 ingenieros de sistemas que jamás usaron aspiradora. El gato puede o no ser devuelto.' },
+  ],
 };
 
 // ---------- Lang Context ----------
@@ -875,6 +968,40 @@ function GameConfetti() {
   );
 }
 
+// ---------- Fake Ad Modal ----------
+function FakeAdModal({ ad, lang, onClose }) {
+  const DURATION = 8;
+  const [secs, setSecs] = useState(DURATION);
+  useEffect(() => {
+    playFx('ad');
+    const id = setInterval(() => setSecs(s => {
+      if (s <= 1) { onClose(); return 0; }
+      return s - 1;
+    }), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const header = lang === 'pt' ? '📺 INTERVALO COMERCIAL' : lang === 'es' ? '📺 PAUSA COMERCIAL' : '📺 COMMERCIAL BREAK';
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 96, background: '#100800', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 250ms ease forwards' }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 5, background: '#2a1800' }}>
+        <div style={{ height: '100%', background: '#ff9600', width: `${(secs / DURATION) * 100}%`, transition: 'width 1s linear' }} />
+      </div>
+      <div style={{ maxWidth: 520, width: '100%', textAlign: 'center' }}>
+        <div style={{ fontSize: 11, fontWeight: 900, color: '#ff9600', letterSpacing: '0.28em', marginBottom: 20 }}>{header}</div>
+        <div style={{ fontSize: 'clamp(18px, 3.5vw, 26px)', fontWeight: 900, color: '#ffffff', letterSpacing: '0.05em', lineHeight: 1.2, marginBottom: 12, textTransform: 'uppercase' }}>{ad.title}</div>
+        <div style={{ fontSize: 'clamp(13px, 1.8vw, 16px)', fontWeight: 700, color: '#ffe0a0', fontStyle: 'italic', marginBottom: 20, lineHeight: 1.5 }}>"{ad.tagline}"</div>
+        <div style={{ background: 'rgba(255,150,0,0.08)', border: '1px solid rgba(255,150,0,0.25)', borderRadius: 14, padding: '12px 16px', marginBottom: 18, textAlign: 'left' }}>
+          <div style={{ fontSize: 13, color: '#ffc800', marginBottom: 4 }}>★★★★★</div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: '#e0d0b0', lineHeight: 1.4, fontStyle: 'italic' }}>"{ad.review}"</div>
+          <div style={{ fontSize: 11, color: '#7a6a50', marginTop: 6 }}>— {ad.reviewer}</div>
+        </div>
+        <div style={{ fontSize: 'clamp(15px, 2.2vw, 20px)', fontWeight: 900, color: '#ffc800', letterSpacing: '0.1em', marginBottom: 8 }}>{ad.cta}</div>
+        <div style={{ fontSize: 10, color: '#3a3020', lineHeight: 1.5, maxWidth: 400, margin: '0 auto' }}>*{ad.fine}</div>
+      </div>
+    </div>
+  );
+}
+
 // ---------- PendingApprovalModal ----------
 
 function PendingApprovalModal({ pending, onApprove, onReject }) {
@@ -900,47 +1027,7 @@ function PendingApprovalModal({ pending, onApprove, onReject }) {
   );
 }
 
-// ---------- Trivia Modals ----------
-
-function TriviaPickModal({ trivia, room, lang }) {
-  const { t } = useLang();
-  const categories = [
-    { id: 'general',    label: t.triviaGeneral,    color: '#58cc02', shade: '#46a302' },
-    { id: 'popculture', label: t.triviaPopCulture,  color: '#1cb0f6', shade: '#0d8fcc' },
-    { id: 'bizarre',    label: t.triviaBizarre,     color: '#ff9600', shade: '#cc7700' },
-  ];
-  function pick(catId) {
-    const bank = (TRIVIA_QUESTIONS[lang] || TRIVIA_QUESTIONS.en)[catId];
-    const idx = Math.floor(Math.random() * bank.length);
-    sessionRef(room).update({
-      'trivia.state': 'question',
-      'trivia.category': catId,
-      'trivia.questionIdx': idx,
-      'trivia.startedAt': Date.now(),
-    });
-  }
-  function skip() {
-    sessionRef(room).update({ trivia: firebase.firestore.FieldValue.delete() });
-  }
-  return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 88, background: 'rgba(31,41,55,0.6)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
-      <div style={{ width: '100%', maxWidth: 420, background: '#ffffff', border: '3px solid #ffc800', borderRadius: 24, boxShadow: '0 12px 0 #c79100, 0 24px 64px rgba(0,0,0,0.2)', overflow: 'hidden', animation: 'modalPop 280ms cubic-bezier(0.34,1.56,0.64,1) forwards' }}>
-        <div style={{ padding: '22px 24px 16px', textAlign: 'center', borderBottom: '2px solid #f3f3f3' }}>
-          <div style={{ fontSize: 32, marginBottom: 6 }}>🎯</div>
-          <div style={{ fontSize: 17, fontWeight: 900, color: '#3c3c3c' }}>{t.triviaPickCategory.replace('{name}', trivia.playerName)}</div>
-        </div>
-        <div style={{ padding: '16px 20px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {categories.map(cat => (
-            <button key={cat.id} onClick={() => pick(cat.id)} style={{ width: '100%', padding: '14px 16px', background: cat.color, color: '#ffffff', border: 'none', borderRadius: 14, boxShadow: `0 4px 0 ${cat.shade}`, fontFamily: 'inherit', fontWeight: 900, fontSize: 15, letterSpacing: '0.04em', cursor: 'pointer', transition: 'transform 60ms ease, box-shadow 60ms ease' }}>
-              {cat.label}
-            </button>
-          ))}
-          <button onClick={skip} style={{ background: 'none', border: 'none', fontFamily: 'inherit', fontSize: 13, fontWeight: 800, color: '#afafaf', cursor: 'pointer', marginTop: 4, padding: '4px 0' }}>{t.triviaSkip}</button>
-        </div>
-      </div>
-    </div>
-  );
-}
+// ---------- Trivia Modal ----------
 
 const OPTION_LABELS = ['A', 'B', 'C', 'D'];
 
@@ -949,6 +1036,8 @@ function TriviaActiveModal({ trivia, room, playerId, isHost, lang }) {
   const [timeLeft, setTimeLeft] = useState(60);
   const [chosen, setChosen] = useState(null);
   const isPlayer = !isHost && trivia.playerId === playerId;
+  const isReady = trivia.state === 'ready';
+  const answered = trivia.state === 'answered';
 
   const bank = (TRIVIA_QUESTIONS[lang] || TRIVIA_QUESTIONS.en)[trivia.category] || [];
   const qData = bank[trivia.questionIdx] || bank[0];
@@ -977,54 +1066,88 @@ function TriviaActiveModal({ trivia, room, playerId, isHost, lang }) {
     sessionRef(room).update(update);
   }
 
+  function startQuestion() {
+    sessionRef(room).update({ 'trivia.state': 'question', 'trivia.startedAt': Date.now() });
+  }
+
   function close() {
     sessionRef(room).update({ trivia: firebase.firestore.FieldValue.delete() });
   }
 
-  const answered = trivia.state === 'answered';
-  const answeredIdx = answered && trivia.answer !== 'timeout' ? parseInt(trivia.answer) : null;
-  const isCorrect = answeredIdx === qData.ans;
-  const timerColor = timeLeft > 20 ? '#58cc02' : timeLeft > 10 ? '#ff9600' : '#ff4b4b';
+  useEffect(() => {
+    if (trivia.state === 'ready') playFx('triviaReady');
+    else if (trivia.state === 'question') playFx('triviaStart');
+    else if (trivia.state === 'answered') {
+      const b = (TRIVIA_QUESTIONS[lang] || TRIVIA_QUESTIONS.en)[trivia.category] || [];
+      const q = b[trivia.questionIdx] || b[0];
+      playFx(trivia.answer !== 'timeout' && parseInt(trivia.answer) === q?.ans ? 'triviaCorrect' : 'triviaWrong');
+    }
+  }, [trivia.state]);
 
+  const answeredIdx = answered && trivia.answer !== 'timeout' ? parseInt(trivia.answer) : null;
+  const isCorrect = answeredIdx === qData?.ans;
+  const timerColor = timeLeft > 20 ? '#58cc02' : timeLeft > 10 ? '#ff9600' : '#ff4b4b';
   const categoryLabels = { general: t.triviaGeneral, popculture: t.triviaPopCulture, bizarre: t.triviaBizarre };
+
+  if (isReady) {
+    return (
+      <div style={{ position: 'fixed', inset: 0, zIndex: 88, background: 'rgba(31,41,55,0.6)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
+        <div style={{ width: '100%', maxWidth: 480, background: '#ffffff', border: '3px solid #ffc800', borderRadius: 24, boxShadow: '0 12px 0 #c79100, 0 24px 64px rgba(0,0,0,0.2)', padding: '28px 28px 24px', textAlign: 'center', animation: 'modalPop 280ms cubic-bezier(0.34,1.56,0.64,1) forwards' }}>
+          <div style={{ fontSize: 36, marginBottom: 10 }}>🎯</div>
+          <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 22 }}>{t.gotItPre}{trivia.playerName}{t.gotItPost}</div>
+          {isHost ? (
+            <button onClick={startQuestion} style={{ width: '100%', padding: '14px 0', background: '#ffc800', border: 'none', borderRadius: 14, boxShadow: '0 4px 0 #c79100', fontFamily: 'inherit', fontWeight: 900, fontSize: 16, color: '#3c3c3c', letterSpacing: '0.06em', cursor: 'pointer' }}>{t.triviaStartQuestion}</button>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+              <div style={{ display: 'flex', gap: 6 }}>
+                {[0,1,2].map(i => <div key={i} style={{ width: 8, height: 8, borderRadius: '50%', background: '#ffc800', animation: `rollDots 1.2s ${i * 0.2}s ease-in-out infinite` }} />)}
+              </div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a' }}>{t.triviaGuestWaiting}</div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 88, background: 'rgba(31,41,55,0.6)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
-      <div style={{ width: '100%', maxWidth: 460, background: '#ffffff', border: '3px solid #ffc800', borderRadius: 24, boxShadow: '0 12px 0 #c79100, 0 24px 64px rgba(0,0,0,0.2)', overflow: 'hidden', animation: 'modalPop 280ms cubic-bezier(0.34,1.56,0.64,1) forwards' }}>
+      <div style={{ width: '100%', maxWidth: 680, background: '#ffffff', border: '3px solid #ffc800', borderRadius: 24, boxShadow: '0 12px 0 #c79100, 0 24px 64px rgba(0,0,0,0.2)', overflow: 'hidden', animation: 'modalPop 280ms cubic-bezier(0.34,1.56,0.64,1) forwards' }}>
 
         {/* Header */}
-        <div style={{ padding: '16px 20px 12px', background: '#fffbea', borderBottom: '2px solid #f3f3f3', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 900, color: '#6b6b6b', letterSpacing: '0.18em' }}>{categoryLabels[trivia.category] || '🎯'}</div>
-            <div style={{ fontSize: 13, fontWeight: 800, color: '#3c3c3c', marginTop: 2 }}>
+        <div style={{ padding: '12px 20px', background: '#fffbea', borderBottom: '2px solid #f3f3f3', display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+            <span style={{ fontSize: 11, fontWeight: 900, color: '#6b6b6b', letterSpacing: '0.12em', whiteSpace: 'nowrap' }}>{categoryLabels[trivia.category]}</span>
+            <span style={{ color: '#e5e5e5' }}>·</span>
+            <span style={{ fontSize: 12, fontWeight: 900, color: '#3c3c3c', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {answered ? (trivia.answer === 'timeout' ? t.triviaTimeout : isCorrect ? t.triviaCorrect : t.triviaWrong) : (isPlayer ? t.triviaYourTurn : t.triviaWaitingAnswer.replace('{name}', trivia.playerName))}
-            </div>
+            </span>
           </div>
           {!answered && (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 44 }}>
-              <div style={{ fontSize: 22, fontWeight: 900, color: timerColor, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{timeLeft}</div>
-              <div style={{ fontSize: 9, fontWeight: 900, color: '#afafaf', letterSpacing: '0.12em' }}>SEG</div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 3, flexShrink: 0 }}>
+              <span style={{ fontSize: 26, fontWeight: 900, color: timerColor, fontVariantNumeric: 'tabular-nums', lineHeight: 1 }}>{timeLeft}</span>
+              <span style={{ fontSize: 10, fontWeight: 900, color: '#afafaf', letterSpacing: '0.1em' }}>S</span>
             </div>
           )}
         </div>
 
-        {/* Question */}
-        <div style={{ padding: '18px 22px 14px' }}>
-          <div style={{ fontSize: 16, fontWeight: 900, color: '#3c3c3c', lineHeight: 1.45, marginBottom: 16 }}>{qData.q}</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {qData.opts.map((opt, i) => {
-              let bg = '#fafafa', border = '2px solid #e5e5e5', color = '#3c3c3c', shadow = '0 2px 0 #e5e5e5';
+        {/* Question + Options */}
+        <div style={{ padding: '16px 20px' }}>
+          <div style={{ fontSize: 15, fontWeight: 900, color: '#3c3c3c', lineHeight: 1.45, marginBottom: 14 }}>{qData?.q}</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+            {qData?.opts.map((opt, i) => {
+              let bg = '#fafafa', border = '2px solid #e5e5e5', color = '#3c3c3c';
               if (answered) {
-                if (i === qData.ans) { bg = '#e7f8d4'; border = '2px solid #58cc02'; color = '#46a302'; shadow = '0 2px 0 #58cc02'; }
-                else if (i === answeredIdx && !isCorrect) { bg = '#fff0f0'; border = '2px solid #ff4b4b'; color = '#ff4b4b'; shadow = '0 2px 0 #ff4b4b'; }
-                else { bg = '#fafafa'; color = '#afafaf'; border = '2px solid #ececec'; }
+                if (i === qData.ans) { bg = '#e7f8d4'; border = '2px solid #58cc02'; color = '#46a302'; }
+                else if (i === answeredIdx && !isCorrect) { bg = '#fff0f0'; border = '2px solid #ff4b4b'; color = '#ff4b4b'; }
+                else { color = '#afafaf'; border = '2px solid #ececec'; }
               }
               const clickable = isPlayer && !answered && chosen === null;
               return (
                 <button key={i} onClick={() => clickable && submitAnswer(i)} disabled={!clickable}
-                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '11px 14px', background: bg, border, borderRadius: 14, boxShadow: shadow, fontFamily: 'inherit', cursor: clickable ? 'pointer' : 'default', transition: 'all 120ms ease', textAlign: 'left' }}>
-                  <span style={{ width: 26, height: 26, borderRadius: 8, background: answered && i === qData.ans ? '#58cc02' : answered && i === answeredIdx && !isCorrect ? '#ff4b4b' : '#ececec', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900, color: answered && (i === qData.ans || i === answeredIdx) ? '#fff' : '#6b6b6b', flexShrink: 0 }}>{OPTION_LABELS[i]}</span>
-                  <span style={{ fontSize: 14, fontWeight: 800, color, lineHeight: 1.3 }}>{opt}</span>
+                  style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', background: bg, border, borderRadius: 12, fontFamily: 'inherit', cursor: clickable ? 'pointer' : 'default', transition: 'all 120ms ease', textAlign: 'left' }}>
+                  <span style={{ width: 24, height: 24, borderRadius: 7, background: answered && i === qData.ans ? '#58cc02' : answered && i === answeredIdx && !isCorrect ? '#ff4b4b' : '#ececec', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 900, color: answered && (i === qData.ans || (i === answeredIdx && !isCorrect)) ? '#fff' : '#6b6b6b', flexShrink: 0 }}>{OPTION_LABELS[i]}</span>
+                  <span style={{ fontSize: 13, fontWeight: 800, color, lineHeight: 1.3 }}>{opt}</span>
                 </button>
               );
             })}
@@ -1033,17 +1156,15 @@ function TriviaActiveModal({ trivia, room, playerId, isHost, lang }) {
 
         {/* Footer */}
         {answered && isHost && (
-          <div style={{ padding: '4px 20px 18px' }}>
-            <button onClick={close} style={{ width: '100%', padding: '13px 0', background: '#58cc02', border: 'none', borderRadius: 14, boxShadow: '0 4px 0 #46a302', fontFamily: 'inherit', fontWeight: 900, fontSize: 15, color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}>{t.triviaClose}</button>
+          <div style={{ padding: '4px 20px 16px' }}>
+            <button onClick={close} style={{ width: '100%', padding: '12px 0', background: '#58cc02', border: 'none', borderRadius: 12, boxShadow: '0 3px 0 #46a302', fontFamily: 'inherit', fontWeight: 900, fontSize: 14, color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', cursor: 'pointer' }}>{t.triviaClose}</button>
           </div>
         )}
         {answered && !isHost && (
-          <div style={{ padding: '4px 20px 18px', textAlign: 'center', fontSize: 13, fontWeight: 700, color: '#afafaf' }}>⏳ Aguardando o host continuar…</div>
+          <div style={{ padding: '8px 20px 14px', textAlign: 'center', fontSize: 13, fontWeight: 700, color: '#afafaf' }}>{t.triviaWaitingContinue}</div>
         )}
-        {!answered && isHost && (
-          <div style={{ padding: '4px 20px 14px', textAlign: 'center' }}>
-            <button onClick={() => sessionRef(room).update({ trivia: firebase.firestore.FieldValue.delete() })} style={{ background: 'none', border: 'none', fontFamily: 'inherit', fontSize: 12, fontWeight: 800, color: '#afafaf', cursor: 'pointer' }}>{t.triviaSkip}</button>
-          </div>
+        {!answered && !isHost && !isPlayer && (
+          <div style={{ padding: '8px 20px 14px', textAlign: 'center', fontSize: 13, fontWeight: 700, color: '#afafaf' }}>{t.triviaWaitingAnswer.replace('{name}', trivia.playerName)}</div>
         )}
       </div>
     </div>
@@ -1091,7 +1212,8 @@ function HostScreen({ me, room, onExit }) {
   const [fsError, setFsError] = useState(null);
   const [rolling, setRolling] = useState(false);
   const [previewN, setPreviewN] = useState(null);
-  const [confetti, setConfetti] = useState(false);
+  const [showAd, setShowAd] = useState(false);
+  const [currentAd, setCurrentAd] = useState(null);
   const [winnerQueue, setWinnerQueue] = useState([]);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showExit, setShowExit] = useState(false);
@@ -1103,6 +1225,7 @@ function HostScreen({ me, room, onExit }) {
   const hostMsgRef = useRef(null);
   const drawnRef = useRef([]);
   const prevPlayerWinsRef = useRef(null);
+  const lastAdTickRef = useRef(0);
   const cells = useMemo(() => Array.from({ length: TOTAL }, (_, i) => ({ n: i + 1, r: Math.floor(i / COLS), c: i % COLS })), []);
   const leaderboard = useMemo(() => Object.values((session?.players) || {}).map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), bingo: p.bingo, triviaScore: (session?.triviaScores || {})[p.id] || 0 })).sort((a, b) => b.hits - a.hits).map((p, i) => ({ ...p, color: i === 0 ? '#ffc800' : i === 1 ? '#afafaf' : i === 2 ? '#cd7f32' : '#6b6b6b' })), [session]);
 
@@ -1114,6 +1237,14 @@ function HostScreen({ me, room, onExit }) {
         if (snap.exists) {
           setSession(snap.data());
           drawnRef.current = snap.data().drawn || [];
+          const d = snap.data().drawn || [];
+          const adTick = Math.floor(d.length / 18);
+          if (adTick > 0 && adTick > lastAdTickRef.current) {
+            lastAdTickRef.current = adTick;
+            const ads = FAKE_ADS[lang] || FAKE_ADS.en;
+            setCurrentAd(ads[(adTick - 1) % ads.length]);
+            setShowAd(true);
+          }
         } else if (!createdRef.current) {
           createdRef.current = true;
           ref.set({ code: room, callerName: me.name, hostUid: me.uid || null, createdAt: Date.now(), phase: 'lobby', drawn: [], lastDrawn: null, lastDrawnAt: null, players: { [me.uid || `host_${me.name}`]: { id: me.uid || `host_${me.name}`, name: me.name, uid: me.uid || null, joinedAt: Date.now(), card: [], marked: [], bingo: false } }, winner: null })
@@ -1148,11 +1279,19 @@ function HostScreen({ me, room, onExit }) {
     for (const p of players) {
       next[p.id] = computeWins(p);
       if (next[p.id] > (prev[p.id] ?? 0)) {
-        setConfetti(true);
-        setTimeout(() => setConfetti(false), 2200);
         setWinnerQueue(q => [...q, { type: p.bingo ? 'bingo' : 'line', name: p.name }]);
         if (!p.bingo && !session.trivia) {
-          sessionRef(room).update({ trivia: { state: 'picking', playerId: p.id, playerName: p.name } });
+          const usedTrivia = session.usedTrivia || [];
+          const categories = ['general', 'popculture', 'bizarre'];
+          const cat = categories[Math.floor(Math.random() * categories.length)];
+          const bank = (TRIVIA_QUESTIONS[lang] || TRIVIA_QUESTIONS.en)[cat];
+          const usedInCat = usedTrivia.filter(u => u.category === cat).map(u => u.idx);
+          const avail = bank.map((_, i) => i).filter(i => !usedInCat.includes(i));
+          const idx = avail.length > 0 ? avail[Math.floor(Math.random() * avail.length)] : Math.floor(Math.random() * bank.length);
+          sessionRef(room).update({
+            trivia: { state: 'ready', playerId: p.id, playerName: p.name, category: cat, questionIdx: idx },
+            usedTrivia: firebase.firestore.FieldValue.arrayUnion({ category: cat, idx }),
+          });
         }
       }
     }
@@ -1312,8 +1451,6 @@ function HostScreen({ me, room, onExit }) {
         {/* Draw button */}
         <DrawButton onClick={drawNext} disabled={left === 0 || !!session.trivia} rolling={rolling} done={!!session.winner} height='10vh' margin='clamp(6px, 1vw, 12px)' />
 
-        {confetti && <GameConfetti />}
-
         {showPending && pendingList.length > 0 && <PendingApprovalModal pending={pendingList} onApprove={handleApprove} onReject={handleReject} />}
         {!showPending && pendingList.length > 0 && (
           <button onClick={() => setShowPending(true)} style={{ position: 'fixed', bottom: 20, right: 20, zIndex: 80, background: '#1cb0f6', color: '#fff', border: 'none', borderRadius: 99, padding: '10px 16px', fontFamily: 'inherit', fontWeight: 900, fontSize: 14, cursor: 'pointer', boxShadow: '0 4px 0 #0d8fcc' }}>
@@ -1326,8 +1463,8 @@ function HostScreen({ me, room, onExit }) {
         {winnerQueue[0]?.type === 'bingo'  && <WinNotif  name={winnerQueue[0].name} onClose={() => { setWinnerQueue(q => q.slice(1)); setShowLeaderboard(true); }} />}
         {showLeaderboard && <LeaderboardModal players={leaderboard} onClose={() => setShowLeaderboard(false)} totalCalled={drawn.length} room={room} />}
         {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => { setShowExit(false); sessionRef(room).delete(); onExit(); }} room={room} />}
-        {session.trivia?.state === 'picking' && <TriviaPickModal trivia={session.trivia} room={room} lang={lang} />}
-        {(session.trivia?.state === 'question' || session.trivia?.state === 'answered') && <TriviaActiveModal trivia={session.trivia} room={room} playerId={me.uid} isHost lang={lang} />}
+        {session.trivia && (session.trivia.state === 'ready' || session.trivia.state === 'question' || session.trivia.state === 'answered') && <TriviaActiveModal trivia={session.trivia} room={room} playerId={me.uid} isHost lang={lang} />}
+        {showAd && currentAd && <FakeAdModal ad={currentAd} lang={lang} onClose={() => setShowAd(false)} />}
       </div>
     </div>
   );
@@ -1464,24 +1601,27 @@ function CastScreen({ me, room, onExit }) {
   const [showExit, setShowExit] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [localBingo, setLocalBingo] = useState(false);
-  const [castConfetti, setCastConfetti] = useState(false);
+  const [showAd, setShowAd] = useState(false);
+  const [currentAd, setCurrentAd] = useState(null);
   const prevLastDrawnRef = useRef(null);
   const hostMsgRef = useRef(t.waitingForHost);
   const castWinLinesRef = useRef([]);
+  const lastAdTickRef = useRef(0);
 
   useEffect(() => {
     setJoining(true);
     setJoinCanRetry(false);
     const pid = me.uid || `p_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
-    const card = makeCard();
+    let card = makeCard();
     const txn = firebase.firestore().runTransaction(async (tx) => {
       const snap = await tx.get(sessionRef(room));
       if (!snap.exists) throw { code: 'not-found' };
       const data = snap.data();
       if (data.phase !== 'lobby') throw { code: 'game-started' };
-      if (Object.keys(data.players || {}).length >= 12) throw { code: 'room-full' };
       const takenNames = Object.values(data.players || {}).map(p => p.name.toLowerCase());
       if (takenNames.includes(me.name.toLowerCase())) throw { code: 'name-taken' };
+      const takenCards = Object.values(data.players || {}).map(p => JSON.stringify(p.card));
+      for (let i = 0; i < 10 && takenCards.includes(JSON.stringify(card)); i++) card = makeCard();
       tx.update(sessionRef(room), { [`players.${pid}`]: { id: pid, name: me.name, uid: me.uid || null, joinedAt: Date.now(), card, marked: [], bingo: false } });
     });
     Promise.race([txn, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 8000))])
@@ -1497,7 +1637,6 @@ function CastScreen({ me, room, onExit }) {
             .then(() => { setPendingId(pid); setPendingCard(card); })
             .catch(() => { setJoinErrorTitle(t.connectionErrorTitle); setJoinError(t.joinConnectionError); setJoinCanRetry(true); });
         }
-        else if (err?.code === 'room-full') { setJoinErrorTitle(t.roomFullTitle); setJoinError(t.joinRoomFull); setJoinCanRetry(false); }
         else { setJoinErrorTitle(t.connectionErrorTitle); setJoinError(t.joinConnectionError); setJoinCanRetry(true); }
       })
       .finally(() => setJoining(false));
@@ -1561,10 +1700,19 @@ function CastScreen({ me, room, onExit }) {
     const wins = [];
     for (let r = 0; r < 5; r++) if (g[r].every(v => v === 'FREE' || ms.has(v))) wins.push(`row-${r}`);
     for (let c = 0; c < 5; c++) if ([0,1,2,3,4].every(r => g[r][c] === 'FREE' || ms.has(g[r][c]))) wins.push(`col-${c}`);
-    const fresh = wins.filter(w => !castWinLinesRef.current.includes(w));
-    if (fresh.length) { setCastConfetti(true); setTimeout(() => setCastConfetti(false), 2200); }
     castWinLinesRef.current = wins;
   }, [session, localCard, playerId]);
+
+  useEffect(() => {
+    if (!session?.drawn) return;
+    const adTick = Math.floor(session.drawn.length / 18);
+    if (adTick > 0 && adTick > lastAdTickRef.current) {
+      lastAdTickRef.current = adTick;
+      const ads = FAKE_ADS[lang] || FAKE_ADS.en;
+      setCurrentAd(ads[(adTick - 1) % ads.length]);
+      setShowAd(true);
+    }
+  }, [session?.drawn?.length]);
 
   if (isRejected) return (
     <ScreenShell>
@@ -1769,8 +1917,8 @@ function CastScreen({ me, room, onExit }) {
         </div>
 
         {calloutQueue[0] && <CastCallout n={calloutQueue[0].n} msg={calloutQueue[0].msg} onClose={() => setCalloutQueue(q => q.slice(1))} />}
-        {session.trivia?.playerId === playerId && (session.trivia.state === 'question' || session.trivia.state === 'answered') && <TriviaActiveModal trivia={session.trivia} room={room} playerId={playerId} isHost={false} lang={lang} />}
-        {(castConfetti || localBingo) && <GameConfetti />}
+        {session.trivia && (session.trivia.state === 'ready' || session.trivia.state === 'question' || session.trivia.state === 'answered') && <TriviaActiveModal trivia={session.trivia} room={room} playerId={playerId} isHost={false} lang={lang} />}
+        {showAd && currentAd && <FakeAdModal ad={currentAd} lang={lang} onClose={() => setShowAd(false)} />}
         {showInfo && <LeaderboardModal players={leaderboard} onClose={() => setShowInfo(false)} totalCalled={drawn.length} room={room} />}
         {showExit && <ExitModal onCancel={() => setShowExit(false)} onConfirm={() => {
           if (playerId) sessionRef(room).update({ [`players.${playerId}`]: firebase.firestore.FieldValue.delete() });
