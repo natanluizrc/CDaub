@@ -1208,7 +1208,7 @@ function HostScreen({ me, room, onExit }) {
   const lastAdTickRef = useRef(0);
   const currentAdTickRef = useRef(0);
   const cells = useMemo(() => Array.from({ length: TOTAL }, (_, i) => ({ n: i + 1, r: Math.floor(i / COLS), c: i % COLS })), []);
-  const leaderboard = useMemo(() => Object.values((session?.players) || {}).map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), bingo: p.bingo, triviaScore: (session?.triviaScores || {})[p.id] || 0 })).sort((a, b) => b.hits - a.hits).map((p, i) => ({ ...p, color: i === 0 ? '#ffc800' : i === 1 ? '#afafaf' : i === 2 ? '#cd7f32' : '#6b6b6b' })), [session]);
+  const leaderboard = useMemo(() => Object.values((session?.players) || {}).filter(p => p.uid !== session?.hostUid).map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), bingo: p.bingo, triviaScore: (session?.triviaScores || {})[p.id] || 0 })).sort((a, b) => b.hits - a.hits).map((p, i) => ({ ...p, color: i === 0 ? '#ffc800' : i === 1 ? '#afafaf' : i === 2 ? '#cd7f32' : '#6b6b6b' })), [session]);
 
 
   useEffect(() => {
@@ -1876,7 +1876,7 @@ function CastScreen({ me, room, onExit }) {
   ];
   const tempStage = tempStages[daubProgress < 0.5 ? 0 : daubProgress < 0.7 ? 1 : 2];
   const allPlayers = Object.values(session.players || {});
-  const leaderboard = allPlayers.map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), bingo: p.bingo, triviaScore: (session?.triviaScores || {})[p.id] || 0 })).sort((a, b) => b.hits - a.hits).map((p, i) => ({ ...p, color: i === 0 ? '#ffc800' : i === 1 ? '#afafaf' : i === 2 ? '#cd7f32' : '#6b6b6b' }));
+  const leaderboard = allPlayers.filter(p => p.uid !== session?.hostUid).map(p => ({ name: p.name, hits: (p.marked || []).length, avatar: mascotFor(p.name), bingo: p.bingo, triviaScore: (session?.triviaScores || {})[p.id] || 0 })).sort((a, b) => b.hits - a.hits).map((p, i) => ({ ...p, color: i === 0 ? '#ffc800' : i === 1 ? '#afafaf' : i === 2 ? '#cd7f32' : '#6b6b6b' }));
   const myRank = Math.max(1, leaderboard.findIndex(p => p.name === me.name) + 1);
   const FREE_CELL = { bg: '#3c3c3c', border: '2px solid #222222', shadow: '0 2px 0 #222222', fg: '#ffffff' };
 
