@@ -577,46 +577,46 @@ const TRIVIA_QUESTIONS = {
 // ---------- Fake Ads ----------
 const FAKE_ADS = {
   pt: [
-    { title: 'ARMAZÉM PARAÍBA', tagline: 'O carnê que não se acaba nem que a moléstia queira.', cta: 'FIADO SÓ AMANHÃ · TRAGA O CPF E A CORAGEM', fine: 'Juros calculados pelo tempo de espera da chuva. O móvel é de compensado, mas a dívida é de carvalho. A montagem exige a paciência de um monge beneditino no deserto.' },
-    { title: 'BRISANET', tagline: "Uma internet tão 'viva' que se esconde quando a trovoada aponta no horizonte.", cta: 'ASSINE JÁ · SE O VENTO DA SERRA DEIXAR', fine: 'Velocidade garantida até a primeira pipa de menino enganchar no fio. Se cair o sinal, reze um terço que o suporte só chega na próxima lua cheia.' },
-    { title: 'POSTO SÃO LUIZ', tagline: 'Onde a conveniência é um luxo e a gasolina tem preço de perfume francês.', cta: 'PARE PARA UM CAFÉ · SAIA COM O TANQUE CHEIO E A ALMA VAZIA', fine: 'Não nos responsabilizamos por motores que começam a soluçar na subida da Serra. O preço da aditivada é inversamente proporcional à sua paciência.' },
-    { title: 'REAL BUS', tagline: 'A geladeira ambulante da BR-230.', cta: 'COMPRE SUA PASSAGEM · REZE POR UM LUGAR NA JANELA', fine: 'Traga seu capote, pois o motorista acredita que estamos atravessando a Sibéria. Parada estratégica no Ingá para o sustento do bucho com pão com ovo.' },
-    { title: 'CAGEPA', tagline: 'A arte de cobrar pelo que o cano só conhece por boato.', cta: 'ECONOMIZE ÁGUA · A GENTE JÁ ECONOMIZA POR VOCÊ', fine: 'Se sair lama, é brinde; se sair ar, é consumo premium. Taxa de esgoto cobrada com rigor britânico, mesmo que você more num oitão sem calçada.' },
-    { title: 'SÃO BRAZ', tagline: 'O café que faz o cabra ver o futuro e o cuscuz que sustenta o juízo.', cta: 'LEVE O MILHO E O CAFÉ · GARANTA A SOBREVIVÊNCIA NO SÍTIO', fine: 'O fabricante não se responsabiliza por palpitações rítmicas de xaxado após a terceira xícara. O milho é tão legítimo que, se plantar o pacote, nasce uma roça.' },
-    { title: 'ENERGISA', tagline: 'Uma luz que custa um olho da cara e a alma de quem paga.', cta: 'PAGUE O BOLETO NO DIA · EVITE O CORTE E O APERREIO', fine: 'A taxa de iluminação é para você enxergar o valor do rombo no escuro. Bandeira tarifária sujeita ao apetite dos acionistas e à posição de Marte.' },
-    { title: 'UNIMED JP', tagline: 'A saúde de ferro pra quem tem a paciência de um monge.', cta: 'AGENDE SUA CONSULTA PARA O PRÓXIMO SEMESTRE', fine: 'Atendimento em tempo real (no tempo da eternidade). Se a carência não lhe matar, o protocolo lhe cura. Café da recepção liberado mediante carimbo.' },
-    { title: 'ALPARGATAS', tagline: 'O solado que já percorreu o mundo, mas gosta mesmo é do chão de barro.', cta: 'COMPRE A LEGÍTIMA · AQUELA QUE JÁ VEM COM O CHEIRO DA VITÓRIA', fine: 'A tira que tora no meio da rua é consertada com prego por conta e risco do cliente. Não aceitamos reclamações se o cachorro comer o pé esquerdo.' },
-    { title: 'UNIFACISA', tagline: 'A ciência no topo da serra, onde o vento faz a curva e o diploma tem grife.', cta: 'VESTIBULAR ABERTO · MENSALIDADE QUE VALE UM BEZERRO DE RAÇA', fine: 'Aprovação depende de estudo e fôlego para encarar o vento cortante do estacionamento. Wi-Fi que voa, mas tem medo de parede de concreto.' },
-    { title: 'REDE COMPRAS', tagline: "A feira do povo onde o 'preço baixo' é uma peleja de sorte.", cta: 'CORRA PARA O ENCARTE · ENQUANTO O CAIXA NÃO DÁ O PREGO', fine: 'Cuidado com o carrinho desgovernado na Quarta da Verdura. A validade dos produtos em promoção é baseada na fé e na pressa do consumidor.' },
-    { title: 'MANAÍRA SHOPPING', tagline: 'A cidade de vidro onde a gente entra rico e sai pedindo esmola na saída.', cta: 'VENHA PASSEAR NO AR-CONDICIONADO · ESTACIONAMENTO PREÇO DE OURO', fine: 'Labirinto projetado para você nunca mais achar a saída nem o carro. A administração não se responsabiliza por divórcios causados por faturas de cartão.' },
+    { title: 'ARMAZÉM PARAÍBA', tagline: 'O sofá dura dois anos. O carnê, vinte.' },
+    { title: 'BRISANET', tagline: 'Internet de fibra óptica. Fibra que desaparece quando chove.' },
+    { title: 'POSTO SÃO LUIZ', tagline: 'Gasolina a preço de uísque importado. Café a preço de gasolina.' },
+    { title: 'REAL BUS', tagline: 'O único ônibus do Nordeste com clima de Sibéria.' },
+    { title: 'CAGEPA', tagline: 'Cobramos com precisão pela água que o cano ainda não conhece.' },
+    { title: 'SÃO BRAZ', tagline: 'O café que acorda. O cuscuz que sustenta. A conta que assusta.' },
+    { title: 'ENERGISA', tagline: 'A conta chega antes da luz.' },
+    { title: 'UNIMED JP', tagline: 'Cuide da sua saúde — a consulta é só daqui seis meses.' },
+    { title: 'ALPARGATAS', tagline: 'Resistente a tudo. Exceto ao chão.' },
+    { title: 'UNIFACISA', tagline: 'Diplomas entregues com vento incluso.' },
+    { title: 'REDE COMPRAS', tagline: 'Promoção todo dia. Desconto, só no cartaz.' },
+    { title: 'MANAÍRA SHOPPING', tagline: 'Você entra de carteira cheia. A gente trata do resto.' },
   ],
   en: [
-    { title: 'ARMAZÉM PARAÍBA', tagline: "The installment plan that outlives the furniture.", cta: 'BUY ON CREDIT · BRING YOUR ID AND YOUR COURAGE', fine: 'Interest rates calculated by the wait for rain. The furniture is plywood, but the debt is solid oak. Assembly requires the patience of a desert monk.' },
-    { title: 'BRISANET', tagline: "Internet so 'alive' it hides whenever thunder rolls in.", cta: 'SIGN UP NOW · IF THE HILLTOP WIND ALLOWS', fine: "Speed guaranteed until the first kite string snags the cable. If the signal drops, say a prayer — support arrives on the next full moon." },
-    { title: 'POSTO SÃO LUIZ', tagline: 'Where convenience is a luxury and gas costs like French perfume.', cta: 'STOP FOR A COFFEE · LEAVE WITH A FULL TANK AND AN EMPTY WALLET', fine: 'Not responsible for engines hiccuping on the hill climb. The premium price is inversely proportional to your patience.' },
-    { title: 'REAL BUS', tagline: 'The rolling freezer of BR-230.', cta: 'BUY YOUR TICKET · PRAY FOR A WINDOW SEAT', fine: "Bring a jacket — the driver believes we're crossing Siberia. Mandatory stop in Ingá for a fried egg sandwich." },
-    { title: 'CAGEPA', tagline: "The art of charging for water the pipes have only heard rumors about.", cta: 'SAVE WATER · WE ARE ALREADY SAVING IT FOR YOU', fine: 'If mud comes out, it is a bonus. If air comes out, it is premium consumption. Sewage fee charged with British precision even on a dirt road.' },
-    { title: 'SÃO BRAZ', tagline: 'The coffee that makes you see the future and the cuscuz that keeps you sane.', cta: 'TAKE THE CORN AND THE COFFEE · SECURE YOUR COUNTRYSIDE SURVIVAL', fine: 'Manufacturer not liable for xaxado-rhythm palpitations after the third cup. The corn is so authentic that if you plant the bag, a whole field grows.' },
-    { title: 'ENERGISA', tagline: 'Light that costs an arm and the soul of whoever pays.', cta: 'PAY THE BILL ON TIME · AVOID THE CUT AND THE HEADACHE', fine: 'The lighting fee is so you can see the hole in your budget in the dark. Tariff flag subject to shareholder appetite and the position of Mars.' },
-    { title: 'UNIMED JP', tagline: 'Iron health for those with the patience of a monk.', cta: 'SCHEDULE YOUR APPOINTMENT FOR NEXT SEMESTER', fine: "Real-time care (on eternity's schedule). If the waiting period doesn't get you, the protocol will cure you. Reception coffee requires an official stamp." },
-    { title: 'ALPARGATAS', tagline: "The sole that's traveled the world but loves mud floors most.", cta: 'BUY THE REAL THING · THE ONE THAT COMES WITH THE SMELL OF VICTORY', fine: "The strap that snaps in the street is repaired with a nail at the client's own risk. No complaints if the dog eats the left shoe." },
-    { title: 'UNIFACISA', tagline: 'Science at the top of the mountain where the wind turns corners and the diploma has prestige.', cta: 'ENROLLMENT OPEN · TUITION WORTH A THOROUGHBRED CALF', fine: 'Approval requires study and stamina to face the biting wind in the parking lot. Wi-Fi flies but is afraid of concrete walls.' },
-    { title: 'REDE COMPRAS', tagline: "The people's fair where 'low price' is a game of luck.", cta: 'RUN TO THE FLYER · BEFORE THE REGISTER GIVES UP', fine: "Watch out for runaway carts on 'Veggie Wednesday'. Expiration dates on promo items are based on faith and consumer urgency." },
-    { title: 'MANAÍRA SHOPPING', tagline: 'The glass city where you walk in rich and leave begging at the exit.', cta: 'COME ENJOY THE AIR CONDITIONING · PARKING AT GOLD PRICES', fine: 'A labyrinth designed so you never find the exit or your car again. Management not responsible for divorces caused by credit card statements.' },
+    { title: 'ARMAZÉM PARAÍBA', tagline: 'The sofa lasts two years. The installment plan, twenty.' },
+    { title: 'BRISANET', tagline: 'Fiber optic internet. Fiber that vanishes when it rains.' },
+    { title: 'POSTO SÃO LUIZ', tagline: 'Gas at imported whiskey prices. Coffee at gas prices.' },
+    { title: 'REAL BUS', tagline: 'The only bus in the Northeast with a Siberian climate setting.' },
+    { title: 'CAGEPA', tagline: 'Precision billing for water the pipes have yet to meet.' },
+    { title: 'SÃO BRAZ', tagline: 'The coffee that wakes you. The cuscuz that feeds you. The bill that haunts you.' },
+    { title: 'ENERGISA', tagline: 'The bill arrives before the power does.' },
+    { title: 'UNIMED JP', tagline: 'Take care of your health — your appointment is in six months.' },
+    { title: 'ALPARGATAS', tagline: 'Built to last. Except on pavement.' },
+    { title: 'UNIFACISA', tagline: 'Degrees delivered with complimentary wind.' },
+    { title: 'REDE COMPRAS', tagline: 'Sales every day. Discounts only on the sign.' },
+    { title: 'MANAÍRA SHOPPING', tagline: 'You walk in with a full wallet. We handle the rest.' },
   ],
   es: [
-    { title: 'ARMAZÉM PARAÍBA', tagline: "El carnê que no termina ni aunque la desgracia quiera.", cta: 'FIADO SOLO MAÑANA · TRAE EL CPF Y EL CORAJE', fine: 'Intereses calculados según el tiempo que tarde la lluvia. El mueble es de aglomerado, pero la deuda es de roble. El montaje exige la paciencia de un monje en el desierto.' },
-    { title: 'BRISANET', tagline: "Internet tan 'viva' que se esconde cuando el trueno asoma en el horizonte.", cta: 'CONTRATA YA · SI EL VIENTO DE LA SIERRA LO PERMITE', fine: 'Velocidad garantizada hasta que el primer barrilete enrede el cable. Si se va la señal, reza un rosario — el soporte llega en la próxima luna llena.' },
-    { title: 'POSTO SÃO LUIZ', tagline: 'Donde la comodidad es un lujo y la gasolina tiene precio de perfume francés.', cta: 'PARA UN CAFÉ · SAL CON EL TANQUE LLENO Y EL ALMA VACÍA', fine: 'No nos responsabilizamos por motores que empiezan a hipar en la cuesta. El precio del premium es inversamente proporcional a tu paciencia.' },
-    { title: 'REAL BUS', tagline: 'El refrigerador ambulante de la BR-230.', cta: 'COMPRA TU PASAJE · REZA POR UN ASIENTO JUNTO A LA VENTANA', fine: 'Trae tu abrigo, el conductor cree que atravesamos Siberia. Parada estratégica en Ingá para reponer fuerzas con pan con huevo.' },
-    { title: 'CAGEPA', tagline: 'El arte de cobrar por lo que el caño solo conoce de rumores.', cta: 'AHORRA AGUA · NOSOTROS YA LO HACEMOS POR TI', fine: 'Si sale barro, es regalo; si sale aire, es consumo premium. La tasa de alcantarillado se cobra con rigor británico aunque vivas en un callejón sin pavimento.' },
-    { title: 'SÃO BRAZ', tagline: 'El café que hace ver el futuro y el cuscuz que mantiene el juicio.', cta: 'LLEVA EL MAÍZ Y EL CAFÉ · ASEGURA LA SUPERVIVENCIA EN EL CAMPO', fine: 'El fabricante no se responsabiliza por palpitaciones al ritmo de xaxado después de la tercera taza. El maíz es tan legítimo que si plantas el paquete, crece un campo entero.' },
-    { title: 'ENERGISA', tagline: 'Una luz que cuesta un ojo de la cara y el alma de quien paga.', cta: 'PAGA EL RECIBO HOY · EVITA EL CORTE Y EL DOLOR DE CABEZA', fine: 'La tasa de iluminación es para que veas el agujero en tu bolsillo a oscuras. La bandera tarifaria depende del apetito de los accionistas y la posición de Marte.' },
-    { title: 'UNIMED JP', tagline: 'Salud de hierro para quien tiene la paciencia de un monje.', cta: 'AGENDA TU CONSULTA PARA EL PRÓXIMO SEMESTRE', fine: 'Atención en tiempo real (en el tiempo de la eternidad). Si la carencia no te mata, el protocolo te cura. El café de recepción requiere sello oficial.' },
-    { title: 'ALPARGATAS', tagline: 'La suela que recorrió el mundo, pero ama el piso de barro.', cta: 'COMPRA LA LEGÍTIMA · LA QUE YA VIENE CON OLOR A VICTORIA', fine: 'La correa que se rompe en la calle se arregla con un clavo por cuenta del cliente. No aceptamos quejas si el perro se comió el zapato izquierdo.' },
-    { title: 'UNIFACISA', tagline: 'La ciencia en la cima de la sierra donde el viento dobla y el diploma tiene distinción.', cta: 'INSCRIPCIONES ABIERTAS · MENSUALIDAD QUE VALE UN BECERRO DE RAZA', fine: 'La aprobación requiere estudio y aguante para enfrentar el viento helado del estacionamiento. El Wi-Fi vuela, pero le tiene miedo a las paredes de concreto.' },
-    { title: 'REDE COMPRAS', tagline: "La feria del pueblo donde el 'precio bajo' es un juego de azar.", cta: 'CORRE AL FOLLETO · ANTES DE QUE LA CAJA SE RINDA', fine: 'Cuidado con el carrito descontrolado el Miércoles de Verduras. La fecha de vencimiento de los productos en oferta se basa en la fe y la prisa del consumidor.' },
-    { title: 'MANAÍRA SHOPPING', tagline: 'La ciudad de vidrio donde entras rico y sales pidiendo limosna en la salida.', cta: 'VEN A DISFRUTAR EL AIRE ACONDICIONADO · ESTACIONAMIENTO A PRECIO DE ORO', fine: 'Laberinto diseñado para que nunca encuentres la salida ni tu auto. La administración no se responsabiliza por divorcios causados por estados de cuenta.' },
+    { title: 'ARMAZÉM PARAÍBA', tagline: 'El sofá dura dos años. El carnê, veinte.' },
+    { title: 'BRISANET', tagline: 'Internet de fibra óptica. Fibra que desaparece cuando llueve.' },
+    { title: 'POSTO SÃO LUIZ', tagline: 'Gasolina a precio de whisky importado. Café a precio de gasolina.' },
+    { title: 'REAL BUS', tagline: 'El único autobús del Nordeste con clima de Siberia.' },
+    { title: 'CAGEPA', tagline: 'Cobramos con precisión por el agua que el caño aún no conoce.' },
+    { title: 'SÃO BRAZ', tagline: 'El café que despierta. El cuscuz que alimenta. La factura que asusta.' },
+    { title: 'ENERGISA', tagline: 'La factura llega antes que la luz.' },
+    { title: 'UNIMED JP', tagline: 'Cuida tu salud — la consulta es en seis meses.' },
+    { title: 'ALPARGATAS', tagline: 'Resistente a todo. Excepto al suelo.' },
+    { title: 'UNIFACISA', tagline: 'Títulos entregados con viento incluido.' },
+    { title: 'REDE COMPRAS', tagline: 'Ofertas todos los días. Descuentos, solo en el cartel.' },
+    { title: 'MANAÍRA SHOPPING', tagline: 'Entras con la billetera llena. Nosotros nos encargamos del resto.' },
   ],
 };
 
@@ -906,8 +906,8 @@ function ExitModal({ onCancel, onConfirm, room }) {
   const { t } = useLang();
   return (
     <div onClick={onCancel} style={{ position: 'fixed', inset: 0, zIndex: 80, background: 'rgba(31, 41, 55, 0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
-      <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, maxHeight: 'min(80vh, 560px)', background: '#ffffff', border: '3px solid #ff4b4b', borderRadius: 24, boxShadow: '0 12px 0 #d63030, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', position: 'relative', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards', display: 'flex', flexDirection: 'column' }}>
-        <button onClick={onCancel} style={{ position: 'absolute', top: 14, right: 14, width: 36, height: 36, background: '#ffe9e9', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 900, color: '#ff4b4b', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>✕</button>
+      <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, maxHeight: 'min(80vh, 560px)', background: '#ffffff', border: '3px solid #ff9600', borderRadius: 24, boxShadow: '0 12px 0 #cc7700, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', position: 'relative', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards', display: 'flex', flexDirection: 'column' }}>
+        <button onClick={onCancel} style={{ position: 'absolute', top: 14, right: 14, width: 36, height: 36, background: '#fff3e0', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 900, color: '#ff9600', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>✕</button>
         <div style={{ padding: '32px 28px 8px', flexShrink: 0 }}>
           <div style={{ fontSize: 11, fontWeight: 800, color: '#6b6b6b', letterSpacing: '0.18em', marginBottom: 4 }}>{t.roomLabel} {String(room).padStart(2, '0')}</div>
           <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c' }}>{t.exitRoomQuestion}</div>
@@ -977,11 +977,9 @@ function FakeAdModal({ ad, lang, onClose, isHost = false }) {
         <button onClick={onClose} style={{ position: 'absolute', top: 18, right: 18, width: 44, height: 44, background: 'rgba(255,150,0,0.15)', border: '2px solid rgba(255,150,0,0.4)', borderRadius: 14, fontSize: 20, fontWeight: 900, color: '#ff9600', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1 }}>✕</button>
       )}
       <div style={{ maxWidth: 520, width: '100%', textAlign: 'center' }}>
-        <div style={{ fontSize: 11, fontWeight: 900, color: '#ff9600', letterSpacing: '0.28em', marginBottom: 20 }}>{header}</div>
-        <div style={{ fontSize: 'clamp(18px, 3.5vw, 26px)', fontWeight: 900, color: '#ffffff', letterSpacing: '0.05em', lineHeight: 1.2, marginBottom: 12, textTransform: 'uppercase' }}>{ad.title}</div>
-        <div style={{ fontSize: 'clamp(15px, 2.2vw, 18px)', fontWeight: 700, color: '#ffe0a0', fontStyle: 'italic', marginBottom: 24, lineHeight: 1.5 }}>"{ad.tagline}"</div>
-        <div style={{ fontSize: 'clamp(15px, 2.2vw, 20px)', fontWeight: 900, color: '#ffc800', letterSpacing: '0.1em', marginBottom: 8 }}>{ad.cta}</div>
-        <div style={{ fontSize: 'clamp(12px, 1.5vw, 14px)', color: '#cc3300', lineHeight: 1.5, maxWidth: 400, margin: '0 auto' }}>*{ad.fine}</div>
+        <div style={{ fontSize: 11, fontWeight: 900, color: '#ff9600', letterSpacing: '0.28em', marginBottom: 24 }}>{header}</div>
+        <div style={{ fontSize: 'clamp(28px, 6vw, 52px)', fontWeight: 900, color: '#ffffff', letterSpacing: '0.04em', lineHeight: 1.1, marginBottom: 28, textTransform: 'uppercase' }}>{ad.title}</div>
+        <div style={{ fontSize: 'clamp(16px, 2.8vw, 24px)', fontWeight: 700, color: '#ffe0a0', fontStyle: 'italic', lineHeight: 1.5 }}>"{ad.tagline}"</div>
       </div>
     </div>
   );
@@ -1075,15 +1073,15 @@ function TriviaActiveModal({ trivia, room, playerId, isHost, lang }) {
   if (isReady) {
     return (
       <div style={{ position: 'fixed', inset: 0, zIndex: 88, background: 'rgba(31,41,55,0.6)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
-        <div style={{ width: '100%', maxWidth: 480, background: '#ffffff', border: '3px solid #ffc800', borderRadius: 24, boxShadow: '0 12px 0 #c79100, 0 24px 64px rgba(0,0,0,0.2)', padding: '28px 28px 24px', textAlign: 'center', animation: 'modalPop 280ms cubic-bezier(0.34,1.56,0.64,1) forwards' }}>
+        <div style={{ width: '100%', maxWidth: 480, background: '#ffffff', border: '3px solid #1cb0f6', borderRadius: 24, boxShadow: '0 12px 0 #0d8fcc, 0 24px 64px rgba(0,0,0,0.2)', padding: '28px 28px 24px', textAlign: 'center', animation: 'modalPop 280ms cubic-bezier(0.34,1.56,0.64,1) forwards' }}>
           <div style={{ fontSize: 36, marginBottom: 10 }}>🎯</div>
           <div style={{ fontSize: 20, fontWeight: 900, color: '#3c3c3c', marginBottom: 22 }}>{t.gotItPre}{trivia.playerName}{t.gotItPost}</div>
           {isHost ? (
-            <button onClick={startQuestion} style={{ width: '100%', padding: '14px 0', background: '#ffc800', border: 'none', borderRadius: 14, boxShadow: '0 4px 0 #c79100', fontFamily: 'inherit', fontWeight: 900, fontSize: 16, color: '#3c3c3c', letterSpacing: '0.06em', cursor: 'pointer' }}>{t.triviaStartQuestion}</button>
+            <button onClick={startQuestion} style={{ width: '100%', padding: '14px 0', background: '#1cb0f6', border: 'none', borderRadius: 14, boxShadow: '0 4px 0 #0d8fcc', fontFamily: 'inherit', fontWeight: 900, fontSize: 16, color: '#ffffff', letterSpacing: '0.06em', cursor: 'pointer' }}>{t.triviaStartQuestion}</button>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
               <div style={{ display: 'flex', gap: 6 }}>
-                {[0,1,2].map(i => <div key={i} style={{ width: 8, height: 8, borderRadius: '50%', background: '#ffc800', animation: `rollDots 1.2s ${i * 0.2}s ease-in-out infinite` }} />)}
+                {[0,1,2].map(i => <div key={i} style={{ width: 8, height: 8, borderRadius: '50%', background: '#1cb0f6', animation: `rollDots 1.2s ${i * 0.2}s ease-in-out infinite` }} />)}
               </div>
               <div style={{ fontSize: 14, fontWeight: 700, color: '#7a7a7a' }}>{t.triviaGuestWaiting}</div>
             </div>
@@ -1095,10 +1093,10 @@ function TriviaActiveModal({ trivia, room, playerId, isHost, lang }) {
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 88, background: 'rgba(31,41,55,0.6)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
-      <div style={{ width: '100%', maxWidth: 680, background: '#ffffff', border: '3px solid #ffc800', borderRadius: 24, boxShadow: '0 12px 0 #c79100, 0 24px 64px rgba(0,0,0,0.2)', overflow: 'hidden', animation: 'modalPop 280ms cubic-bezier(0.34,1.56,0.64,1) forwards' }}>
+      <div style={{ width: '100%', maxWidth: 680, background: '#ffffff', border: '3px solid #1cb0f6', borderRadius: 24, boxShadow: '0 12px 0 #0d8fcc, 0 24px 64px rgba(0,0,0,0.2)', overflow: 'hidden', animation: 'modalPop 280ms cubic-bezier(0.34,1.56,0.64,1) forwards' }}>
 
         {/* Header */}
-        <div style={{ padding: '12px 20px', background: '#fffbea', borderBottom: '2px solid #f3f3f3', display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ padding: '12px 20px', background: '#e8f7ff', borderBottom: '2px solid #f3f3f3', display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <span style={{ fontSize: 12, fontWeight: 900, color: '#3c3c3c', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {answered ? (trivia.answer === 'timeout' ? t.triviaTimeout : isCorrect ? t.triviaCorrect : t.triviaWrong) : (isPlayer ? t.triviaYourTurn : t.triviaWaitingAnswer.replace('{name}', trivia.playerName))}
@@ -1492,8 +1490,8 @@ function LeaderboardModal({ players, onClose, totalCalled, room }) {
   const { t } = useLang();
   return (
     <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 70, background: 'rgba(31, 41, 55, 0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
-      <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, maxHeight: 'min(80vh, 560px)', background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 24, boxShadow: '0 12px 0 #d6d6d6, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', position: 'relative', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards', display: 'flex', flexDirection: 'column' }}>
-        <button onClick={onClose} style={{ position: 'absolute', top: 14, right: 14, width: 36, height: 36, background: '#f3f3f3', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 900, color: '#6b6b6b', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>✕</button>
+      <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, maxHeight: 'min(80vh, 560px)', background: '#ffffff', border: '3px solid #ff9600', borderRadius: 24, boxShadow: '0 12px 0 #cc7700, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', position: 'relative', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards', display: 'flex', flexDirection: 'column' }}>
+        <button onClick={onClose} style={{ position: 'absolute', top: 14, right: 14, width: 36, height: 36, background: '#fff3e0', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 900, color: '#ff9600', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>✕</button>
         <div style={{ padding: '32px 28px 8px', flexShrink: 0 }}>
           <div style={{ fontSize: 11, fontWeight: 800, color: '#6b6b6b', letterSpacing: '0.18em', marginBottom: 4 }}>{t.roomLabel} {String(room).padStart(2, '0')}</div>
           <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c' }}>{t.leaderboard}</div>
@@ -1539,8 +1537,8 @@ function TriviaPodiumModal({ players, onClose }) {
     .slice(0, 3);
   return (
     <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 70, background: 'rgba(31, 41, 55, 0.55)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'fadeIn 180ms ease forwards' }}>
-      <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, background: '#ffffff', border: '3px solid #e5e5e5', borderRadius: 24, boxShadow: '0 12px 0 #d6d6d6, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', position: 'relative', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
-        <button onClick={onClose} style={{ position: 'absolute', top: 14, right: 14, width: 36, height: 36, background: '#f3f3f3', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 900, color: '#6b6b6b', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>✕</button>
+      <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, background: '#ffffff', border: '3px solid #1cb0f6', borderRadius: 24, boxShadow: '0 12px 0 #0d8fcc, 0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden', textAlign: 'center', position: 'relative', animation: 'modalPop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards' }}>
+        <button onClick={onClose} style={{ position: 'absolute', top: 14, right: 14, width: 36, height: 36, background: '#e8f7ff', border: 'none', borderRadius: 12, fontSize: 18, fontWeight: 900, color: '#1cb0f6', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>✕</button>
         <div style={{ padding: '32px 28px 16px' }}>
           <div style={{ fontSize: 48, lineHeight: 1, marginBottom: 8 }}>🧠</div>
           <div style={{ fontSize: 22, fontWeight: 900, color: '#3c3c3c' }}>{t.triviaPodiumTitle}</div>
